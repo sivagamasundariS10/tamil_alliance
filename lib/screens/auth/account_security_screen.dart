@@ -126,15 +126,13 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
       return;
     }
 
-    debugPrint('====================================================');
-    debugPrint('[AUTH: ACCOUNT SECURITY & PASSWORD CREATED]');
-    debugPrint('  Country Code     : ${widget.countryCode}');
-    debugPrint('  Mobile Number    : ${widget.mobileNumber}');
-    debugPrint('  Full Mobile      : ${widget.countryCode} ${widget.mobileNumber}');
-    debugPrint('  Email ID         : ${_emailController.text.trim()}');
-    debugPrint('  Created Password : ${_passwordController.text}');
-    debugPrint('  Confirm Password : ${_confirmPasswordController.text}');
-    debugPrint('====================================================');
+    print('====================================================');
+    print('🔒 [USER INPUT: ACCOUNT SECURITY CREATION]');
+    print('   Mobile Number: ${widget.countryCode} ${widget.mobileNumber}');
+    print('   Email ID     : ${_emailController.text.trim()}');
+    print('   Password     : ${_passwordController.text}');
+    print('   Confirmed Pwd: ${_confirmPasswordController.text}');
+    print('====================================================');
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(

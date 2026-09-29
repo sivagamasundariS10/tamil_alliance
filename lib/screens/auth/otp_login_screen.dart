@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../home/home_screen.dart';
 import 'mobile_auth_screen.dart';
 import 'password_login_screen.dart';
 
@@ -110,6 +111,76 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
     return '****';
   }
 
+  int _getMaxPhoneLength(String countryCode) {
+    switch (countryCode) {
+      case '+91':
+        return 10;
+      case '+1':
+        return 10;
+      case '+44':
+        return 10;
+      case '+65':
+        return 8;
+      case '+60':
+        return 10;
+      case '+971':
+        return 9;
+      case '+94':
+        return 9;
+      case '+61':
+        return 9;
+      case '+49':
+        return 11;
+      case '+33':
+        return 9;
+      case '+974':
+        return 8;
+      case '+966':
+        return 9;
+      case '+968':
+        return 8;
+      case '+965':
+        return 8;
+      default:
+        return 10;
+    }
+  }
+
+  String _getPhoneHint(String countryCode) {
+    switch (countryCode) {
+      case '+91':
+        return '98421 76540 (10 digits)';
+      case '+1':
+        return '202 555 0123 (10 digits)';
+      case '+44':
+        return '7911 123456 (10 digits)';
+      case '+65':
+        return '8123 4567 (8 digits)';
+      case '+60':
+        return '12 345 6789 (10 digits)';
+      case '+971':
+        return '50 123 4567 (9 digits)';
+      case '+94':
+        return '71 234 5678 (9 digits)';
+      case '+61':
+        return '412 345 678 (9 digits)';
+      case '+49':
+        return '151 23456789 (11 digits)';
+      case '+33':
+        return '6 12 34 56 78 (9 digits)';
+      case '+974':
+        return '3312 3456 (8 digits)';
+      case '+966':
+        return '50 123 4567 (9 digits)';
+      case '+968':
+        return '9123 4567 (8 digits)';
+      case '+965':
+        return '9123 4567 (8 digits)';
+      default:
+        return 'Enter mobile number';
+    }
+  }
+
   void _showCountryPicker() {
     showModalBottomSheet(
       context: context,
@@ -185,6 +256,11 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                         onTap: () {
                           setState(() {
                             _selectedCountryCode = item['code']!;
+                            final maxLen = _getMaxPhoneLength(_selectedCountryCode);
+                            if (_mobileController.text.length > maxLen) {
+                              _mobileController.text =
+                                  _mobileController.text.substring(0, maxLen);
+                            }
                           });
                           Navigator.pop(context);
                         },
@@ -201,6 +277,31 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
   }
 
   void _onVerifyAndLogin() {
+    final phone = _mobileController.text.trim();
+    final maxLen = _getMaxPhoneLength(_selectedCountryCode);
+
+    if (phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your mobile number'),
+          backgroundColor: Color(0xFFE11D48),
+          duration: Duration(milliseconds: 1500),
+        ),
+      );
+      return;
+    }
+
+    if (phone.length != maxLen) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Mobile number must be exactly $maxLen digits for $_selectedCountryCode'),
+          backgroundColor: const Color(0xFFE11D48),
+          duration: const Duration(milliseconds: 2000),
+        ),
+      );
+      return;
+    }
+
     final otp = _otpValue;
     if (otp.length < 4) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -213,13 +314,13 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
       return;
     }
 
-    debugPrint('====================================================');
-    debugPrint('[AUTH: OTP LOGIN SUBMITTED]');
-    debugPrint('  Country Code : $_selectedCountryCode');
-    debugPrint('  Mobile Number: ${_mobileController.text.trim()}');
-    debugPrint('  Full Phone   : $_selectedCountryCode ${_mobileController.text.trim()}');
-    debugPrint('  Entered OTP  : $otp');
-    debugPrint('====================================================');
+    print('====================================================');
+    print('📩 [USER INPUT: OTP LOGIN]');
+    print('   Country Code : $_selectedCountryCode');
+    print('   Mobile Number: ${_mobileController.text.trim()}');
+    print('   Full Phone   : $_selectedCountryCode ${_mobileController.text.trim()}');
+    print('   Entered OTP  : $otp');
+    print('====================================================');
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -229,11 +330,14 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
       ),
     );
 
-    Future.delayed(const Duration(milliseconds: 600), () {
-      if (mounted) {
-        Navigator.of(context).popUntil((route) => route.isFirst);
-      }
-    });
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (_) => HomeScreen(
+          userPhone: '$_selectedCountryCode ${_mobileController.text.trim()}',
+        ),
+      ),
+      (route) => false,
+    );
   }
 
   void _onPasswordLogin() {
@@ -525,9 +629,10 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                           Expanded(
                             child: TextField(
                               controller: _mobileController,
-                              keyboardType: TextInputType.phone,
+                              keyboardType: TextInputType.number,
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(_getMaxPhoneLength(_selectedCountryCode)),
                               ],
                               style: const TextStyle(
                                 fontSize: 14.5,
@@ -535,7 +640,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                                 color: Color(0xFF1E293B),
                                 letterSpacing: 0.5,
                               ),
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 filled: false,
                                 fillColor: Colors.transparent,
                                 border: InputBorder.none,
@@ -544,14 +649,22 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                                 errorBorder: InputBorder.none,
                                 focusedErrorBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
-                                hintText: 'Enter mobile number',
-                                hintStyle: TextStyle(
+                                hintText: _getPhoneHint(_selectedCountryCode),
+                                hintStyle: const TextStyle(
                                   color: Color(0xFF94A3B8),
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                 ),
                                 isDense: true,
                               ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 12.0),
+                            child: Icon(
+                              Icons.edit_outlined,
+                              size: 16,
+                              color: Color(0xFF94A3B8),
                             ),
                           ),
                         ],

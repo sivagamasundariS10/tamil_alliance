@@ -18,23 +18,23 @@ class PhotosPrivacyScreen extends StatefulWidget {
 
 class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   // Primary photo state
-  String _primaryPhotoAsset = 'assets/images/avatar1.jpg';
+  String _primaryPhotoAsset = 'assets/images/bride_portrait.jpg';
   double _zoomScale = 1.0;
   int _rotationTurns = 0;
 
   // Available sample photos in assets
   final List<Map<String, String>> _sampleOptions = [
-    {'name': 'Traditional Saree', 'asset': 'assets/images/avatar1.jpg'},
+    {'name': 'Traditional Saree', 'asset': 'assets/images/bride_portrait.jpg'},
     {'name': 'Family & Kalyanam', 'asset': 'assets/images/wedding_hero.jpg'},
-    {'name': 'Full Length Attire', 'asset': 'assets/images/avatar2.jpg'},
-    {'name': 'Close-Up Portrait', 'asset': 'assets/images/avatar3.jpg'},
+    {'name': 'Full Length Attire', 'asset': 'assets/images/groom_full.jpg'},
+    {'name': 'Close-Up Portrait', 'asset': 'assets/images/bride_portrait.jpg'},
   ];
 
   // Gallery photos list (Initial slots)
   final List<Map<String, String>> _galleryPhotos = [
     {
       'id': '1',
-      'asset': 'assets/images/avatar1.jpg',
+      'asset': 'assets/images/bride_portrait.jpg',
       'label': 'Traditional Attire',
       'status': 'Approved',
       'slot': 'Slot 1 of 5',
@@ -48,7 +48,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
     },
     {
       'id': '3',
-      'asset': 'assets/images/avatar2.jpg',
+      'asset': 'assets/images/groom_full.jpg',
       'label': 'Full Length',
       'status': 'Approved',
       'slot': 'Slot 3 of 5',
@@ -109,7 +109,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 onTap: () {
                   Navigator.of(ctx).pop();
                   _handlePhotoSelection(
-                    asset: 'assets/images/avatar3.jpg',
+                    asset: 'assets/images/bride_portrait.jpg',
                     isPrimary: isPrimary,
                     slotLabel: slotLabel ?? 'Camera Shot',
                   );
@@ -292,7 +292,6 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
       setState(() {
         _primaryPhotoAsset = asset;
       });
-      debugPrint('[STEP 4: PHOTOS] Primary photo updated to: $asset');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Primary Biodata Portrait updated!'),
@@ -320,7 +319,6 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
           'slot': 'Slot $nextSlot of 5',
         });
       });
-      debugPrint('[STEP 4: PHOTOS] Added gallery photo: "$slotLabel". Total: ${_galleryPhotos.length}/5');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Added "$slotLabel" to gallery (Slot ${_galleryPhotos.length}/5)'),
@@ -524,7 +522,6 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                             _rotationTurns = tempRotationTurns;
                           });
                           Navigator.of(ctx).pop();
-                          debugPrint('[STEP 4: PHOTOS] Framing adjusted. Zoom: $_zoomScale, Rotation: $_rotationTurns');
                         },
                         child: const Text('Apply Focus', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       ),
@@ -543,7 +540,6 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   // Fullscreen Watermarked Preview Modal
   // ─────────────────────────────────────────────────────────────
   void _onPreviewPrimary() {
-    debugPrint('[STEP 4: PHOTOS] Previewing high-resolution watermarked portrait');
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
@@ -607,7 +603,6 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   void _showPhotoPreviewModal(String asset, String title) {
-    debugPrint('[STEP 4: PHOTOS] Previewing photo: "$title" ($asset)');
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
@@ -671,23 +666,15 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   void _onRemoveGalleryPhoto(int index) {
-    final removed = _galleryPhotos[index]['label'];
     setState(() {
       _galleryPhotos.removeAt(index);
       for (int i = 0; i < _galleryPhotos.length; i++) {
         _galleryPhotos[i]['slot'] = 'Slot ${i + 1} of 5';
       }
     });
-    debugPrint('[STEP 4: PHOTOS] Removed gallery photo "$removed". Remaining: ${_galleryPhotos.length}/5');
   }
 
   void _onSaveDraft() {
-    debugPrint('====================================================');
-    debugPrint('[STEP 4 DRAFT SAVED: PHOTOS & PRIVACY]');
-    debugPrint('  Primary Photo   : $_primaryPhotoAsset');
-    debugPrint('  Gallery Photos  : ${_galleryPhotos.map((e) => e['label']).toList()}');
-    debugPrint('====================================================');
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Photo draft saved successfully'),
@@ -698,14 +685,13 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   void _onContinueToGovtId() {
-    debugPrint('====================================================');
-    debugPrint('[STEP 4: PHOTOS & PRIVACY SUBMITTED]');
-    debugPrint('  Primary Photo   : $_primaryPhotoAsset');
-    debugPrint('  Gallery Count   : ${_galleryPhotos.length}');
-    for (int i = 0; i < _galleryPhotos.length; i++) {
-      debugPrint('    Photo ${i + 1}   : ${_galleryPhotos[i]['label']} (${_galleryPhotos[i]['status']})');
-    }
-    debugPrint('====================================================');
+    print('====================================================');
+    print('📸 [USER INPUT: STEP 4 - PHOTOS & PRIVACY]');
+    print('   Primary Photo   : $_primaryPhotoAsset');
+    print('   Gallery Photos  : ${_galleryPhotos.map((e) => e['label']).toList()} (${_galleryPhotos.length}/5)');
+    print('   Photo Privacy   : Visible to All Verified Members (Watermarked)');
+    print('   Watermark Policy: Active ✓');
+    print('====================================================');
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -851,7 +837,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
         Icon(Icons.circle, size: 6, color: Color(0xFF701A33)),
         SizedBox(width: 6),
         Text(
-          'STEP 4 OF 6 • PHOTOS & PRIVACY',
+          'PHOTOS & PRIVACY',
           style: TextStyle(
             color: Color(0xFF701A33),
             fontSize: 11,

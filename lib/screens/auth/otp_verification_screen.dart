@@ -75,13 +75,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   void _verifyOtp() {
     if (_otp.length == 4) {
-      debugPrint('====================================================');
-      debugPrint('[AUTH: OTP VERIFIED]');
-      debugPrint('  Country Code : ${widget.countryCode}');
-      debugPrint('  Mobile Number: ${widget.mobileNumber}');
-      debugPrint('  Full Phone   : ${widget.countryCode} ${widget.mobileNumber}');
-      debugPrint('  Entered OTP  : $_otp');
-      debugPrint('====================================================');
+      print('====================================================');
+      print('🔐 [USER INPUT: OTP VERIFICATION]');
+      print('   Mobile Number: ${widget.countryCode} ${widget.mobileNumber}');
+      print('   Entered OTP  : $_otp');
+      print('   Status       : OTP Verified ✓');
+      print('====================================================');
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('OTP Verified Successfully!'),

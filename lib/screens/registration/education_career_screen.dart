@@ -473,25 +473,25 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       return;
     }
 
-    debugPrint('====================================================');
-    debugPrint('[STEP 3: EDUCATION, CAREER & LIFESTYLE SUBMITTED]');
-    debugPrint('  Highest Education  : $_highestEducation');
-    debugPrint('  Degree             : ${_degreeController.text}');
-    debugPrint('  College            : ${_collegeController.text}');
-    debugPrint('  Employment Sector  : $_employmentSector');
-    debugPrint('  Designation        : ${_designationController.text}');
-    debugPrint('  Company            : ${_companyController.text}');
-    debugPrint('  Work Location      : ${_workLocationController.text}');
-    debugPrint('  Work Arrangement   : $_workArrangement');
-    debugPrint('  Annual Income      : $_currencySymbol ${_incomeController.text}');
-    debugPrint('  Citizenship        : $_citizenship ${_citizenship == "Other" ? "(${_otherCitizenshipController.text})" : ""}');
-    debugPrint('  Dietary Preference : $_dietaryPreference');
-    debugPrint('  Smoking Habit      : $_smokingHabit');
-    debugPrint('  Drinking Habit     : $_drinkingHabit');
-    debugPrint('  Hobbies            : $_selectedHobbies');
-    debugPrint('  Cultural Outlook   : $_culturalOutlook');
-    debugPrint('  Bio                : ${_bioController.text}');
-    debugPrint('====================================================');
+    print('====================================================');
+    print('🎓 [USER INPUT: STEP 3 - EDUCATION, CAREER & LIFESTYLE]');
+    print('   Highest Education  : $_highestEducation');
+    print('   Degree             : ${_degreeController.text.trim()}');
+    print('   College/University : ${_collegeController.text.trim()}');
+    print('   Employment Sector  : $_employmentSector');
+    print('   Designation        : ${_designationController.text.trim()}');
+    print('   Company            : ${_companyController.text.trim()}');
+    print('   Work Location      : ${_workLocationController.text.trim()}');
+    print('   Work Arrangement   : $_workArrangement');
+    print('   Annual Income      : $_currencySymbol ${_incomeController.text.trim()}');
+    print('   Citizenship        : $_citizenship ${_citizenship == "Other" ? "(${_otherCitizenshipController.text.trim()})" : ""}');
+    print('   Dietary Preference : $_dietaryPreference');
+    print('   Smoking Habit      : $_smokingHabit');
+    print('   Drinking Habit     : $_drinkingHabit');
+    print('   Hobbies            : $_selectedHobbies');
+    print('   Cultural Outlook   : $_culturalOutlook');
+    print('   About Me / Bio     : ${_bioController.text.trim()}');
+    print('====================================================');
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -699,7 +699,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
               const SizedBox(width: 6),
               const Expanded(
                 child: Text(
-                  'STEP 3 OF 6 • EDUCATION, CAREER & LIFESTYLE',
+                  'EDUCATION, CAREER & LIFESTYLE',
                   style: TextStyle(
                     color: Color(0xFF881337),
                     fontSize: 12,

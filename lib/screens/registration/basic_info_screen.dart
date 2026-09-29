@@ -534,26 +534,26 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
 
   void _onContinue() {
     FocusScope.of(context).unfocus();
-    debugPrint('====================================================');
-    debugPrint('[STEP 1: BASIC INFO SUBMITTED]');
-    debugPrint('  Profile Created For : $_profileFor');
-    debugPrint('  Legal Full Name     : ${_nameController.text}');
-    debugPrint('  Date of Birth       : ${_dobController.text}');
-    debugPrint('  Time of Birth       : ${_birthTimeController.text}');
-    debugPrint('  Place of Birth      : ${_birthPlaceController.text}');
-    debugPrint('  Height              : $_heightFormatted');
-    debugPrint('  Gender              : $_gender');
-    debugPrint('  Mother Tongue       : $_motherTongue');
-    debugPrint('  Secondary Languages : $_selectedLanguages');
-    debugPrint('  Religion            : ${_religionController.text}');
-    debugPrint('  Community / Caste   : $_selectedCaste');
-    debugPrint('  Kula Deivam/Kootam  : ${_kootamController.text}');
-    debugPrint('  Gothram             : ${_gothramController.text}');
-    debugPrint('  Marital Status      : $_maritalStatus');
+    print('====================================================');
+    print('📋 [USER INPUT: STEP 1 - BASIC & ASTROLOGY DETAILS]');
+    print('   Profile For     : $_profileFor');
+    print('   Full Name       : ${_nameController.text.trim()}');
+    print('   Date of Birth   : ${_dobController.text.trim()}');
+    print('   Time of Birth   : ${_birthTimeController.text.trim()}');
+    print('   Place of Birth  : ${_birthPlaceController.text.trim()}');
+    print('   Height          : $_heightFormatted');
+    print('   Gender          : $_gender');
+    print('   Mother Tongue   : $_motherTongue');
+    print('   Secondary Lang  : $_selectedLanguages');
+    print('   Religion        : ${_religionController.text.trim()}');
+    print('   Caste/Community : $_selectedCaste');
+    print('   Kula Deivam     : ${_kootamController.text.trim()}');
+    print('   Gothram         : ${_gothramController.text.trim()}');
+    print('   Marital Status  : $_maritalStatus');
     if (_requiresChildrenSelection) {
-      debugPrint('  Children Status     : $_childrenStatus');
+      print('   Children Status : $_childrenStatus');
     }
-    debugPrint('====================================================');
+    print('====================================================');
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => FamilyDetailsScreen(
@@ -774,7 +774,8 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                'STEP 1 OF 6 • Vital Details',
+                '',
+                // 'STEP 1 OF 6 • Vital Details',
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w800,

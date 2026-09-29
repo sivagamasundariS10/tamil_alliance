@@ -2,7 +2,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../auth/mobile_auth_screen.dart';
-import '../auth/otp_login_screen.dart';
+import '../auth/password_login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -278,7 +278,7 @@ class WelcomeScreen extends StatelessWidget {
                 badgeBg: const Color(0xFFF3E8FF),
                 badgeTextColor: const Color(0xFF701A33),
                 description:
-                    'Zero fake profiles, authenticated by government ID & verified family background.',
+                    'Mobile number  and government ID verified',
               ),
 
               const SizedBox(height: 12),
@@ -313,7 +313,7 @@ class WelcomeScreen extends StatelessWidget {
                 badgeBg: const Color(0xFFE0F2FE),
                 badgeTextColor: const Color(0xFF0369A1),
                 description:
-                    'Contact numbers and full photo albums are unveiled only upon mutual parental consent.',
+                    'Contact numbers and full photo albums are unveiled only upon mutual consent.',
               ),
 
               const SizedBox(height: 14),
@@ -449,7 +449,7 @@ class WelcomeScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Get Started / ஆரம்பிக்கவும்',
+                        'Sign up / பதிவு செய்க',
                         style: TextStyle(
                           fontSize: 14.5,
                           fontWeight: FontWeight.w700,
@@ -479,7 +479,7 @@ class WelcomeScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const OtpLoginScreen()),
+                        MaterialPageRoute(builder: (_) => const PasswordLoginScreen()),
                       );
                     },
                     child: const Text(

@@ -261,27 +261,25 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
       return;
     }
 
-    debugPrint('====================================================');
-    debugPrint('[STEP 2: FAMILY DETAILS SUBMITTED]');
-    debugPrint('  Father Name       : ${_fatherNameController.text}');
-    debugPrint('  Father Occupation : ${_fatherOccController.text}');
-    debugPrint('  Mother Name       : ${_motherNameController.text}');
-    debugPrint('  Mother Occupation : ${_motherOccController.text}');
-    debugPrint('  No Siblings       : $_noSiblings');
+    print('====================================================');
+    print('👨‍👩‍👧‍👦 [USER INPUT: STEP 2 - FAMILY DETAILS]');
+    print('   Father Name       : ${_fatherNameController.text.trim()}');
+    print('   Father Occupation : ${_fatherOccController.text.trim()}');
+    print('   Mother Name       : ${_motherNameController.text.trim()}');
+    print('   Mother Occupation : ${_motherOccController.text.trim()}');
+    print('   No Siblings       : $_noSiblings');
     if (!_noSiblings) {
       for (int i = 0; i < _siblings.length; i++) {
-        debugPrint(
-          '    Sibling ${i + 1}  : Name="${_siblings[i].nameController.text}", Rel="${_siblings[i].relationship}", Marital="${_siblings[i].maritalStatus}"',
-        );
+        print('   Sibling ${i + 1}         : Name="${_siblings[i].nameController.text}", Rel="${_siblings[i].relationship}", Status="${_siblings[i].maritalStatus}"');
       }
     }
-    debugPrint('  Family Type       : $_familyType');
-    debugPrint('  Family Values     : $_familyValues');
-    debugPrint('  Residence City    : ${_residenceCityController.text}');
-    debugPrint('  Native Town       : ${_nativeTownController.text}');
-    debugPrint('  Affluence Tier    : $_affluenceTier');
-    debugPrint('  Property Status   : $_propertyStatus');
-    debugPrint('====================================================');
+    print('   Family Type       : $_familyType');
+    print('   Family Values     : $_familyValues');
+    print('   Residence City    : ${_residenceCityController.text.trim()}');
+    print('   Native Town       : ${_nativeTownController.text.trim()}');
+    print('   Affluence Tier    : $_affluenceTier');
+    print('   Property Status   : $_propertyStatus');
+    print('====================================================');
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -489,7 +487,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
           const SizedBox(width: 6),
           const Expanded(
             child: Text(
-              'STEP 2 OF 6 • FAMILY DETAILS',
+              'FAMILY DETAILS',
               style: TextStyle(
                 color: Color(0xFF881337),
                 fontSize: 12,
@@ -760,7 +758,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   ),
                   const SizedBox(width: 10),
                   const Text(
-                    'No Siblings (Only Child)',
+                    'No Siblings',
                     style: TextStyle(
                       fontSize: 12.5,
                       fontWeight: FontWeight.w600,
@@ -1289,7 +1287,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               Expanded(
                 child: _buildTierBox(
                   title: 'Middle Class',
-                  range: '₹5L – ₹15L / year',
+                  range: 'Below 1Cr',
                   isSelected: _affluenceTier == 'Middle Class',
                   onTap: () {
                     setState(() => _affluenceTier = 'Middle Class');
@@ -1301,7 +1299,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               Expanded(
                 child: _buildTierBox(
                   title: 'Upper Middle',
-                  range: '₹15L – ₹40L / year',
+                  range: 'Upto  1Cr - 5Cr',
                   isSelected: _affluenceTier == 'Upper Middle',
                   onTap: () {
                     setState(() => _affluenceTier = 'Upper Middle');
@@ -1317,7 +1315,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               Expanded(
                 child: _buildTierBox(
                   title: 'Affluent/Rich',
-                  range: '₹40L – ₹1 Cr+ / year',
+                  range: 'Upto ₹5Cr - 25Cr',
                   isSelected: _affluenceTier == 'Affluent/Rich',
                   onTap: () {
                     setState(() => _affluenceTier = 'Affluent/Rich');
@@ -1329,7 +1327,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               Expanded(
                 child: _buildTierBox(
                   title: 'Elite',
-                  range: '₹1 Cr+ / year & Ultra HNI',
+                  range: 'Upto  ₹25Cr+',
                   isSelected: _affluenceTier == 'Elite',
                   onTap: () {
                     setState(() => _affluenceTier = 'Elite');
@@ -1339,59 +1337,6 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               ),
             ],
           ),
-
-          if (_affluenceTier != null) ...[
-            const SizedBox(height: 12),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFF1F3),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFFCE7EC), width: 1),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF881337).withValues(alpha: 0.12),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.check_rounded,
-                      size: 13,
-                      color: Color(0xFF881337),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text.rich(
-                      TextSpan(
-                        text: 'Selected Range: ',
-                        style: const TextStyle(
-                          fontSize: 11.5,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF881337),
-                        ),
-                        children: [
-                          TextSpan(
-                            text: _selectedRangeDetail,
-                            style: const TextStyle(
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xFF1E293B),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
           const SizedBox(height: 14),
 
           // Residential Property Status *
@@ -1425,21 +1370,6 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
         ],
       ),
     );
-  }
-
-  String get _selectedRangeDetail {
-    switch (_affluenceTier) {
-      case 'Middle Class':
-        return '₹5L – ₹15L Annual Family Income';
-      case 'Upper Middle':
-        return '₹15L – ₹40L Annual Family Income';
-      case 'Affluent/Rich':
-        return '₹40L – ₹1 Cr+ Annual Family Income';
-      case 'Elite':
-        return '₹1 Cr+ & Ultra HNI Annual Family Income';
-      default:
-        return '${_affluenceTier ?? ""} Annual Family Income';
-    }
   }
 
   // H) Security Footer Badge

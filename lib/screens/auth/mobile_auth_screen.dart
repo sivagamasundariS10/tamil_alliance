@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/constants/app_colors.dart';
 import 'otp_verification_screen.dart';
 
@@ -14,7 +15,6 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
   String _selectedCountryCode = '+91';
   bool _agreeTerms = false;
   bool _confirmMarriagePurpose = false;
-  bool _whatsappAlerts = false;
 
   final List<Map<String, String>> _countryCodes = [
     {'name': 'India', 'code': '+91'},
@@ -34,6 +34,76 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
     {'name': 'Kuwait', 'code': '+965'},
   ];
 
+  int _getMaxPhoneLength(String countryCode) {
+    switch (countryCode) {
+      case '+91':
+        return 10;
+      case '+1':
+        return 10;
+      case '+44':
+        return 10;
+      case '+65':
+        return 8;
+      case '+60':
+        return 10;
+      case '+971':
+        return 9;
+      case '+94':
+        return 9;
+      case '+61':
+        return 9;
+      case '+49':
+        return 11;
+      case '+33':
+        return 9;
+      case '+974':
+        return 8;
+      case '+966':
+        return 9;
+      case '+968':
+        return 8;
+      case '+965':
+        return 8;
+      default:
+        return 10;
+    }
+  }
+
+  String _getPhoneHint(String countryCode) {
+    switch (countryCode) {
+      case '+91':
+        return 'Enter 10-digit number';
+      case '+1':
+        return 'Enter 10-digit number';
+      case '+44':
+        return 'Enter 10-digit number';
+      case '+65':
+        return 'Enter 8-digit number';
+      case '+60':
+        return 'Enter 10-digit number';
+      case '+971':
+        return 'Enter 9-digit number';
+      case '+94':
+        return 'Enter 9-digit number';
+      case '+61':
+        return 'Enter 9-digit number';
+      case '+49':
+        return 'Enter 11-digit number';
+      case '+33':
+        return 'Enter 9-digit number';
+      case '+974':
+        return 'Enter 8-digit number';
+      case '+966':
+        return 'Enter 9-digit number';
+      case '+968':
+        return 'Enter 8-digit number';
+      case '+965':
+        return 'Enter 8-digit number';
+      default:
+        return 'Enter mobile number';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -50,15 +120,16 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
 
   bool get _isPhoneValid {
     final cleanDigits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    return cleanDigits.length >= 10;
+    return cleanDigits.length == _getMaxPhoneLength(_selectedCountryCode);
   }
 
   int get _completedPercentage {
     int score = 0;
     final cleanDigits = _phoneController.text.replaceAll(RegExp(r'\D'), '');
-    if (cleanDigits.length >= 10) {
+    final maxLen = _getMaxPhoneLength(_selectedCountryCode);
+    if (cleanDigits.length == maxLen) {
       score += 15;
-    } else if (cleanDigits.length >= 5) {
+    } else if (cleanDigits.length >= 4) {
       score += 7;
     }
 
@@ -150,6 +221,11 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                         onTap: () {
                           setState(() {
                             _selectedCountryCode = item['code']!;
+                            final maxLen = _getMaxPhoneLength(_selectedCountryCode);
+                            if (_phoneController.text.length > maxLen) {
+                              _phoneController.text =
+                                  _phoneController.text.substring(0, maxLen);
+                            }
                           });
                           Navigator.pop(context);
                         },
@@ -407,73 +483,11 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
 
                       // Subtitle
                       const Text(
-                        'We will send an instant 6-digit verification code to validate your profile and ensure family trust.',
+                        'We will send an instant 4-digit verification code to validate your profile and ensure family trust.',
                         style: TextStyle(
                           fontSize: 12.5,
                           color: Color(0xFF6B7280),
                           height: 1.4,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Social Proof Badge with 3 Realistic Avatars
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 9),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5EEFD),
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Row(
-                          children: [
-                            // 3 Overlapping Real Wedding Avatars
-                            SizedBox(
-                              width: 68,
-                              height: 30,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    child: _buildImageAvatar(
-                                        'assets/images/avatar1.jpg'),
-                                  ),
-                                  Positioned(
-                                    left: 18,
-                                    child: _buildImageAvatar(
-                                        'assets/images/avatar2.jpg'),
-                                  ),
-                                  Positioned(
-                                    left: 36,
-                                    child: _buildImageAvatar(
-                                        'assets/images/avatar3.jpg'),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: RichText(
-                                text: const TextSpan(
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Color(0xFF4B5563),
-                                      height: 1.35),
-                                  children: [
-                                    TextSpan(text: 'Joined by '),
-                                    TextSpan(
-                                      text: '54,000+ verified families',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF701A33),
-                                      ),
-                                    ),
-                                    TextSpan(
-                                        text: '\nacross Tamil Nadu & overseas.'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                       ),
                     ],
@@ -580,22 +594,26 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                             Expanded(
                               child: TextField(
                                 controller: _phoneController,
-                                keyboardType: TextInputType.phone,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  LengthLimitingTextInputFormatter(_getMaxPhoneLength(_selectedCountryCode)),
+                                ],
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFF111827),
                                   letterSpacing: 0.3,
                                 ),
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   isDense: true,
-                                  contentPadding: EdgeInsets.symmetric(vertical: 8),
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 8),
                                   border: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   fillColor: Colors.transparent,
-                                  hintText: 'Enter 10-digit number',
-                                  hintStyle: TextStyle(
+                                  hintText: _getPhoneHint(_selectedCountryCode),
+                                  hintStyle: const TextStyle(
                                     color: Color(0xFF9CA3AF),
                                     fontSize: 14,
                                     fontWeight: FontWeight.normal,
@@ -715,76 +733,6 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 12),
-
-                // Declaration 3: WhatsApp Auspicious Alerts Card
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F7FF),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFE0E7FF)),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _whatsappAlerts = !_whatsappAlerts;
-                          });
-                        },
-                        child: _buildCheckboxBox(_whatsappAlerts),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  'WhatsApp Auspicious Alerts',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF111827),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 7, vertical: 2),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFD1FAE5),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: const Text(
-                                    'Enabled',
-                                    style: TextStyle(
-                                      fontSize: 9.5,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xFF065F46),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                            const Text(
-                              'Receive matched horoscope points (Porutham) and immediate interest alerts directly on WhatsApp.',
-                              style: TextStyle(
-                                fontSize: 11.5,
-                                color: Color(0xFF6B7280),
-                                height: 1.35,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
 
                 const SizedBox(height: 22),
 
@@ -795,14 +743,14 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                   child: ElevatedButton(
                     onPressed: _isPhoneValid && _agreeTerms && _confirmMarriagePurpose
                         ? () {
-                            debugPrint('====================================================');
-                            debugPrint('[AUTH: MOBILE NUMBER SUBMITTED]');
-                            debugPrint('  Country Code : $_selectedCountryCode');
-                            debugPrint('  Phone Number : ${_phoneController.text.trim()}');
-                            debugPrint('  Full Mobile  : $_selectedCountryCode ${_phoneController.text.trim()}');
-                            debugPrint('  Agreed Terms : $_agreeTerms');
-                            debugPrint('  Confirmed Marriage Purpose : $_confirmMarriagePurpose');
-                            debugPrint('====================================================');
+                            print('====================================================');
+                            print('📱 [USER INPUT: MOBILE AUTH]');
+                            print('   Country Code : $_selectedCountryCode');
+                            print('   Mobile Number: ${_phoneController.text.trim()}');
+                            print('   Full Phone   : $_selectedCountryCode ${_phoneController.text.trim()}');
+                            print('   Agreed Terms : $_agreeTerms');
+                            print('   Marriage Only: $_confirmMarriagePurpose');
+                            print('====================================================');
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => OtpVerificationScreen(
@@ -813,11 +761,12 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                             );
                           }
                         : () {
+                            final maxLen = _getMaxPhoneLength(_selectedCountryCode);
                             if (!_isPhoneValid) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please enter a valid 10-digit mobile number'),
-                                  backgroundColor: Color(0xFF701A33),
+                                SnackBar(
+                                  content: Text('Please enter a valid $maxLen-digit mobile number for $_selectedCountryCode'),
+                                  backgroundColor: const Color(0xFF701A33),
                                 ),
                               );
                             } else if (!_agreeTerms || !_confirmMarriagePurpose) {
@@ -916,34 +865,6 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                 const SizedBox(height: 40),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildImageAvatar(String assetPath) {
-    return Container(
-      width: 28,
-      height: 28,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
-      ),
-      child: ClipOval(
-        child: Image.asset(
-          assetPath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => Container(
-            color: const Color(0xFF701A33),
-            child: const Icon(Icons.person, size: 14, color: Colors.white),
           ),
         ),
       ),

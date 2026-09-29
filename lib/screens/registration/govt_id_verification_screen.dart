@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
 import '../home/home_screen.dart';
+import 'partner_preferences_screen.dart';
 
 class GovtIdVerificationScreen extends StatefulWidget {
   final String? mobileNumber;
@@ -414,15 +415,6 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
   }
 
   void _onSaveDraft() {
-    debugPrint('====================================================');
-    debugPrint('[STEP 5 DRAFT SAVED: GOVT ID & VERIFICATION]');
-    debugPrint('  Document Type   : $_selectedDocType');
-    debugPrint('  ID Number       : ${_idNumberController.text}');
-    debugPrint('  Front Uploaded  : $_frontSideUploaded');
-    debugPrint('  Back Uploaded   : $_backSideUploaded');
-    debugPrint('  Selfie Captured : $_selfieCaptured');
-    debugPrint('====================================================');
-
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Verification draft saved successfully'),
@@ -432,32 +424,43 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
     );
   }
 
+  void _onSkip() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PartnerPreferencesScreen(
+          mobileNumber: widget.mobileNumber,
+          profileFor: widget.profileFor,
+        ),
+      ),
+    );
+  }
+
   void _onSubmitAndFinish() {
-    debugPrint('====================================================');
-    debugPrint('[STEP 5 SUBMITTED: IDENTITY & GOVT VERIFICATION]');
-    debugPrint('  Document Type   : $_selectedDocType');
-    debugPrint('  ID Number       : ${_idNumberController.text}');
-    debugPrint('  Front Uploaded  : $_frontSideUploaded');
-    debugPrint('  Back Uploaded   : $_backSideUploaded');
-    debugPrint('  Selfie Captured : $_selfieCaptured');
-    debugPrint('  Sacred Oaths    : 1=$_oath1Checked, 2=$_oath2Checked');
-    debugPrint('====================================================');
+    print('====================================================');
+    print('🪪 [USER INPUT: STEP 5 - GOVT ID & IDENTITY VERIFICATION]');
+    print('   Document Type   : $_selectedDocType');
+    print('   ID Number       : ${_idNumberController.text.trim()}');
+    print('   Front Uploaded  : $_frontSideUploaded');
+    print('   Back Uploaded   : $_backSideUploaded');
+    print('   Live Selfie     : $_selfieCaptured');
+    print('   Sacred Oaths    : Oath 1=$_oath1Checked, Oath 2=$_oath2Checked');
+    print('====================================================');
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Registration completed successfully! Welcome to Tamil Alliance.'),
+        content: Text('ID verification details saved. Moving to Partner Preferences.'),
         backgroundColor: Color(0xFF10B981),
-        duration: Duration(milliseconds: 1500),
+        duration: Duration(milliseconds: 1400),
       ),
     );
 
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (_) => HomeScreen(
-          userPhone: widget.mobileNumber,
+        builder: (_) => PartnerPreferencesScreen(
+          mobileNumber: widget.mobileNumber,
+          profileFor: widget.profileFor,
         ),
       ),
-      (route) => false,
     );
   }
 
@@ -573,93 +576,21 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 2. Step Tracker & Trust Shield Header Card
-  // ─────────────────────────────────────────────────────────────
   Widget _buildStepHeaderCard() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+    return const Row(
+      children: [
+        Icon(Icons.circle, size: 6, color: Color(0xFF881337)),
+        SizedBox(width: 6),
+        Text(
+          'IDENTITY & GOVT VERIFICATION',
+          style: TextStyle(
+            color: Color(0xFF881337),
+            fontSize: 11,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.8,
           ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 7,
-            height: 7,
-            decoration: const BoxDecoration(
-              color: Color(0xFF881337),
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 8),
-          const Expanded(
-            child: Text(
-              'STEP 5 OF 6 • IDENTITY & GOVT\nVERIFICATION',
-              style: TextStyle(
-                color: Color(0xFF881337),
-                fontSize: 11,
-                fontWeight: FontWeight.w800,
-                letterSpacing: 0.4,
-                height: 1.35,
-              ),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEFF6FF),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFFBFDBFE)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.shield_outlined,
-                  size: 14,
-                  color: Color(0xFF2563EB),
-                ),
-                const SizedBox(width: 5),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Text(
-                      'Trust & Safety',
-                      style: TextStyle(
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF1D4ED8),
-                        height: 1.1,
-                      ),
-                    ),
-                    Text(
-                      'Shield',
-                      style: TextStyle(
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF1D4ED8),
-                        height: 1.1,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -781,72 +712,6 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
                     });
                   }
                 },
-              ),
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          // ID Number Input Field
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'Govt ID Number (Last 4 Digits Visible)',
-                style: TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF475569),
-                ),
-              ),
-              Text(
-                'Auto-Masked',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF94A3B8),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: const Color(0xFFCBD5E1)),
-            ),
-            child: TextField(
-              controller: _idNumberController,
-              style: const TextStyle(
-                fontSize: 13.5,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF1E293B),
-                letterSpacing: 0.5,
-              ),
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock_outline_rounded, size: 18, color: Color(0xFF94A3B8)),
-                hintText: _selectedDocType.contains('Aadhaar')
-                    ? 'Enter 12-digit Aadhaar number'
-                    : _selectedDocType.contains('Passport')
-                        ? 'Enter 8-character Passport number'
-                        : _selectedDocType.contains('PAN')
-                            ? 'Enter 10-character PAN number'
-                            : 'Enter ID number',
-                hintStyle: const TextStyle(
-                  fontSize: 12.5,
-                  color: Color(0xFF94A3B8),
-                  fontWeight: FontWeight.normal,
-                ),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedErrorBorder: InputBorder.none,
-                filled: false,
-                isDense: true,
-                contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
               ),
             ),
           ),
@@ -1425,7 +1290,7 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: _onSubmitAndFinish,
+            onPressed: _onSkip,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
