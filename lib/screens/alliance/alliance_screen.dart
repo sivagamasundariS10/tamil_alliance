@@ -279,7 +279,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                           ),
                           Text(
                             'Dr. Priyadarshini Sundaram • 10 Porutham Analysis',
-                            style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                            style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                           ),
                         ],
                       ),
@@ -330,7 +330,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                                       child: Text(
                                         'லக்னம்\nசிம்மம்',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Color(0xFF92400E)),
+                                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF92400E)),
                                       ),
                                     ),
                                   ),
@@ -341,7 +341,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                                       child: Text(
                                         'ராசி:\nமகம் 2',
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: Color(0xFF92400E)),
+                                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF92400E)),
                                       ),
                                     ),
                                   ),
@@ -407,7 +407,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
         child: Text(
           text,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700, color: Color(0xFF451A03)),
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF451A03)),
         ),
       ),
     );
@@ -419,7 +419,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: const TextStyle(fontSize: 11.5, color: Color(0xFF334155), fontWeight: FontWeight.w600)),
+          Text(title, style: const TextStyle(fontSize: 13, color: Color(0xFF334155), fontWeight: FontWeight.w600)),
           Row(
             children: [
               Icon(
@@ -431,7 +431,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
               Text(
                 status,
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: isMatch ? const Color(0xFF059669) : const Color(0xFFDC2626),
                 ),
@@ -446,7 +446,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.only(top: 12, bottom: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -529,7 +529,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                     filter['title'] as String,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                       color: isSelected
                           ? Colors.white
@@ -602,7 +602,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   Text(
                     'Filter',
                     style: TextStyle(
-                      fontSize: 11.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF334155),
                     ),
@@ -630,10 +630,10 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   Expanded(
                     child: TextField(
                       controller: _searchController,
-                      style: const TextStyle(fontSize: 12, color: Color(0xFF1E293B)),
+                      style: const TextStyle(fontSize: 13, color: Color(0xFF1E293B)),
                       decoration: const InputDecoration(
                         hintText: 'search by ID Number',
-                        hintStyle: TextStyle(fontSize: 11.5, color: Color(0xFF94A3B8)),
+                        hintStyle: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -713,7 +713,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                             child: const Text(
                               'Active Today',
                               style: TextStyle(
-                                fontSize: 9.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: Color(0xFF6D28D9),
                               ),
@@ -732,7 +732,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   TextSpan(
                     text: 'M.B.B.S, M.D. (Pediatrics)',
                     style: const TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF701A33),
                     ),
@@ -740,7 +740,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                       TextSpan(
                         text: ' • 26 Yrs, 5\' 5" (165 cm)',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF64748B),
                         ),
@@ -754,7 +754,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 const Text(
                   'Senior Resident Physician, Apollo Children\'s Hospital, Chennai • Native: Coimbatore',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     color: Color(0xFF475569),
                     height: 1.35,
                   ),
@@ -777,7 +777,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                       Text(
                         'Lineage: ',
                         style: TextStyle(
-                          fontSize: 10.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF64748B),
                         ),
@@ -812,7 +812,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                         label: Text(
                           'Shortlist ($_shortlistCount)',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                             color: _isShortlisted ? const Color(0xFFE11D48) : const Color(0xFF4338CA),
                           ),
@@ -841,7 +841,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                         label: const Text(
                           'Share Biodata',
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF0F766E),
                           ),
@@ -901,7 +901,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                               ? 'Tap this button to withdraw / unsend your interest'
                               : 'Instant SMS & App notification sent to registered users',
                           style: const TextStyle(
-                            fontSize: 8.5,
+                            fontSize: 13,
                             color: Colors.white70,
                             fontWeight: FontWeight.w500,
                           ),
@@ -985,7 +985,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                     Text(
                       '100% ID Verified',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF0369A1),
                       ),
@@ -1009,7 +1009,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                     Text(
                       'Vedic Horoscope Match',
                       style: TextStyle(
-                        fontSize: 9.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Colors.white,
                       ),
@@ -1039,7 +1039,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 Text(
                   '1/5 Photos',
                   style: TextStyle(
-                    fontSize: 9.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
@@ -1075,7 +1075,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 child: Text(
                   'Vedic Astrology Porutham',
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF1E293B),
                   ),
@@ -1092,7 +1092,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 child: const Text(
                   '9 / 10 Matched',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF4338CA),
                   ),
@@ -1116,11 +1116,11 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text('Rasi', style: TextStyle(fontSize: 9.5, color: Color(0xFF64748B))),
+                      Text('Rasi', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                       SizedBox(height: 2),
                       Text(
                         'Simha (Leo)',
-                        style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                       ),
                     ],
                   ),
@@ -1138,11 +1138,11 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text('Nakshatram', style: TextStyle(fontSize: 9.5, color: Color(0xFF64748B))),
+                      Text('Nakshatram', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                       SizedBox(height: 2),
                       Text(
                         'Magham (Padam 2)',
-                        style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                       ),
                     ],
                   ),
@@ -1159,12 +1159,12 @@ class _AllianceScreenState extends State<AllianceScreen> {
               SizedBox(width: 5),
               Text(
                 'Chevvai Dosham: ',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF334155)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF334155)),
               ),
               Expanded(
                 child: Text(
                   'No Dosham (செவ்வாய் தோஷம் இல்லை)',
-                  style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: Color(0xFF059669)),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF059669)),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -1177,12 +1177,12 @@ class _AllianceScreenState extends State<AllianceScreen> {
             children: const [
               Text(
                 'Rajju Porutham: ',
-                style: TextStyle(fontSize: 10.5, color: Color(0xFF475569)),
+                style: TextStyle(fontSize: 13, color: Color(0xFF475569)),
               ),
               Expanded(
                 child: Text(
                   '★ Uthama / Supreme Match',
-                  style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: Color(0xFF92400E)),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF92400E)),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -1226,7 +1226,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                     child: Text(
                       'View Full 12-House Chakram & Jathagam',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF4338CA),
                       ),
@@ -1266,7 +1266,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 child: Text(
                   'Family Heritage & Background',
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF1E293B),
                   ),
@@ -1322,13 +1322,13 @@ class _AllianceScreenState extends State<AllianceScreen> {
             width: 60,
             child: Text(
               label,
-              style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w700, color: Color(0xFF64748B)),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B)),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 10.5, color: Color(0xFF1E293B), fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 13, color: Color(0xFF1E293B), fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -1364,7 +1364,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 child: Text(
                   'Next Auspicious Match in Queue',
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w900,
                     color: Color(0xFF1E293B),
                   ),
@@ -1380,7 +1380,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                 child: const Text(
                   '91% Match',
                   style: TextStyle(
-                    fontSize: 9.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFFB45309),
                   ),
@@ -1421,17 +1421,17 @@ class _AllianceScreenState extends State<AllianceScreen> {
                     SizedBox(height: 2),
                     Text(
                       'B.Tech, MBA • Senior Product Manager',
-                      style: TextStyle(fontSize: 10.5, color: Color(0xFF475569), fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF475569), fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: 2),
                     Text(
                       'Google Bengaluru • 27 Yrs, 5\' 4"',
-                      style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                     ),
                     SizedBox(height: 2),
                     Text(
                       'Kongu Vellalar • Sadayam Nakshatram',
-                      style: TextStyle(fontSize: 9.5, color: Color(0xFF94A3B8)),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                     ),
                   ],
                 ),
@@ -1455,7 +1455,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   label: Text(
                     _isNextShortlisted ? 'Shortlisted' : 'Shortlist',
                     style: TextStyle(
-                      fontSize: 11.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: _isNextShortlisted ? const Color(0xFF701A33) : const Color(0xFF334155),
                     ),
@@ -1482,7 +1482,7 @@ class _AllianceScreenState extends State<AllianceScreen> {
                   ),
                   label: Text(
                     _isNextInterestSent ? 'Sent (Unsend)' : 'Send Interest',
-                    style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800),
+                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _isNextInterestSent ? const Color(0xFF0F766E) : const Color(0xFF701A33),
@@ -1520,7 +1520,7 @@ class _LineagePill extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          fontSize: 9.5,
+          fontSize: 13,
           fontWeight: FontWeight.w700,
           color: Color(0xFF334155),
         ),
@@ -1545,7 +1545,7 @@ class _PoruthamPill extends StatelessWidget {
       child: Text(
         title,
         style: const TextStyle(
-          fontSize: 9.5,
+          fontSize: 13,
           fontWeight: FontWeight.w700,
           color: Color(0xFF047857),
         ),
@@ -1584,7 +1584,7 @@ class _LifestylePill extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 9.5,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: color,
             ),

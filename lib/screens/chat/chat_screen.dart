@@ -167,7 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
     final list = _filteredConversations;
 
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +218,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Text(
                 'உரையாடல்கள் & நேரடி தொடர்பு',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   color: Color(0xFF64748B),
                   fontWeight: FontWeight.w500,
                 ),
@@ -299,7 +299,7 @@ class _ChatScreenState extends State<ChatScreen> {
               onChanged: (val) => setState(() => _searchQuery = val.trim()),
               decoration: const InputDecoration(
                 hintText: 'Search conversations or handles (@)...',
-                hintStyle: TextStyle(fontSize: 12.5, color: Color(0xFF94A3B8)),
+                hintStyle: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
@@ -396,7 +396,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 color: isSelected ? Colors.white : const Color(0xFF475569),
               ),
@@ -411,7 +411,7 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Text(
                 badgeText,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 13,
                   fontWeight: FontWeight.w900,
                   color: isSelected ? Colors.white : const Color(0xFF991B1B),
                 ),
@@ -519,7 +519,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         Text(
                           conv['time'] as String,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             fontWeight: isUnread ? FontWeight.w800 : FontWeight.w600,
                             color: isUnread ? const Color(0xFF701A33) : const Color(0xFF94A3B8),
                           ),
@@ -533,7 +533,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       '${conv['name']} • ${conv['profession']}',
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         color: Color(0xFF64748B),
                         fontWeight: FontWeight.w500,
                       ),
@@ -552,7 +552,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         child: Text(
                           tag,
                           style: const TextStyle(
-                            fontSize: 9.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFFB45309),
                           ),
@@ -575,7 +575,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             conv['lastMessage'] as String,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: isUnread ? FontWeight.w800 : FontWeight.w500,
                               color: isUnread ? const Color(0xFF1E293B) : const Color(0xFF475569),
                             ),
@@ -604,7 +604,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               Text(
                                 'Mutual Alliance Unlocked',
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w800,
                                   color: Color(0xFF1D4ED8),
                                 ),
@@ -624,7 +624,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             child: Text(
                               '$unreadCount',
                               style: const TextStyle(
-                                fontSize: 10,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w900,
                                 color: Colors.white,
                               ),
@@ -634,7 +634,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           Text(
                             statusRight,
                             style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF64748B),
                             ),

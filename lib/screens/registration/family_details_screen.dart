@@ -435,7 +435,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   'STEP 2 OF 6',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.8,
                   ),
@@ -490,7 +490,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               'FAMILY DETAILS',
               style: TextStyle(
                 color: Color(0xFF881337),
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 0.6,
               ),
@@ -540,7 +540,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   Text(
                     title,
                     style: const TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF0F172A),
                       letterSpacing: 0.5,
@@ -550,7 +550,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   Text(
                     subtitle,
                     style: const TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                     ),
                   ),
@@ -597,7 +597,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
           const Text(
             "Father's Full Name",
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: Color(0xFF334155),
             ),
@@ -652,7 +652,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
           const Text(
             "Mother's Full Name",
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: Color(0xFF334155),
             ),
@@ -710,7 +710,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               child: Text(
                 _noSiblings ? 'None' : '${_siblings.length} Added',
                 style: const TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF881337),
                 ),
@@ -760,7 +760,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   const Text(
                     'No Siblings',
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF334155),
                     ),
@@ -800,7 +800,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                     Text(
                       'Add Another Sibling',
                       style: TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF881337),
                       ),
@@ -844,7 +844,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                       child: Text(
                         '${index + 1}',
                         style: const TextStyle(
-                          fontSize: 11,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
                         ),
@@ -855,7 +855,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                   Text(
                     'Sibling ${index + 1}',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF0F172A),
                     ),
@@ -872,7 +872,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                     Text(
                       'Remove',
                       style: TextStyle(
-                        fontSize: 11.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFFE11D48),
                       ),
@@ -888,7 +888,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
           const Text(
             'Sibling Full Name',
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: Color(0xFF334155),
             ),
@@ -1045,7 +1045,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                 label,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected ? const Color(0xFF881337) : const Color(0xFF475569),
                 ),
@@ -1098,7 +1098,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected ? const Color(0xFF881337) : const Color(0xFF475569),
               ),
@@ -1395,7 +1395,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               child: Text(
                 '256-Bit Encrypted Sacred Matrimonial Charter',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w600,
                   color: Color(0xFF92400E),
                 ),
@@ -1413,7 +1413,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
       TextSpan(
         text: label,
         style: const TextStyle(
-          fontSize: 11.5,
+          fontSize: 13,
           fontWeight: FontWeight.w600,
           color: Color(0xFF334155),
         ),
@@ -1530,7 +1530,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                 label,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected ? const Color(0xFF881337) : const Color(0xFF475569),
                 ),
@@ -1572,7 +1572,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected ? Colors.white : const Color(0xFF475569),
               ),
@@ -1594,8 +1594,8 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        height: 54,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        height: 58,
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF881337) : const Color(0xFFF1F3FB),
           borderRadius: BorderRadius.circular(12),
@@ -1616,8 +1616,8 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                     title,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
                       color: isSelected ? Colors.white : const Color(0xFF1E293B),
                     ),
                   ),
@@ -1636,9 +1636,10 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               range,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 11.5,
                 fontWeight: isSelected ? FontWeight.w500 : FontWeight.w400,
                 color: isSelected ? Colors.white.withValues(alpha: 0.9) : const Color(0xFF64748B),
+                height: 1.2,
               ),
             ),
           ],
@@ -1695,7 +1696,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                 child: Text(
                   'Save Draft',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF131B2E),
                     letterSpacing: 0.36,

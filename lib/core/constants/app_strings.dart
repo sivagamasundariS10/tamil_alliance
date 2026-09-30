@@ -1,7 +1,7 @@
 class AppStrings {
   static const String appName = 'TAMIL ALLIANCE';
   static const String appTagline = 'Your Trustworthy Indo Alliance';
-  static const String companyFooter = 'INDO ALLIENCE PVT LIMITED';
+  static const String companyFooter = 'INDO ALLIANCE PVT LIMITED';
 
   // Auth Strings
   static const String loginTitle = 'Welcome Back';

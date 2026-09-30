@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'privacy_settings_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -68,7 +69,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 'Preferences & Account Control',
                 style: TextStyle(
                   color: Colors.white70,
-                  fontSize: 10.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -208,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   'Alliance ID -TA889123 • Chennai, TN',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     color: Color(0xFF64748B),
                     fontWeight: FontWeight.w500,
                   ),
@@ -244,7 +245,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: const Text(
                 'Download bio data',
                 style: TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF701A33),
                 ),
@@ -284,7 +285,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const Text(
                 'MEMBERSHIP & PLAN VALIDITY',
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF475569),
                   letterSpacing: 0.5,
@@ -301,7 +302,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: const Text(
                   'Kalyanam Gold',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF701A33),
                   ),
@@ -320,7 +321,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(
                       'Valid: 15 Jan 2026 – 15 May 2026',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF1E293B),
                       ),
@@ -329,7 +330,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(
                       'Auto-renews at preferred community rate',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                         color: Color(0xFF64748B),
                       ),
                     ),
@@ -346,7 +347,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: const Text(
                   '64 Days Remaining',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF701A33),
                   ),
@@ -382,7 +383,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   Text(
                     'Upgrade / Renew Plan',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
                     ),
@@ -423,7 +424,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           const Text(
                             'Push Notifications & Alerts',
                             style: TextStyle(
-                              fontSize: 12.5,
+                              fontSize: 13,
                               fontWeight: FontWeight.w800,
                               color: Color(0xFF1E293B),
                             ),
@@ -438,7 +439,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             child: const Text(
                               'ON',
                               style: TextStyle(
-                                fontSize: 9.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w900,
                                 color: Color(0xFF15803D),
                               ),
@@ -449,7 +450,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: 4),
                       const Text(
                         'Receive instant updates for match requests, family chats, and astrologer-approved muhurtham matches.',
-                        style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B), height: 1.3),
+                        style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.3),
                       ),
                     ],
                   ),
@@ -512,7 +513,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Text(
               title,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF334155),
               ),
@@ -553,7 +554,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 const Text(
                   '+91 98401 XXXXX',
-                  style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(width: 6),
                 Container(
@@ -564,7 +565,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   child: const Text(
                     '✓ Verified',
-                    style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: Color(0xFF15803D)),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF15803D)),
                   ),
                 ),
               ],
@@ -611,7 +612,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: 'Mobile Number Privacy',
             subtitle: 'Visible to Accepted Matches Only',
             subtitleColor: const Color(0xFFBE185D),
-            onTap: () => _showComingSoon('Mobile Number Privacy'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const PrivacySettingsScreen(),
+                ),
+              );
+            },
           ),
           _buildSettingsActionTile(
             icon: Icons.image_not_supported_outlined,
@@ -619,7 +627,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             iconColor: const Color(0xFF64748B),
             title: 'Photo Privacy',
             subtitle: 'Blur photos for unverified profiles',
-            onTap: () => _showComingSoon('Photo Privacy Settings'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const PrivacySettingsScreen(initialScrollToPhoto: true),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -662,7 +677,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: const Text(
                 'Update >',
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF9E1C3F),
                 ),
@@ -699,7 +714,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   'Toll-\nfree',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 9.5, color: Color(0xFF64748B), fontWeight: FontWeight.w600, height: 1.1),
+                  style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600, height: 1.1),
                 ),
                 SizedBox(width: 4),
                 Icon(Icons.chevron_right_rounded, size: 16, color: Color(0xFF94A3B8)),
@@ -716,7 +731,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   'Rate the App',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF1E293B),
                   ),
@@ -727,7 +742,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   '4.9',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFFF59E0B),
                   ),
@@ -748,7 +763,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   'Terms & Conditions',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF1E293B),
                   ),
@@ -757,7 +772,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Text(
                   '(விதிமுறைகள்)',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF94A3B8),
                   ),
@@ -813,7 +828,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         const Text(
                           'Deactivate Account',
                           style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF1E293B),
                           ),
@@ -827,7 +842,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           child: const Text(
                             'PAUSE',
-                            style: TextStyle(fontSize: 8.5, fontWeight: FontWeight.w800, color: Color(0xFF991B1B)),
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF991B1B)),
                           ),
                         ),
                       ],
@@ -835,7 +850,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SizedBox(height: 3),
                     const Text(
                       'Temporarily hide your profile and photo from all search results. You can reactivate anytime by logging back in.',
-                      style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B), height: 1.3),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.3),
                     ),
                   ],
                 ),
@@ -871,7 +886,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         const Text(
                           'Delete Account',
                           style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF991B1B),
                           ),
@@ -885,7 +900,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           child: const Text(
                             'PERMANENT',
-                            style: TextStyle(fontSize: 8.5, fontWeight: FontWeight.w800, color: Color(0xFF991B1B)),
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF991B1B)),
                           ),
                         ),
                       ],
@@ -893,7 +908,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     const SizedBox(height: 3),
                     const Text(
                       'Permanently wipe your biodata, verified Jathagam horoscope, conversation history, and active membership. This action cannot be reversed.',
-                      style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B), height: 1.3),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.3),
                     ),
                     const SizedBox(height: 10),
                     InkWell(
@@ -913,7 +928,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Text(
                               'Proceed to Delete',
                               style: TextStyle(
-                                fontSize: 11.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 color: Colors.white,
                               ),
@@ -983,7 +998,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Text(
             'Tamil Alliance v1.4.2',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: Color(0xFF94A3B8),
             ),
@@ -992,7 +1007,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Text(
             'Recognized in 2026 • 100% Secure Cultural Heritage',
             style: TextStyle(
-              fontSize: 9.5,
+              fontSize: 13,
               color: Color(0xFF94A3B8),
             ),
           ),
@@ -1012,7 +1027,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Text(
           title,
           style: const TextStyle(
-            fontSize: 10.5,
+            fontSize: 13,
             fontWeight: FontWeight.w900,
             color: Color(0xFF701A33),
             letterSpacing: 0.6,
@@ -1063,7 +1078,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF1E293B),
                       ),
@@ -1076,7 +1091,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 13,
                         color: subtitleColor ?? const Color(0xFF64748B),
                         fontWeight: FontWeight.w500,
                       ),
@@ -1118,7 +1133,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         content: const Text(
           'Are you sure you want to permanently delete your Tamil Alliance profile? All biodata, matching records, and active membership will be permanently erased.',
-          style: TextStyle(fontSize: 12, color: Color(0xFF475569)),
+          style: TextStyle(fontSize: 13, color: Color(0xFF475569)),
         ),
         actions: [
           TextButton(
@@ -1151,7 +1166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: const Text('Log Out', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900)),
         content: const Text(
           'Are you sure you want to log out from Tamil Alliance?',
-          style: TextStyle(fontSize: 12, color: Color(0xFF475569)),
+          style: TextStyle(fontSize: 13, color: Color(0xFF475569)),
         ),
         actions: [
           TextButton(

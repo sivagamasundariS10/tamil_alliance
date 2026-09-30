@@ -247,7 +247,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   'Account Registration',
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 11,
+                    fontSize: 13,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -339,7 +339,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                 child: Text(
                   is100 ? '100% Complete' : '$pct% Completed',
                   style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: is100 ? const Color(0xFF065F46) : const Color(0xFF9F1239),
                   ),
@@ -413,7 +413,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                 child: const Text(
                   'OPTIONAL',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF64748B),
                     letterSpacing: 0.5,
@@ -476,7 +476,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
               Text(
                 'FINAL STEP OF SECURITY',
                 style: TextStyle(
-                  fontSize: 9.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.6,
                   color: Color(0xFF701A33),
@@ -502,7 +502,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
         const Text(
           'Protect your confidential matrimonial biodata, sacred horoscope charts, and intimate family communications.',
           style: TextStyle(
-            fontSize: 12.5,
+            fontSize: 13,
             color: Color(0xFF64748B),
             height: 1.4,
           ),
@@ -552,7 +552,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   child: Text(
                     _strengthText,
                     style: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: _strengthTextColor,
                     ),
@@ -638,7 +638,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   ? 'Exceptional cryptographic entropy'
                   : 'Requires 8+ chars, numbers & symbols',
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 13,
                 color: _strengthScore == 4
                     ? const Color(0xFF92400E)
                     : const Color(0xFF94A3B8),
@@ -662,7 +662,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                 const Text(
                   'PASSWORD CRITERIA',
                   style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF475569),
                     letterSpacing: 0.6,
@@ -706,7 +706,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                     Text(
                       'Passwords Match',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF065F46),
                       ),
@@ -821,7 +821,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                       Text(
                         'Instant Face ID or Fingerprint unlock',
                         style: TextStyle(
-                          fontSize: 10.5,
+                          fontSize: 13,
                           color: Color(0xFF64748B),
                         ),
                       ),
@@ -897,7 +897,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
         Text(
           title,
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             color: isMet ? const Color(0xFF334155) : const Color(0xFF94A3B8),
             fontWeight: isMet ? FontWeight.w600 : FontWeight.w400,
           ),
@@ -921,7 +921,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
           child: Text(
             'Encrypted with 256–bit AES Vault • Zero Spam Guarantee',
             style: TextStyle(
-              fontSize: 10.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: Color(0xFF78350F),
             ),
@@ -985,7 +985,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
         child: const Text(
           'Need help? Contact Alliance Family Desk',
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: FontWeight.w700,
             color: Color(0xFF1E40AF),
           ),

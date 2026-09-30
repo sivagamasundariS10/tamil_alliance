@@ -352,7 +352,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   'STEP 6 OF 6',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.8,
                   ),
@@ -401,7 +401,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           'PARTNER PREFERENCES',
           style: TextStyle(
             color: Color(0xFF881337),
-            fontSize: 11,
+            fontSize: 13,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.8,
           ),
@@ -461,7 +461,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   Text(
                     'அடிப்படை & உடல் தகுதி',
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                       fontWeight: FontWeight.w500,
                     ),
@@ -478,7 +478,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             children: [
               const Text(
                 'Age Span',
-                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
@@ -488,7 +488,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 ),
                 child: Text(
                   '${_ageRange.start.round()} yrs — ${_ageRange.end.round()} yrs',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
                 ),
               ),
             ],
@@ -522,8 +522,8 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('20 yrs', style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B))),
-                Text('35 yrs', style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B))),
+                Text('20 yrs', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+                Text('35 yrs', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
               ],
             ),
           ),
@@ -535,7 +535,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             children: [
               const Text(
                 'Height Span',
-                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
@@ -545,7 +545,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 ),
                 child: Text(
                   '${_formatHeight(_heightRange.start)} — ${_formatHeight(_heightRange.end)}',
-                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
                 ),
               ),
             ],
@@ -579,8 +579,8 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('4\'6" (137cm)', style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B))),
-                Text('6\'4" (193cm)', style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B))),
+                Text('4\'6" (137cm)', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+                Text('6\'4" (193cm)', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
               ],
             ),
           ),
@@ -645,7 +645,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   child: const Text(
                     'Change',
                     style: TextStyle(
-                      fontSize: 11.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF1D4ED8),
                     ),
@@ -757,7 +757,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
         child: Text(
           status,
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: FontWeight.w700,
             color: isSelected ? Colors.white : const Color(0xFF334155),
           ),
@@ -805,7 +805,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: 13,
                 fontWeight: FontWeight.w700,
                 color: isSelected ? const Color(0xFFBE123C) : const Color(0xFF475569),
               ),
@@ -855,7 +855,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
               ),
               const Text(
                 'தாய்மொழி',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF881337)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF881337)),
               ),
             ],
           ),
@@ -968,7 +968,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   Text(
                     'மதம் & சமூகம்',
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                       fontWeight: FontWeight.w500,
                     ),
@@ -982,7 +982,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           // Religion
           const Text(
             'Religion',
-            style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -1012,18 +1012,18 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 children: const [
                   Text(
                     'Community & Sub-Caste',
-                    style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                   ),
                   SizedBox(width: 4),
                   Text(
                     '(Tamil Nadu)',
-                    style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                   ),
                 ],
               ),
               Text(
                 '${_selectedCastes.length} of 12 Selected',
-                style: const TextStyle(fontSize: 10.5, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
+                style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -1110,7 +1110,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 ),
                 child: Text(
                   '$selectedCount Selected',
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
                 ),
               ),
             ],
@@ -1174,7 +1174,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                               const SizedBox(width: 6),
                               const Text(
                                 'Specific Doshams',
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                               ),
                               const SizedBox(width: 6),
                               Container(
@@ -1185,7 +1185,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                                 ),
                                 child: Text(
                                   '${_selectedSpecificDoshams.length} Doshams',
-                                  style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
+                                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
                                 ),
                               ),
                             ],
@@ -1205,7 +1205,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                     const SizedBox(height: 4),
                     const Text(
                       'Select applicable dosham filters',
-                      style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B)),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                     ),
                     const SizedBox(height: 10),
                     Wrap(
@@ -1273,13 +1273,13 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   SizedBox(width: 4),
                   Text(
                     '(விருப்பமான இடங்கள்)',
-                    style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                   ),
                 ],
               ),
               Text(
                 '${_selectedLocations.length} Selected',
-                style: const TextStyle(fontSize: 10.5, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
+                style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -1293,10 +1293,10 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             ),
             child: TextField(
               controller: _locationSearchController,
-              style: const TextStyle(fontSize: 12.5),
+              style: const TextStyle(fontSize: 13),
               decoration: const InputDecoration(
                 hintText: 'Search Country, State, City... (e.g. Chennai, Coim',
-                hintStyle: TextStyle(fontSize: 11.5, color: Color(0xFF94A3B8)),
+                hintStyle: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                 prefixIcon: Icon(Icons.search_rounded, size: 16, color: Color(0xFF64748B)),
                 prefixIconConstraints: BoxConstraints(minWidth: 28, minHeight: 28),
                 border: InputBorder.none,
@@ -1316,7 +1316,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           const SizedBox(height: 10),
           const Text(
             'Selected places',
-            style: TextStyle(fontSize: 10, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+            style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 6),
           Wrap(
@@ -1343,7 +1343,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                       children: [
                         Text(
                           loc,
-                          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white),
                         ),
                         const SizedBox(width: 4),
                         const Icon(
@@ -1413,7 +1413,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   Text(
                     'கல்வி & வருமானம்',
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                       fontWeight: FontWeight.w500,
                     ),
@@ -1427,7 +1427,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           // Highest Qualification
           const Text(
             'Highest Qualification',
-            style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -1500,7 +1500,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
               Text(
                 'Career & Profession',
                 style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF1E293B),
                 ),
@@ -1508,25 +1508,13 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             ],
           ),
           const SizedBox(height: 12),
-          Row(
-            children: const [
-              Text(
-                'Employment Sector',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF1E293B),
-                ),
-              ),
-              Text(
-                ' *',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFBE123C),
-                ),
-              ),
-            ],
+          const Text(
+            'Employment Sector',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF1E293B),
+            ),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -1591,7 +1579,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   SizedBox(height: 1),
                   Text(
                     '(ஆண்டு வருமான வரம்பு)',
-                    style: TextStyle(fontSize: 9.5, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                   ),
                 ],
               ),
@@ -1605,7 +1593,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                   (_minIncome != null && _maxIncome != null)
                       ? '$_minIncome – $_maxIncome'
                       : (_minIncome != null ? 'From $_minIncome' : (_maxIncome != null ? 'Up to $_maxIncome' : '₹15L – ₹40L')),
-                  style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w800, color: Color(0xFF881337)),
+                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF881337)),
                 ),
               ),
             ],
@@ -1617,7 +1605,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Minimum Income', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF475569))),
+                    const Text('Minimum Income', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF475569))),
                     const SizedBox(height: 4),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -1629,10 +1617,10 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _minIncome,
-                          hint: const Text('Select Min', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
+                          hint: const Text('Select Min', style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
                           isExpanded: true,
                           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF475569)),
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                           items: _incomeList.map((inc) => DropdownMenuItem(value: inc, child: Text(inc))).toList(),
                           onChanged: (val) {
                             if (val != null) setState(() => _minIncome = val);
@@ -1648,7 +1636,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Maximum Income', style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600, color: Color(0xFF475569))),
+                    const Text('Maximum Income', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF475569))),
                     const SizedBox(height: 4),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -1660,10 +1648,10 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _maxIncome,
-                          hint: const Text('Select Max', style: TextStyle(fontSize: 12, color: Color(0xFF94A3B8))),
+                          hint: const Text('Select Max', style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
                           isExpanded: true,
                           icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF475569)),
-                          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                           items: _incomeList.map((inc) => DropdownMenuItem(value: inc, child: Text(inc))).toList(),
                           onChanged: (val) {
                             if (val != null) setState(() => _maxIncome = val);
@@ -1681,7 +1669,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
             (_minIncome != null && _maxIncome != null)
                 ? 'Filtering matches earning $_minIncome – $_maxIncome per annum.'
                 : 'Filtering matches earning ₹15L – ₹40L per annum.',
-            style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+            style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
           ),
         ],
       ),
@@ -1827,7 +1815,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
                 ),
@@ -1939,7 +1927,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
                 ),
@@ -1969,7 +1957,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           Text(
             'Partner Overview',
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: 13,
               fontWeight: FontWeight.w800,
               color: Color(0xFF92400E),
             ),
@@ -1978,7 +1966,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           Text(
             'The above partner preferences are saved as soft parameters and our matchmaking algorithm prioritizes profiles matching your sacred criteria & family traditions.',
             style: TextStyle(
-              fontSize: 10.5,
+              fontSize: 13,
               color: Color(0xFF78350F),
               height: 1.4,
             ),
@@ -2030,7 +2018,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: isSelected ? Colors.white : const Color(0xFF1E293B),
                 ),
@@ -2092,7 +2080,7 @@ class _PartnerPreferencesScreenState extends State<PartnerPreferencesScreen> {
           child: Text(
             label,
             style: const TextStyle(
-              fontSize: 11.5,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: Color(0xFF881337),
             ),

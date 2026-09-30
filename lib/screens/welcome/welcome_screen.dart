@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../auth/mobile_auth_screen.dart';
 import '../auth/password_login_screen.dart';
@@ -49,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
                     const Text(
                       'VEDIC & MODERN MATCHMAKING',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.8,
                         color: Color(0xFF701A33),
@@ -84,13 +85,13 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Tamil Alliance',
-                    style: TextStyle(
-                      fontFamily: 'serif',
-                      fontSize: 24,
+                  Text(
+                    'TAMIL ALLIANCE',
+                    style: GoogleFonts.cinzel(
+                      fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF701A33),
+                      letterSpacing: 1.2,
+                      color: const Color(0xFF701A33),
                     ),
                   ),
                 ],
@@ -104,7 +105,7 @@ class WelcomeScreen extends StatelessWidget {
                   'Connecting sacred lineage, cultural heritage, and modern aspirations globally.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     color: Color(0xFF6B7280),
                     height: 1.35,
                   ),
@@ -173,14 +174,14 @@ class WelcomeScreen extends StatelessWidget {
                                 const Text(
                                   'Welcome to the ',
                                   style: TextStyle(
-                                    fontSize: 9.5,
+                                    fontSize: 13,
                                     color: Colors.white70,
                                   ),
                                 ),
                                 const Text(
                                   'Auspicious Union',
                                   style: TextStyle(
-                                    fontSize: 9.5,
+                                    fontSize: 13,
                                     color: AppColors.goldLight,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -195,7 +196,7 @@ class WelcomeScreen extends StatelessWidget {
                                 Text(
                                   'MANGALYA DHARANAM',
                                   style: TextStyle(
-                                    fontSize: 9,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 1.1,
                                     color: AppColors.gold,
@@ -216,7 +217,7 @@ class WelcomeScreen extends StatelessWidget {
                             Text(
                               'Rooted in authentic tradition, built for forward-thinking families.',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 13,
                                 color: Colors.white.withValues(alpha: 0.88),
                               ),
                             ),
@@ -278,7 +279,7 @@ class WelcomeScreen extends StatelessWidget {
                 badgeBg: const Color(0xFFF3E8FF),
                 badgeTextColor: const Color(0xFF701A33),
                 description:
-                    'Mobile number  and government ID verified',
+                    'Mobile number and government ID verified',
               ),
 
               const SizedBox(height: 12),
@@ -318,7 +319,7 @@ class WelcomeScreen extends StatelessWidget {
 
               const SizedBox(height: 14),
 
-              // 6. Community Trust Card: 2,50,000+ Tamil Families
+              // 6. Community Trust Card: One App For All Your preference
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
@@ -337,19 +338,20 @@ class WelcomeScreen extends StatelessWidget {
                           color: Color(0xFF701A33),
                         ),
                         const SizedBox(width: 6),
-                        const Text(
-                          '2,50,000+ Tamil Families',
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF701A33),
+                        const Expanded(
+                          child: Text(
+                            'One App For All Your preference',
+                            style: TextStyle(
+                              fontSize: 13.5,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF701A33),
+                            ),
                           ),
                         ),
-                        const Spacer(),
                         const Text(
                           'Worldwide',
                           style: TextStyle(
-                            fontSize: 10.5,
+                            fontSize: 13,
                             color: Color(0xFF6B7280),
                           ),
                         ),
@@ -359,9 +361,9 @@ class WelcomeScreen extends StatelessWidget {
                     const Text(
                       'Trusted across Chennai, Coimbatore, Madurai, Bengaluru, Singapore, Malaysia, the UK & North America.',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         color: Color(0xFF4B5563),
-                        height: 1.3,
+                        height: 1.35,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -399,7 +401,7 @@ class WelcomeScreen extends StatelessWidget {
                         Text(
                           '"கற்பெனப்படுவது சொற்றிறம்பாமை"',
                           style: TextStyle(
-                            fontSize: 11.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w600,
                             fontStyle: FontStyle.italic,
                             color: Color(0xFF701A33),
@@ -409,7 +411,7 @@ class WelcomeScreen extends StatelessWidget {
                         Text(
                           'Auspicious New Beginnings',
                           style: TextStyle(
-                            fontSize: 9.5,
+                            fontSize: 13,
                             color: Color(0xFF9CA3AF),
                           ),
                         ),
@@ -472,7 +474,7 @@ class WelcomeScreen extends StatelessWidget {
                   const Text(
                     'Already have an account? ',
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       color: Color(0xFF4B5563),
                     ),
                   ),
@@ -485,7 +487,7 @@ class WelcomeScreen extends StatelessWidget {
                     child: const Text(
                       'Log In',
                       style: TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF65001E),
                       ),
@@ -503,7 +505,7 @@ class WelcomeScreen extends StatelessWidget {
                   'By continuing, you agree to our Sacred Trust Guidelines & family privacy pledge.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 13,
                     color: Colors.grey.shade600,
                     height: 1.3,
                   ),
@@ -578,7 +580,7 @@ class WelcomeScreen extends StatelessWidget {
                       child: Text(
                         badgeText,
                         style: TextStyle(
-                          fontSize: 9.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: badgeTextColor,
                         ),
@@ -590,9 +592,9 @@ class WelcomeScreen extends StatelessWidget {
                 Text(
                   description,
                   style: const TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     color: Color(0xFF6B7280),
-                    height: 1.3,
+                    height: 1.35,
                   ),
                 ),
               ],
@@ -614,7 +616,7 @@ class WelcomeScreen extends StatelessWidget {
       child: Text(
         label,
         style: const TextStyle(
-          fontSize: 10.5,
+          fontSize: 13,
           fontWeight: FontWeight.w600,
           color: Color(0xFF374151),
         ),

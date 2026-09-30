@@ -1,28 +1,57 @@
 import 'package:flutter/material.dart';
-import '../settings/settings_screen.dart';
-import 'edit_profile_screen.dart';
 import 'edit_preferences_screen.dart';
 
-class MyProfileScreen extends StatefulWidget {
+class EditProfileScreen extends StatefulWidget {
   final String? userName;
 
-  const MyProfileScreen({
+  const EditProfileScreen({
     super.key,
     this.userName,
   });
 
   @override
-  State<MyProfileScreen> createState() => _MyProfileScreenState();
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
-class _MyProfileScreenState extends State<MyProfileScreen> {
-  void _showEditProfileBottomSheet() {
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  // Affluence state
+  String _selectedAffluence = 'Upper Middle';
+  String _selectedPropertyStatus = 'Own House / Villa';
+
+  // Profile data states
+  late String _fullName;
+  String _dob = '14 Oct 1996 (29 Yrs)';
+  String _maritalStatus = 'Never Married';
+  String _heightWeight = '5\' 11" (180 cm) • 74 kg';
+  String _motherTongue = 'Tamil (தமிழ்)';
+  String _dietLifestyle = 'Pure Vegetarian • Non–Smoker';
+
+  // Career states
+  String _highestDegree = 'B.Tech (Computer Science) + Executive MBA';
+  String _college = 'PSG College of Tech, Coimbatore • IIM Bangalore';
+  String _profession = 'Lead Cloud Solutions Architect';
+  String _employer = 'Amazon Web Services (AWS) • OMR Chennai';
+  String _annualIncome = '₹34,00,000 / Year';
+  String _workLocation = 'Chennai (Hybrid /\nOnsite)';
+
+  @override
+  void initState() {
+    super.initState();
+    _fullName = widget.userName ?? 'Karthik Sundaram';
+  }
+
+  void _showEditSectionModal(String sectionTitle) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          top: 20,
+          left: 20,
+          right: 20,
+        ),
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -34,122 +63,108 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Edit Biodata & Details',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF1E293B)),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF1F2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const Icon(Icons.edit_outlined, color: Color(0xFF881337), size: 16),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Edit $sectionTitle',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                  ],
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded),
+                  icon: const Icon(Icons.close, size: 20),
                   onPressed: () => Navigator.pop(ctx),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
-            const Text(
-              'Update your verified personal details, education, career, and family background.',
-              style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+            const SizedBox(height: 14),
+            Text(
+              'Update your verified information for $sectionTitle. Changes are instantly reflected across prospective alliance matches.',
+              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.4),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             SizedBox(
               width: double.infinity,
-              height: 46,
+              height: 44,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(ctx);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Profile details updated successfully! ✓'),
+                    SnackBar(
+                      content: Row(
+                        children: [
+                          const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              '$sectionTitle updated and saved successfully!',
+                              style: const TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
+                      ),
+                      backgroundColor: const Color(0xFF1E293B),
                       behavior: SnackBarBehavior.floating,
-                      duration: Duration(seconds: 2),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      duration: const Duration(seconds: 2),
                     ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF701A33),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  backgroundColor: const Color(0xFF881337),
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                 ),
-                child: const Text(
-                  'Save Changes',
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Colors.white),
-                ),
+                child: const Text('Save & Update Section', style: TextStyle(fontWeight: FontWeight.w800)),
               ),
             ),
-            const SizedBox(height: 10),
           ],
         ),
-      ),
-    );
-  }
-
-  void _showJathagamChartModal() {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Row(
-          children: const [
-            Icon(Icons.auto_awesome, color: Color(0xFF701A33), size: 20),
-            SizedBox(width: 8),
-            Text(
-              'Vedic Horoscope Chart',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: Color(0xFF1E293B)),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Certified_Jathagam_Karthik.pdf',
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: Color(0xFF701A33)),
-            ),
-            SizedBox(height: 6),
-            Text(
-              'Thirukanitha & Vakya Panchangam with Dasa-Bhukti analysis verified by certified Astrologer.',
-              style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close', style: TextStyle(color: Color(0xFF701A33), fontWeight: FontWeight.w700)),
-          ),
-        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final String displayName = widget.userName ?? 'Karthik Sundaram';
-
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8F8),
       appBar: _buildCustomAppBar(),
       body: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.only(bottom: 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. Cover Photo & Avatar Header
-            _buildCoverAndAvatarHeader(displayName),
+            _buildCoverAndAvatarHeader(_fullName),
             const SizedBox(height: 12),
 
-            // 2. Action Buttons (Edit Profile & Edit Preferences)
-            _buildProfileActionsRow(),
-            const SizedBox(height: 14),
+            // 2. Edit Preview Action Button
+            _buildEditPreviewRow(),
+            const SizedBox(height: 12),
 
             // 3. Name, ID, Bio & Lineage Tags
-            _buildProfileSummarySection(displayName),
+            _buildProfileSummarySection(_fullName),
             const SizedBox(height: 16),
 
             // 4. Basic Details Card
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
-              child: _buildBasicDetailsCard(displayName),
+              child: _buildBasicDetailsCard(_fullName),
             ),
             const SizedBox(height: 14),
 
@@ -174,7 +189,14 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             ),
             const SizedBox(height: 14),
 
-            // 8. Partner Preferences Card
+            // 8. Family Affluence & Assets Card
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: _buildFamilyAffluenceCard(),
+            ),
+            const SizedBox(height: 14),
+
+            // 9. Partner Preferences Card
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
               child: _buildPartnerPreferencesCard(),
@@ -223,7 +245,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'My Profile',
+                        'Edit Profile',
                         style: TextStyle(
                           color: Color(0xFFF5D68B),
                           fontFamily: 'serif',
@@ -258,7 +280,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Viewing public prospective match preview.'),
+                        content: Text('Viewing live prospective match preview.'),
                         duration: Duration(seconds: 1),
                       ),
                     );
@@ -288,31 +310,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-
-                // Settings icon (White circular button)
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const SettingsScreen(),
-                      ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    width: 34,
-                    height: 34,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(Icons.settings_outlined, color: Color(0xFF701A33), size: 18),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -328,52 +325,54 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        // Cover Banner
+        // Maroon Patterned Cover
         Container(
+          height: 125,
           width: double.infinity,
-          height: 120,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF701A33), Color(0xFF4C0B1E)],
+              colors: [Color(0xFF5E0B22), Color(0xFF881337), Color(0xFF4C081A)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
           child: Stack(
             children: [
-              // Concentric circles watermark
+              // Decorative traditional rangoli circles
               Positioned(
-                right: -20,
-                bottom: -20,
+                right: -25,
+                top: -25,
                 child: Container(
-                  width: 120,
-                  height: 120,
+                  width: 130,
+                  height: 130,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withAlpha(15), width: 1.5),
+                    border: Border.all(color: Colors.white.withAlpha(25), width: 1.5),
                   ),
-                  child: Center(
-                    child: Container(
-                      width: 70,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white.withAlpha(15), width: 1.5),
-                      ),
-                    ),
+                ),
+              ),
+              Positioned(
+                right: 15,
+                bottom: 10,
+                child: Container(
+                  width: 90,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFFF5D68B).withAlpha(40), width: 1.5),
                   ),
                 ),
               ),
 
               // Update Cover Button
               Positioned(
-                top: 12,
-                right: 14,
+                top: 10,
+                right: 12,
                 child: InkWell(
                   onTap: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Select image from gallery to update cover photo.'),
+                        content: Text('Update cover photo from sacred templates or gallery.'),
                         duration: Duration(seconds: 1),
                       ),
                     );
@@ -397,6 +396,36 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         ),
                       ],
                     ),
+                  ),
+                ),
+              ),
+
+              // Sacred Privacy Shield pill
+              Positioned(
+                bottom: 10,
+                right: 14,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withAlpha(70),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFF5D68B).withAlpha(90), width: 0.8),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.shield_outlined, size: 12, color: Color(0xFFF5D68B)),
+                      SizedBox(width: 4),
+                      Text(
+                        'SACRED PRIVACY SHIELD',
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFFF5D68B),
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -465,77 +494,55 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 3. Profile Action Buttons Row
+  // 3. Edit Profile Action Row
   // ─────────────────────────────────────────────────────────────
-  Widget _buildProfileActionsRow() {
+  Widget _buildEditPreviewRow() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, right: 14, bottom: 2),
+      padding: const EdgeInsets.only(top: 8, right: 14, bottom: 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          _buildActionButton(
-            label: 'Edit Profile',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => EditProfileScreen(userName: widget.userName),
+          Material(
+            color: const Color(0xFF800E2F),
+            borderRadius: BorderRadius.circular(10),
+            elevation: 1.5,
+            shadowColor: const Color(0x33000000),
+            child: InkWell(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Editing profile sections.'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              },
+              borderRadius: BorderRadius.circular(10),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(
+                      Icons.edit_outlined,
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      'Edit Profile',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
                 ),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-          _buildActionButton(
-            label: 'Edit Preferences',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const EditPartnerPreferencesScreen(),
-                ),
-              );
-            },
+              ),
+            ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildActionButton({
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return Material(
-      color: const Color(0xFF881337),
-      borderRadius: BorderRadius.circular(10),
-      elevation: 2,
-      shadowColor: const Color(0x66000000),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 7),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.drive_file_rename_outline_rounded,
-                size: 14,
-                color: Color(0xFFF5D68B),
-              ),
-              const SizedBox(width: 5),
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: Colors.white,
-                  letterSpacing: 0.2,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -595,18 +602,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
-                  'Alliance ID: TA-78492',
+                  'Alliance ID: TA–78492',
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xFF701A33),
+                    color: Color(0xFF881337),
                   ),
                 ),
               ),
               const SizedBox(width: 6),
               const Text(
                 '• 29 Yrs • 5\' 11" (180 cm)',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF64748B)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Color(0xFF64748B)),
               ),
             ],
           ),
@@ -663,6 +670,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       title: 'BASIC DETAILS',
       subtitle: 'Personal identity and vitals',
       showDivider: true,
+      onEditTap: () => _showEditSectionModal('Basic Details'),
       child: Column(
         children: [
           IntrinsicHeight(
@@ -671,7 +679,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               children: [
                 Expanded(child: _buildPreferenceDataBox('FULL NAME', name)),
                 const SizedBox(width: 8),
-                Expanded(child: _buildPreferenceDataBox('DATE OF BIRTH', '14 Oct 1996 (29 Yrs)')),
+                Expanded(child: _buildPreferenceDataBox('DATE OF BIRTH', _dob)),
               ],
             ),
           ),
@@ -680,9 +688,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(child: _buildPreferenceDataBox('MARITAL STATUS', 'Never Married')),
+                Expanded(child: _buildPreferenceDataBox('MARITAL STATUS', _maritalStatus)),
                 const SizedBox(width: 8),
-                Expanded(child: _buildPreferenceDataBox('HEIGHT & WEIGHT', '5\' 11" (180 cm) • 74 kg')),
+                Expanded(child: _buildPreferenceDataBox('HEIGHT & WEIGHT', _heightWeight)),
               ],
             ),
           ),
@@ -691,9 +699,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(child: _buildPreferenceDataBox('MOTHER TONGUE', 'Tamil (தமிழ்)')),
+                Expanded(child: _buildPreferenceDataBox('MOTHER TONGUE', _motherTongue)),
                 const SizedBox(width: 8),
-                Expanded(child: _buildPreferenceDataBox('DIET & LIFESTYLE', 'Pure Vegetarian • Non–Smoker')),
+                Expanded(child: _buildPreferenceDataBox('DIET & LIFESTYLE', _dietLifestyle)),
               ],
             ),
           ),
@@ -715,6 +723,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       badgeColor: const Color(0xFFFEF3C7),
       badgeTextColor: const Color(0xFF92400E),
       showDivider: true,
+      onEditTap: () => _showEditSectionModal('Astrology & Horoscope'),
       child: Column(
         children: [
           IntrinsicHeight(
@@ -801,9 +810,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ),
                 ),
                 InkWell(
-                  onTap: _showJathagamChartModal,
+                  onTap: () => _showEditSectionModal('Jathagam Chart'),
                   child: const Text(
-                    'View\nChart',
+                    'Edit\nChart',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 13,
@@ -831,6 +840,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       title: 'EDUCATION & CAREER',
       subtitle: 'Professional pedigree & income',
       showDivider: true,
+      onEditTap: () => _showEditSectionModal('Education & Career'),
       child: Column(
         children: [
           // Highest Degree Box
@@ -857,20 +867,20 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'HIGHEST DEGREE',
                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF831843)),
                       ),
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Text(
-                        'B.Tech (Computer Science) + Executive MBA',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                        _highestDegree,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
-                        'PSG College of Tech, Coimbatore • IIM Bangalore',
-                        style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                        _college,
+                        style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                       ),
                     ],
                   ),
@@ -904,20 +914,20 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'PROFESSION & EMPLOYER',
                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF831843)),
                       ),
-                      SizedBox(height: 3),
+                      const SizedBox(height: 3),
                       Text(
-                        'Lead Cloud Solutions Architect',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                        _profession,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
-                        'Amazon Web Services (AWS) • OMR Chennai',
-                        style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
+                        _employer,
+                        style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                       ),
                     ],
                   ),
@@ -932,11 +942,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: _buildPreferenceDataBox('ANNUAL INCOME', '₹34,00,000 / Year'),
+                  child: _buildPreferenceDataBox('ANNUAL INCOME', _annualIncome),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: _buildPreferenceDataBox('WORK LOCATION', 'Chennai (Hybrid /\nOnsite)'),
+                  child: _buildPreferenceDataBox('WORK LOCATION', _workLocation),
                 ),
               ],
             ),
@@ -956,6 +966,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       title: 'FAMILY LINEAGE & ROOTS',
       subtitle: 'Gothram, heritage and family background',
       showDivider: true,
+      onEditTap: () => _showEditSectionModal('Family Lineage & Roots'),
       child: Column(
         children: [
           IntrinsicHeight(
@@ -1008,7 +1019,256 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 9. Partner Preferences Card
+  // 9. Family Affluence & Assets Card
+  // ─────────────────────────────────────────────────────────────
+  Widget _buildFamilyAffluenceCard() {
+    return _buildSectionContainer(
+      icon: Icons.diamond_rounded,
+      iconColor: const Color(0xFF38BDF8),
+      iconBgColor: const Color(0xFFF6ECEB),
+      title: 'FAMILY AFFLUENCE & ASSETS',
+      subtitle: 'Economic standing & property status',
+      showDivider: true,
+      onEditTap: () => _showEditSectionModal('Family Affluence & Assets'),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Text(
+                'Affluence Tier',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+              SizedBox(width: 4),
+              Text(
+                '*',
+                style: TextStyle(
+                  color: Color(0xFFE11D48),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          // 4 Grid Affluence Tiers
+          Row(
+            children: [
+              Expanded(
+                child: _buildAffluenceOption(
+                  title: 'Middle Class',
+                  subtitle: 'Below 1Cr',
+                  isSelected: _selectedAffluence == 'Middle Class',
+                  onTap: () => setState(() => _selectedAffluence = 'Middle Class'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _buildAffluenceOption(
+                  title: 'Upper Middle',
+                  subtitle: 'Upto 1Cr - 5Cr',
+                  isGoldBadge: true,
+                  isSelected: _selectedAffluence == 'Upper Middle',
+                  onTap: () => setState(() => _selectedAffluence = 'Upper Middle'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: _buildAffluenceOption(
+                  title: 'Affluent/Rich',
+                  subtitle: 'Upto ₹5Cr - 25Cr',
+                  isSelected: _selectedAffluence == 'Affluent/Rich',
+                  onTap: () => setState(() => _selectedAffluence = 'Affluent/Rich'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _buildAffluenceOption(
+                  title: 'Elite',
+                  subtitle: 'Upto ₹25Cr+',
+                  isSelected: _selectedAffluence == 'Elite',
+                  onTap: () => setState(() => _selectedAffluence = 'Elite'),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+
+          // Residential Property Status
+          Row(
+            children: const [
+              Text(
+                'Residential Property Status',
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF1E293B),
+                ),
+              ),
+              SizedBox(width: 4),
+              Text(
+                '*',
+                style: TextStyle(
+                  color: Color(0xFFE11D48),
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+
+          Row(
+            children: [
+              Expanded(
+                child: _buildPropertyStatusOption(
+                  title: 'Own House / Villa',
+                  isSelected: _selectedPropertyStatus == 'Own House / Villa',
+                  onTap: () => setState(() => _selectedPropertyStatus = 'Own House / Villa'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _buildPropertyStatusOption(
+                  title: 'Rented / Leased',
+                  isSelected: _selectedPropertyStatus == 'Rented / Leased',
+                  onTap: () => setState(() => _selectedPropertyStatus = 'Rented / Leased'),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAffluenceOption({
+    required String title,
+    required String subtitle,
+    required bool isSelected,
+    required VoidCallback onTap,
+    bool isGoldBadge = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF831843) : const Color(0xFFFAF7F2),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF831843) : const Color(0xFFEDE4D5),
+            width: isSelected ? 1.6 : 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 13.5,
+                    fontWeight: FontWeight.w800,
+                    color: isSelected ? Colors.white : const Color(0xFF831843),
+                  ),
+                ),
+                if (isGoldBadge && isSelected) ...[
+                  const SizedBox(width: 4),
+                  const Icon(Icons.check_rounded, size: 16, color: Color(0xFFF5D68B)),
+                ],
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: isSelected ? const Color(0xFFFDE8E8) : const Color(0xFF64748B),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPropertyStatusOption({
+    required String title,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFAF7F2) : const Color(0xFFFAF7F2),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF831843) : const Color(0xFFEDE4D5),
+            width: isSelected ? 2.0 : 1,
+          ),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 19,
+              height: 19,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? const Color(0xFF831843) : const Color(0xFFCBD5E1),
+                  width: isSelected ? 2 : 1.5,
+                ),
+              ),
+              child: isSelected
+                  ? Center(
+                      child: Container(
+                        width: 8.5,
+                        height: 8.5,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFF831843),
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                  color: isSelected ? const Color(0xFF831843) : const Color(0xFF475569),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 10. Partner Preferences Card
   // ─────────────────────────────────────────────────────────────
   Widget _buildPartnerPreferencesCard() {
     return _buildSectionContainer(
@@ -1020,6 +1280,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
       badgeColor: const Color(0xFFFFF1F2),
       badgeTextColor: const Color(0xFF9F1239),
       showDivider: true,
+      onEditTap: () => _showEditSectionModal('Partner Preferences'),
       child: Column(
         children: [
           IntrinsicHeight(
@@ -1089,6 +1350,54 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             'DIET & LIFESTYLE HABITS',
             'Pure Vegetarian • Never Smokes • Non-Drinker',
           ),
+          const SizedBox(height: 12),
+
+          // Edit All Partner Preferences Button
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditPartnerPreferencesScreen(),
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(10),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF1F2),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFFCE7F3)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(
+                    Icons.edit_note_rounded,
+                    size: 16,
+                    color: Color(0xFF881337),
+                  ),
+                  SizedBox(width: 6),
+                  Text(
+                    'Edit All Partner Preferences',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF881337),
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 16,
+                    color: Color(0xFF881337),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -1100,6 +1409,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   Widget _buildSectionContainer({
     required IconData icon,
     required Color iconColor,
+    Color? iconBgColor,
     required String title,
     required String subtitle,
     required Widget child,
@@ -1107,6 +1417,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     Color? badgeColor,
     Color? badgeTextColor,
     bool showDivider = false,
+    VoidCallback? onEditTap,
   }) {
     return Container(
       width: double.infinity,
@@ -1131,9 +1442,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: iconColor.withAlpha(20),
+                  color: iconBgColor ?? iconColor.withAlpha(20),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: iconColor.withAlpha(35)),
+                  border: Border.all(color: iconBgColor != null ? const Color(0xFFEDE4D5) : iconColor.withAlpha(35)),
                 ),
                 child: Icon(icon, color: iconColor, size: 16),
               ),
@@ -1153,7 +1464,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                   ],
                 ),
               ),
-              if (badgeText != null)
+              if (badgeText != null) ...[
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
@@ -1168,6 +1479,26 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       fontWeight: FontWeight.w800,
                       color: badgeTextColor ?? const Color(0xFFB45309),
                       letterSpacing: 0.2,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+              ],
+              if (onEditTap != null)
+                InkWell(
+                  onTap: onEditTap,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF1F2),
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: const Color(0xFFFCE7F3)),
+                    ),
+                    child: const Icon(
+                      Icons.edit_outlined,
+                      size: 14,
+                      color: Color(0xFF881337),
                     ),
                   ),
                 ),
@@ -1238,100 +1569,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 fontWeight: FontWeight.w700,
                 color: Color(0xFF1E293B),
                 height: 1.35,
-              ),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDataBox(String label, String value, {Color? textColor, Color? labelColor}) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: labelColor ?? const Color(0xFF94A3B8),
-              letterSpacing: 0.2,
-            ),
-          ),
-          const SizedBox(height: 3),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: textColor ?? const Color(0xFF1E293B),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAstrologyDataBox(
-    String label,
-    String value, {
-    bool isVerifiedDosham = false,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFBEB),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFFDE68A)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w800,
-              color: Color(0xFF991B1B),
-              letterSpacing: 0.2,
-            ),
-          ),
-          const SizedBox(height: 4),
-          if (isVerifiedDosham)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.check_circle_rounded, color: Color(0xFF059669), size: 14),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xFF059669),
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          else
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF1E293B),
               ),
             ),
         ],

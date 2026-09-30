@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : _bottomNavIndex == 4
                       ? ChatScreen(onNavigateToHome: () => setState(() => _bottomNavIndex = 0))
                       : SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   padding: const EdgeInsets.only(bottom: 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : (_bottomNavIndex == 4 ? 'chat' : 'Home'))),
                       style: const TextStyle(
                         color: Colors.white70,
-                        fontSize: 11,
+                        fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -270,8 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ] else if (_bottomNavIndex == 2) ...[
                   const SizedBox.shrink(),
-                ] else if (_bottomNavIndex == 4) ...[
-                  // Chat Screen: Settings icon is in the page body, keep only Alert in top bar
+                ] else if (_bottomNavIndex == 3 || _bottomNavIndex == 4) ...[
+                  // Interests & Chat Screen: Settings icon removed, keep only Alert in top bar
                   _buildAppBarAction(
                     icon: Icons.notifications_none_rounded,
                     label: 'Alert',
@@ -356,7 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 8.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -369,7 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
             label,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 9.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -513,7 +513,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Alliance ID • TA889123 • 31 Yrs • 5\'11" • Chennai',
                             style: TextStyle(
                               color: Color(0xFFFCE7F3),
-                              fontSize: 11,
+                              fontSize: 13,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -546,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'Kalyanam Gold',
                                       style: TextStyle(
                                         color: Color(0xFF4A2500),
-                                        fontSize: 10.5,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w900,
                                       ),
                                     ),
@@ -564,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'Profile: 95% Complete',
                                   style: TextStyle(
                                     color: Color(0xFFFEF3C7),
-                                    fontSize: 10,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
@@ -620,7 +620,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title,
           style: const TextStyle(
             color: Color(0xFFF3E8FF),
-            fontSize: 10,
+            fontSize: 13,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -974,7 +974,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text(
                                 'For accurate 10 Porutham horoscope match',
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 13,
                                   color: Color(0xFF64748B),
                                 ),
                               ),
@@ -1024,7 +1024,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     'Upload Jathagam',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 13,
                                       fontWeight: selectedTab == 0 ? FontWeight.w800 : FontWeight.w600,
                                       color: selectedTab == 0 ? const Color(0xFF701A33) : const Color(0xFF64748B),
                                     ),
@@ -1055,7 +1055,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     'Enter Chart Details',
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 13,
                                       fontWeight: selectedTab == 1 ? FontWeight.w800 : FontWeight.w600,
                                       color: selectedTab == 1 ? const Color(0xFF701A33) : const Color(0xFF64748B),
                                     ),
@@ -1203,7 +1203,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 4),
               const Text(
                 'Supports PDF, JPG, PNG (Max 10 MB)',
-                style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
               ),
               const SizedBox(height: 16),
               Row(
@@ -1212,7 +1212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   OutlinedButton.icon(
                     onPressed: () => onFileSelected('Jathagam_Scan_2026.pdf'),
                     icon: const Icon(Icons.picture_as_pdf_rounded, size: 16),
-                    label: const Text('Upload PDF', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+                    label: const Text('Upload PDF', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                     style: OutlinedButton.styleFrom(
                       foregroundColor: const Color(0xFFB45309),
                       side: const BorderSide(color: Color(0xFFF59E0B)),
@@ -1223,7 +1223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ElevatedButton.icon(
                     onPressed: () => onFileSelected('Jathagam_Photo_Capture.jpg'),
                     icon: const Icon(Icons.camera_alt_rounded, size: 16),
-                    label: const Text('Take Photo', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700)),
+                    label: const Text('Take Photo', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFD97706),
                       foregroundColor: Colors.white,
@@ -1251,7 +1251,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Text(
                   '100% Sacred & Secure: Only matched families approved by you can view full horoscope details.',
-                  style: TextStyle(fontSize: 10.5, color: Color(0xFF475569), fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 13, color: Color(0xFF475569), fontWeight: FontWeight.w500),
                 ),
               ),
             ],
@@ -1279,7 +1279,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Rasi Dropdown
         const Text(
           'Moon Sign / Rasi (ராசி)',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF334155)),
+          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF334155)),
         ),
         const SizedBox(height: 6),
         Container(
@@ -1292,7 +1292,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: DropdownButton<String>(
               isExpanded: true,
               value: selectedRasi,
-              items: rasiList.map((r) => DropdownMenuItem(value: r, child: Text(r, style: const TextStyle(fontSize: 12.5)))).toList(),
+              items: rasiList.map((r) => DropdownMenuItem(value: r, child: Text(r, style: const TextStyle(fontSize: 13)))).toList(),
               onChanged: (v) {
                 if (v != null) onRasiChanged(v);
               },
@@ -1304,7 +1304,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Nakshatram Dropdown
         const Text(
           'Star / Nakshatram (நட்சத்திரம்)',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF334155)),
+          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF334155)),
         ),
         const SizedBox(height: 6),
         Container(
@@ -1317,7 +1317,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: DropdownButton<String>(
               isExpanded: true,
               value: selectedNakshatra,
-              items: nakshatraList.map((n) => DropdownMenuItem(value: n, child: Text(n, style: const TextStyle(fontSize: 12.5)))).toList(),
+              items: nakshatraList.map((n) => DropdownMenuItem(value: n, child: Text(n, style: const TextStyle(fontSize: 13)))).toList(),
               onChanged: (v) {
                 if (v != null) onNakshatraChanged(v);
               },
@@ -1329,7 +1329,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Dosham Checkboxes
         const Text(
           'Dosham Details (தோஷம் விவரங்கள்)',
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: Color(0xFF334155)),
+          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF334155)),
         ),
         const SizedBox(height: 6),
         Row(
@@ -1356,7 +1356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Expanded(
                         child: Text(
                           'Chevvai Dosham',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ],
@@ -1387,7 +1387,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Expanded(
                         child: Text(
                           'Rahu-Ketu Dosham',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700),
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                         ),
                       ),
                     ],
@@ -1406,7 +1406,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Birth Place', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF334155))),
+                  const Text('Birth Place', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF334155))),
                   const SizedBox(height: 4),
                   Container(
                     height: 42,
@@ -1416,7 +1416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.centerLeft,
-                    child: const Text('Chennai, Tamil Nadu', style: TextStyle(fontSize: 12, color: Color(0xFF1E293B))),
+                    child: const Text('Chennai, Tamil Nadu', style: TextStyle(fontSize: 13, color: Color(0xFF1E293B))),
                   ),
                 ],
               ),
@@ -1426,7 +1426,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Birth Time', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF334155))),
+                  const Text('Birth Time', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF334155))),
                   const SizedBox(height: 4),
                   Container(
                     height: 42,
@@ -1436,7 +1436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     alignment: Alignment.centerLeft,
-                    child: const Text('09:45 AM', style: TextStyle(fontSize: 12, color: Color(0xFF1E293B))),
+                    child: const Text('09:45 AM', style: TextStyle(fontSize: 13, color: Color(0xFF1E293B))),
                   ),
                 ],
               ),
@@ -1506,7 +1506,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Text(
                             'Profiles with 3+ photos receive 8x more parent interest',
-                            style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                            style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                           ),
                         ],
                       ),
@@ -1533,7 +1533,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   subtitle: const Text(
                     'Manage all 5 gallery slots, watermark & privacy controls',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                   ),
                   trailing: const Icon(Icons.chevron_right_rounded, color: Color(0xFF94A3B8)),
                   onTap: () {
@@ -1564,7 +1564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   subtitle: const Text(
                     'Select traditional attire, family or casual portrait',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                   ),
                   trailing: const Icon(Icons.chevron_right_rounded, color: Color(0xFF94A3B8)),
                   onTap: () {
@@ -1595,7 +1595,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   subtitle: const Text(
                     'Capture instant portrait with high clarity',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                   ),
                   trailing: const Icon(Icons.chevron_right_rounded, color: Color(0xFF94A3B8)),
                   onTap: () {
@@ -1641,19 +1641,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     '• Real-time Stats',
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF64748B),
                     ),
                   ),
                 ],
               ),
-              const Text(
-                'View All >',
-                style: TextStyle(
-                  fontSize: 11.5,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF701A33),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _bottomNavIndex = 3;
+                  });
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                  child: Text(
+                    'View All >',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF701A33),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -1788,7 +1798,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 11,
+              fontSize: 11.5,
               fontWeight: FontWeight.w800,
               color: Color(0xFF1E293B),
             ),
@@ -1870,7 +1880,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   'தினசரி பரிந்துரைகள் • Handpicked Matches',
                   style: TextStyle(
-                    fontSize: 10,
+                    fontSize: 11,
                     color: Color(0xFF64748B),
                     fontWeight: FontWeight.w500,
                   ),
@@ -2028,26 +2038,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   details,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 9.5,
                     color: Color(0xFF64748B),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   job,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 9.5,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF701A33),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   casteStar,
                   style: const TextStyle(
-                    fontSize: 9.5,
+                    fontSize: 9,
                     color: Color(0xFF94A3B8),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
 
@@ -2119,7 +2135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'View >',
                 style: TextStyle(
                   color: Color(0xFF701A33),
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                 ),
               ),
@@ -2129,7 +2145,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text(
             'Based on your 11-step sacred partner preferences',
             style: TextStyle(
-              fontSize: 10.5,
+              fontSize: 11,
               color: Color(0xFF64748B),
             ),
           ),
@@ -2259,26 +2275,32 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   details,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 9.5,
                     color: Color(0xFF64748B),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   job,
                   style: const TextStyle(
-                    fontSize: 10,
+                    fontSize: 9.5,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF701A33),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
                 Text(
                   casteStar,
                   style: const TextStyle(
-                    fontSize: 9.5,
+                    fontSize: 9,
                     color: Color(0xFF94A3B8),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
 
@@ -2346,12 +2368,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              const Text(
-                'View All >',
-                style: TextStyle(
-                  color: Color(0xFF701A33),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w800,
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _bottomNavIndex = 1;
+                  });
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                  child: Text(
+                    'View All >',
+                    style: TextStyle(
+                      color: Color(0xFF701A33),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -2360,7 +2392,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const Text(
             '(30 Days) • Fresh Sacred Alliances',
             style: TextStyle(
-              fontSize: 10.5,
+              fontSize: 11,
               color: Color(0xFF64748B),
             ),
           ),
@@ -2693,8 +2725,8 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Colors.white,
           selectedItemColor: const Color(0xFF701A33),
           unselectedItemColor: const Color(0xFF64748B),
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11),
-          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined, size: 23),

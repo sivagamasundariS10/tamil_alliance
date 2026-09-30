@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../premium/premium_screen.dart';
 
 class AllianceFilterScreen extends StatefulWidget {
   const AllianceFilterScreen({super.key});
@@ -13,8 +14,15 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   RangeValues _ageRange = const RangeValues(21, 32);
   RangeValues _heightRange = const RangeValues(152, 183); // 5'0" (152cm) - 6'0" (183cm)
 
-  // 2. Marital Status
-  final Set<String> _selectedMaritalStatus = {'Never Married'};
+  // 2. Marital Status (Step 1 Model)
+  String? _maritalStatus = 'Never Married';
+  String? _childrenStatus;
+
+  bool get _requiresChildrenSelection =>
+      _maritalStatus == 'Awaiting Divorce' ||
+      _maritalStatus == 'Widowed' ||
+      _maritalStatus == 'Divorced' ||
+      _maritalStatus == 'Annulled';
 
   // 3. Mother Tongue
   final Set<String> _selectedMotherTongue = {'Tamil'};
@@ -26,149 +34,108 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   ];
   bool _sagothramRestriction = true;
   final Set<String> _selectedGotras = {'Bharadwaja', 'Srivatsa', 'Haritha'};
-  final List<String> _additionalGotras = ['Viswamitra', 'Kashyapa', 'Koundinya', 'Sadaayan'];
+  final List<String> _additionalGotras = ['Viswamitra', 'Kashyapa'];
 
-  // 5. Dosham / Chevvai Porutham
-  final Set<String> _selectedDoshams = {'Chevvai / Manglik (செவ்வாய் தோஷம்)'};
+  // 5. Dosham / Manglik Alignment
+  final Set<String> _selectedDoshams = {'Chevvai: No Dosham'};
 
-  // 6. Location / Native Preference
+  // 6. Location & Regional Heritage
   final Set<String> _selectedCountries = {'India'};
   final Set<String> _selectedStates = {'Tamil Nadu'};
-  final Set<String> _selectedCities = {'Chennai', 'Coimbatore'};
+  final List<String> _selectedCities = ['Chennai', 'Coimbatore'];
+  final List<String> _availableDistrictSuggestions = ['Madurai'];
 
   // 7. Education & Profession
-  final Set<String> _selectedEducations = {'Doctor (MBBS/MD)'};
-  final Set<String> _selectedProfessions = {'Doctor / Healthcare', 'IT / Software'};
-  String _selectedIncome = '₹15L - ₹30L';
+  final Set<String> _selectedEducations = {'Bachelors', 'Masters'};
+  final Set<String> _selectedProfessions = {'Software / IT'};
+  final Set<String> _selectedIncomeSteps = {'₹10L – ₹25L', '₹25L – ₹50L', '₹50L+'};
 
   // 8. Diet & Physical
   final Set<String> _selectedDiets = {'Pure Vegetarian'};
   String _selectedPhysicalStatus = 'Normal';
 
-  // 9. Profile Badges
+  // 9. Hobbies & Cultural Interests
+  final Set<String> _selectedHobbies = {'Carnatic Music', 'Temple Tours'};
+
+  // 10. Lifestyle & Habits (Single-select)
+  String _selectedSmoking = 'Never';
+  String _selectedDrinking = 'Never';
+
+  // 11. Profile Created By (Single-select)
+  String _selectedCreatedBy = 'Self';
+
+  // 12. Citizenship Type (Single-select)
+  String _selectedCitizenship = 'Citizen';
+
+  // 13. Family Type & Values
+  String _selectedFamilyType = 'Both';
+  String _selectedFamilyValue = 'Traditional';
+
+  // 14. Profile Badges
   final Set<String> _selectedBadges = {'100% ID Verified', 'Horoscope Available', 'Photo Only'};
 
-  // 10. Porutham & Stars
-  String _selectedPoruthamScore = '7+ / 10 Matched';
-  final Set<String> _selectedStars = {'Rohini', 'Magam', 'Hastham', 'Uthiram'};
-
-  // 11. Languages & Family
-  final Set<String> _selectedLanguages = {'Tamil', 'English'};
-  String _selectedFamilyValue = 'Traditional';
-  String _selectedFamilyStatus = 'Upper Middle';
-
   // ─── Data Lists ───
-  final List<String> _maritalOptions = ['Never Married', 'Divorced', 'Widowed', 'Awaiting Divorce'];
+  final List<String> _smokingOptions = ['Never', 'Occasionally'];
+  final List<String> _drinkingOptions = ['Never', 'Socially'];
+  final List<String> _createdByOptions = ['Parents', 'Self', 'Siblings', 'Relatives'];
+  final List<String> _citizenshipOptions = [
+    'Citizen',
+    'PR',
+    'Work Permit (H1B/Tier-2)',
+    'Student Visa',
+    'Temporary Visa',
+  ];
+  final List<String> _familyTypeOptions = ['Nuclear', 'Joint', 'Both'];
+  final List<String> _familyValueOptions = ['Orthodox', 'Traditional', 'Moderate', 'Liberal'];
   final List<String> _motherTongueOptions = ['Tamil', 'Telugu', 'Malayalam', 'Kannada', 'Hindi'];
   
   final List<String> _doshamOptions = [
-    'Chevvai / Manglik (செவ்வாய் தோஷம்)',
-    'Rahu-Ketu Dosham',
-    'Sarpa Dosham',
-    'No Dosham',
-    'Doesn\'t Matter'
+    'Chevvai: No Dosham',
+    'Chevvai Dosham Accepted',
+    'Raghu-Kethu Dosham',
+    'Doesn\'t Matter',
   ];
 
-  final List<String> _countryOptions = ['India', 'USA', 'UAE / Gulf', 'Singapore', 'Malaysia', 'UK'];
-  final List<String> _stateOptions = ['Tamil Nadu', 'Karnataka', 'Kerala', 'Maharashtra'];
-  final List<String> _cityOptions = ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Tiruppur', 'Erode', 'Tiruchirappalli', 'Bangalore'];
+  final List<String> _countryOptions = ['India', 'USA', 'United Kingdom'];
+  final List<String> _stateOptions = ['Tamil Nadu', 'Karnataka', 'Other States'];
 
   final List<String> _educationOptions = [
-    'Doctor (MBBS/MD)',
-    'B.E / B.Tech',
-    'MBA / PG',
+    'Bachelors',
+    'Masters',
+    'Doctorate',
     'CA / CS',
-    'MS / M.Tech',
-    'Any Graduate',
+    'Medical',
   ];
 
   final List<String> _professionOptions = [
-    'Doctor / Healthcare',
-    'IT / Software',
+    'Software / IT',
+    'Doctor',
     'Civil Services',
-    'Business',
-    'Banking / Finance',
-    'Govt Employee',
+    'Banking',
   ];
 
   final List<String> _incomeOptions = [
-    '< ₹5L',
-    '₹5L - ₹15L',
-    '₹15L - ₹30L',
-    '₹30L - ₹50L',
+    'Any',
+    '₹10L – ₹25L',
+    '₹25L – ₹50L',
     '₹50L+',
   ];
 
-  final List<String> _dietOptions = ['Pure Vegetarian', 'Non-Vegetarian', 'Eggetarian', 'Vegan'];
-  final List<String> _physicalOptions = ['Normal', 'Physically Challenged', 'Doesn\'t Matter'];
-  final List<String> _badgeOptions = ['100% ID Verified', 'Horoscope Available', 'Photo Only', 'Active This Week'];
-  final List<String> _poruthamScoreOptions = ['7+ / 10 Matched', '8+ / 10 Matched', '9+ / 10 Matched', 'Any Porutham'];
-  
-  final List<String> _starOptions = [
-    'Ashwini', 'Rohini', 'Magam', 'Hastham', 'Uthiram', 'Thiruvonam', 'Swathi', 'Anusham', 'Revathi', 'Mirugaseerisham', 'Karthigai'
+  final List<String> _dietOptions = ['Pure Vegetarian', 'Eggetarian', 'Non-Vegetarian', 'Vegan'];
+  final List<String> _physicalOptions = ['Normal', 'Specially Abled', 'Doesn\'t Matter'];
+  final List<Map<String, dynamic>> _hobbyOptions = [
+    {'name': 'Carnatic Music', 'icon': Icons.music_note_rounded},
+    {'name': 'Temple Tours', 'icon': Icons.temple_hindu_rounded},
+    {'name': 'Yoga & Meditation', 'icon': null},
+    {'name': 'Classical Literature', 'icon': null},
   ];
-
-  final List<String> _languageOptions = ['Tamil', 'English', 'Telugu', 'Hindi', 'Malayalam'];
-  final List<String> _familyValueOptions = ['Traditional', 'Moderate', 'Liberal', 'Orthodox'];
-  final List<String> _familyStatusOptions = ['Middle Class', 'Upper Middle', 'Affluent'];
-
-  // Advanced Gold Filters List
-  final List<Map<String, dynamic>> _advancedGoldFilterItems = [
-    {
-      'title': '10 Porutham Deep Compatibility',
-      'subtitle': 'Dina, Gana, Mahendra, Rasi, Rajju, Sthree, Yoni, Vasya, Veda',
-      'icon': Icons.emoji_events_rounded,
-    },
-    {
-      'title': 'Planetary Dasa Bukthi Matching',
-      'subtitle': 'Analyze current & future running Dasa Bukthi compatibility',
-      'icon': Icons.flare_rounded,
-    },
-    {
-      'title': 'Annual Family Wealth & Property Worth',
-      'subtitle': 'Filter profiles with family assets ₹1 Cr – ₹5 Cr+, Own House',
-      'icon': Icons.account_balance_rounded,
-    },
-    {
-      'title': 'Government / High-Ranking Officers Only',
-      'subtitle': 'IAS, IPS, IRS, Class-1 Gazetted, PSU & State Govt Officers',
-      'icon': Icons.military_tech_rounded,
-    },
-    {
-      'title': 'Gothram & Ancestral Lineage Compatibility',
-      'subtitle': 'Automatic Non-Sagaothiram & temple kulam validation',
-      'icon': Icons.account_tree_rounded,
-    },
-    {
-      'title': 'Own House & Real Estate Assets Criteria',
-      'subtitle': 'Filter by owned independent houses, lands & commercial assets',
-      'icon': Icons.home_work_rounded,
-    },
-    {
-      'title': 'Permanent Resident (PR) / Green Card Filter',
-      'subtitle': 'USA H1B/PR, Canada PR, Australia PR, UK Skilled Visa',
-      'icon': Icons.flight_takeoff_rounded,
-    },
-    {
-      'title': 'Top Tier Universities (IIT, IIM, AIIMS, Ivy League)',
-      'subtitle': 'Premier institutions in India & Abroad',
-      'icon': Icons.school_rounded,
-    },
-  ];
-
-  String _formatHeight(double cm) {
-    int totalInches = (cm / 2.54).round();
-    int feet = totalInches ~/ 12;
-    int inches = totalInches % 12;
-    return '$feet\'0" (${cm.round()}cm)';
-  }
 
   void _onResetAll() {
     setState(() {
       _ageRange = const RangeValues(21, 32);
       _heightRange = const RangeValues(152, 183);
-      _selectedMaritalStatus.clear();
-      _selectedMaritalStatus.add('Never Married');
+      _maritalStatus = 'Never Married';
+      _childrenStatus = null;
       _selectedMotherTongue.clear();
       _selectedMotherTongue.add('Tamil');
       _selectedSubCastes.clear();
@@ -177,7 +144,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
       _selectedGotras.clear();
       _selectedGotras.addAll(['Bharadwaja', 'Srivatsa', 'Haritha']);
       _selectedDoshams.clear();
-      _selectedDoshams.add('Chevvai / Manglik (செவ்வாய் தோஷம்)');
+      _selectedDoshams.add('Chevvai: No Dosham');
       _selectedCountries.clear();
       _selectedCountries.add('India');
       _selectedStates.clear();
@@ -185,22 +152,24 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
       _selectedCities.clear();
       _selectedCities.addAll(['Chennai', 'Coimbatore']);
       _selectedEducations.clear();
-      _selectedEducations.add('Doctor (MBBS/MD)');
+      _selectedEducations.addAll(['Bachelors', 'Masters']);
       _selectedProfessions.clear();
-      _selectedProfessions.addAll(['Doctor / Healthcare', 'IT / Software']);
-      _selectedIncome = '₹15L - ₹30L';
+      _selectedProfessions.add('Software / IT');
+      _selectedIncomeSteps.clear();
+      _selectedIncomeSteps.addAll(['₹10L – ₹25L', '₹25L – ₹50L', '₹50L+']);
       _selectedDiets.clear();
       _selectedDiets.add('Pure Vegetarian');
       _selectedPhysicalStatus = 'Normal';
+      _selectedHobbies.clear();
+      _selectedHobbies.addAll(['Carnatic Music', 'Temple Tours']);
+      _selectedSmoking = 'Never';
+      _selectedDrinking = 'Never';
+      _selectedCreatedBy = 'Self';
+      _selectedCitizenship = 'Citizen';
+      _selectedFamilyType = 'Both';
+      _selectedFamilyValue = 'Traditional';
       _selectedBadges.clear();
       _selectedBadges.addAll(['100% ID Verified', 'Horoscope Available', 'Photo Only']);
-      _selectedPoruthamScore = '7+ / 10 Matched';
-      _selectedStars.clear();
-      _selectedStars.addAll(['Rohini', 'Magam', 'Hastham', 'Uthiram']);
-      _selectedLanguages.clear();
-      _selectedLanguages.addAll(['Tamil', 'English']);
-      _selectedFamilyValue = 'Traditional';
-      _selectedFamilyStatus = 'Upper Middle';
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
@@ -215,7 +184,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
 
   int _calculateActiveCount() {
     int count = 2; // Age + Height
-    count += _selectedMaritalStatus.length;
+    count += _maritalStatus != null ? 1 : 0;
     count += _selectedMotherTongue.length;
     count += _selectedSubCastes.length;
     count += _selectedGotras.length;
@@ -226,7 +195,10 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
     count += 1; // income
     count += _selectedDiets.length;
     count += _selectedBadges.length;
-    count += _selectedStars.length;
+    count += 1; // smoking
+    count += 1; // drinking
+    count += 1; // created by
+    count += 1; // citizenship
     return count;
   }
 
@@ -331,7 +303,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFFE5B84B),
-                    fontSize: 11.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     height: 1.15,
                   ),
@@ -339,20 +311,46 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(
-              Icons.person_outline_rounded,
-              color: Colors.white,
-              size: 22,
+          Padding(
+            padding: const EdgeInsets.only(right: 12, left: 4),
+            child: Center(
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color(0xFFE5B84B), width: 1.5),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x33000000),
+                      blurRadius: 4,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/bride_portrait.jpg',
+                    width: 34,
+                    height: 34,
+                    fit: BoxFit.cover,
+                    errorBuilder: (ctx, err, stack) => Container(
+                      color: const Color(0xFF881337),
+                      child: const Icon(
+                        Icons.person_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
-            onPressed: () {},
-            splashRadius: 20,
           ),
-          const SizedBox(width: 4),
         ],
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -389,7 +387,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
             _buildLocationCard(),
             const SizedBox(height: 12),
 
-            // Card 8: 8. Education Qualification
+            // Card 8: 8. Education
             _buildEducationCard(),
             const SizedBox(height: 12),
 
@@ -397,7 +395,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
             _buildProfessionIncomeCard(),
             const SizedBox(height: 12),
 
-            // Card 10: 10. Diet Preference
+            // Card 10: 10. Diet
             _buildDietCard(),
             const SizedBox(height: 12),
 
@@ -405,29 +403,29 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
             _buildPhysicalStatusCard(),
             const SizedBox(height: 12),
 
-            // Card 12: 12. Verified Profiles & Horoscope
-            _buildProfileBadgesCard(),
+            // Card 12: 12. Hobbies & Cultural Interests
+            _buildHobbiesCard(),
             const SizedBox(height: 12),
 
-            // Card 13: 13. Minimum Porutham Score
-            _buildPoruthamScoreCard(),
+            // Card 13: 13. Lifestyle & Habits
+            _buildLifestyleHabitsCard(),
             const SizedBox(height: 12),
 
-            // Card 14: 14. Preferred Stars / Nakshatras
-            _buildPreferredStarsCard(),
+            // Card 14: 14. Profile Created By
+            _buildProfileCreatedByCard(),
             const SizedBox(height: 12),
 
-            // Card 15: 15. Languages Known
-            _buildLanguagesCard(),
+            // Card 15: 15. Citizenship Type
+            _buildCitizenshipTypeCard(),
             const SizedBox(height: 12),
 
-            // Card 16: 16. Family Values & Status
-            _buildFamilyValuesStatusCard(),
+            // Card 16 & 17: 16. Family Type & 17. Family Values
+            _buildFamilyTypeAndValuesCard(),
             const SizedBox(height: 16),
 
-            // Card 17: 👑 Advanced Match Filters (Golden Premium Card)
-            _buildAdvancedMatchFiltersGoldenCard(),
-            const SizedBox(height: 18),
+            // Advanced VIP Filters (Gold Box Exact Reference)
+            _buildAdvancedVIPFiltersCard(),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -490,7 +488,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                 child: Text(
                   '${_ageRange.start.round()} Yrs – ${_ageRange.end.round()} Yrs',
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF701A33),
                   ),
@@ -524,12 +522,12 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('18 Yrs', style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+                const Text('18 Yrs', style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
                 Text(
                   'Selected: ${_ageRange.start.round()}–${_ageRange.end.round()} Yrs',
-                  style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
                 ),
-                const Text('45+ Yrs', style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+                const Text('45+ Yrs', style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -568,7 +566,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                 child: Text(
                   '5\'0" (${_heightRange.start.round()}cm) – 6\'0" (${_heightRange.end.round()}cm)',
                   style: const TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF1E293B),
                   ),
@@ -602,8 +600,8 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: const [
-                Text('4\'6" (137cm)', style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
-                Text('6\'6"+ (198cm)', style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+                Text('4\'6" (137cm)', style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
+                Text('6\'6"+ (198cm)', style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -613,39 +611,228 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 3: 3. Marital Status
+  // Card 3: 3. Marital Status (Exact Step 1 Model)
   // ─────────────────────────────────────────────────────────────
   Widget _buildMaritalStatusCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '3. Marital Status',
-            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: const [
+                  Text(
+                    '3. Marital Status',
+                    style: TextStyle(
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    '*',
+                    style: TextStyle(
+                      color: Color(0xFFE11D48),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              if (_maritalStatus != null && _requiresChildrenSelection)
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _maritalStatus = null;
+                      _childrenStatus = null;
+                    });
+                  },
+                  child: const Text(
+                    'Change',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1D4ED8),
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _maritalOptions.map((opt) {
-              final isSel = _selectedMaritalStatus.contains(opt);
-              return _buildPillChip(
-                label: opt,
-                isSelected: isSel,
-                onTap: () {
-                  setState(() {
-                    if (isSel) {
-                      if (_selectedMaritalStatus.length > 1) _selectedMaritalStatus.remove(opt);
-                    } else {
-                      _selectedMaritalStatus.add(opt);
-                    }
-                  });
-                },
-              );
-            }).toList(),
-          ),
+
+          // If Awaiting Divorce, Widowed, Annulled, or Divorced is selected -> show selected bar & 3 radio buttons for children
+          if (_requiresChildrenSelection) ...[
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFF701A33),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF701A33).withValues(alpha: 0.2),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.check_circle, color: Colors.white, size: 16),
+                  const SizedBox(width: 8),
+                  Text(
+                    _maritalStatus!,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+
+            // 3 Custom Radio Buttons for Children
+            Row(
+              children: [
+                Expanded(
+                  child: _buildCustomRadioButton('Living with Children'),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: _buildCustomRadioButton('No Children'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            _buildCustomRadioButton('Living without Children', isFullWidth: true),
+          ] else ...[
+            // All 5 Marital options visible when not locked
+            Row(
+              children: [
+                Expanded(child: _buildMaritalChip('Never Married')),
+                const SizedBox(width: 8),
+                Expanded(child: _buildMaritalChip('Awaiting Divorce')),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(child: _buildMaritalChip('Annulled')),
+                const SizedBox(width: 8),
+                Expanded(child: _buildMaritalChip('Widowed')),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Expanded(child: _buildMaritalChip('Divorced')),
+              ],
+            ),
+          ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildMaritalChip(String status) {
+    final isSelected = _maritalStatus == status;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _maritalStatus = status;
+          if (!_requiresChildrenSelection) {
+            _childrenStatus = null;
+          }
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF701A33) : const Color(0xFFF3EFEA),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          status,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+            color: isSelected ? Colors.white : const Color(0xFF5C5854),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomRadioButton(String label, {bool isFullWidth = false}) {
+    final isSelected = _childrenStatus == label;
+
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _childrenStatus = label;
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: isFullWidth ? double.infinity : null,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFCE7F3) : const Color(0xFFF3EFEA),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: isSelected ? const Color(0xFF701A33) : const Color(0xFFE7E1D8),
+            width: isSelected ? 1.5 : 1,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 16,
+              height: 16,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected ? const Color(0xFF701A33) : const Color(0xFF94A3B8),
+                  width: 2,
+                ),
+              ),
+              child: isSelected
+                  ? Center(
+                      child: Container(
+                        width: 8,
+                        height: 8,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(0xFF701A33),
+                        ),
+                      ),
+                    )
+                  : null,
+            ),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                  color: isSelected ? const Color(0xFF701A33) : const Color(0xFF5C5854),
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -722,7 +909,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
               children: [
                 const Text(
                   'Sub-caste Preferences:',
-                  style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF64748B)),
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B)),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -749,7 +936,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                               Text(
                                 subCaste,
                                 style: const TextStyle(
-                                  fontSize: 11.5,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                   color: Color(0xFF701A33),
                                 ),
@@ -788,7 +975,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                             Text(
                               'Add Caste',
                               style: TextStyle(
-                                fontSize: 11.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: Color(0xFF701A33),
                               ),
@@ -822,12 +1009,12 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                     children: const [
                       Text(
                         'Sagothram Restriction',
-                        style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                       ),
                       SizedBox(height: 2),
                       Text(
                         'Auto-exclude own gotra (Kaundinya) per Vedic shastras',
-                        style: TextStyle(fontSize: 10.5, color: Color(0xFF78716C)),
+                        style: TextStyle(fontSize: 13, color: Color(0xFF78716C)),
                       ),
                     ],
                   ),
@@ -851,7 +1038,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
           // Section 3: Accepted Gotras
           const Text(
             'Accepted Gotras:',
-            style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF64748B)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B)),
           ),
           const SizedBox(height: 8),
           Wrap(
@@ -890,22 +1077,16 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 6: Dosham / Chevvai Porutham
+  // Card 6: Dosham / Manglik Alignment (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildDoshamCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.auto_awesome_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '6. Dosham / Chevvai Porutham',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '6. Dosham / Manglik Alignment',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -934,26 +1115,20 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 7: Location / Native Preference
+  // Card 7: Location & Regional Heritage (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildLocationCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.location_on_outlined, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '7. Location / Native Preference',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '7. Location & Regional Heritage',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
-          const SizedBox(height: 10),
-          const Text('Country', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
+          const Text('Country', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -974,9 +1149,9 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 10),
-          const Text('State', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
+          const Text('State', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -997,44 +1172,121 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 10),
-          const Text('Preferred Cities / Districts', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              ..._cityOptions.map((city) {
-                final isSel = _selectedCities.contains(city);
-                return _buildPillChip(
-                  label: city,
-                  isSelected: isSel,
-                  onTap: () {
-                    setState(() {
-                      if (isSel) {
-                        _selectedCities.remove(city);
-                      } else {
-                        _selectedCities.add(city);
-                      }
-                    });
-                  },
-                );
-              }),
-              _buildAddButton(
-                label: '+ Add City',
-                onTap: () {
-                  _showAddCustomDialog(
-                    title: 'Add Preferred City',
-                    onAdd: (name) {
+          const SizedBox(height: 12),
+          const Text('Native District Tags', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFBF8F4),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFF2EDE6)),
+            ),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                ..._selectedCities.map((city) {
+                  return InkWell(
+                    onTap: () {
                       setState(() {
-                        if (!_cityOptions.contains(name)) _cityOptions.add(name);
-                        _selectedCities.add(name);
+                        _selectedCities.remove(city);
+                        if (!_availableDistrictSuggestions.contains(city)) {
+                          _availableDistrictSuggestions.add(city);
+                        }
                       });
                     },
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFCEEEF),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            city,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF701A33),
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          const Icon(Icons.close_rounded, size: 14, color: Color(0xFF701A33)),
+                        ],
+                      ),
+                    ),
                   );
-                },
-              ),
-            ],
+                }),
+                ..._availableDistrictSuggestions.map((dist) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _availableDistrictSuggestions.remove(dist);
+                        _selectedCities.add(dist);
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: const Color(0xFFE5E0D8)),
+                      ),
+                      child: Text(
+                        dist,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF64748B),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+                InkWell(
+                  onTap: () {
+                    _showAddCustomDialog(
+                      title: 'Add District / Native Tag',
+                      onAdd: (name) {
+                        setState(() {
+                          if (!_selectedCities.contains(name)) _selectedCities.add(name);
+                        });
+                      },
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: const Color(0xFFE5E0D8)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.add_rounded, size: 14, color: Color(0xFF701A33)),
+                        SizedBox(width: 4),
+                        Text(
+                          '+ Add District',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF701A33),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -1042,59 +1294,37 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 8: Education Qualification
+  // Card 8: Education (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildEducationCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.school_outlined, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '8. Education Qualification',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '8. Education',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              ..._educationOptions.map((edu) {
-                final isSel = _selectedEducations.contains(edu);
-                return _buildPillChip(
-                  label: edu,
-                  isSelected: isSel,
-                  onTap: () {
-                    setState(() {
-                      if (isSel) {
-                        _selectedEducations.remove(edu);
-                      } else {
-                        _selectedEducations.add(edu);
-                      }
-                    });
-                  },
-                );
-              }),
-              _buildAddButton(
-                label: '+ Add Degree',
+            children: _educationOptions.map((edu) {
+              final isSel = _selectedEducations.contains(edu);
+              return _buildPillChip(
+                label: edu,
+                isSelected: isSel,
                 onTap: () {
-                  _showAddCustomDialog(
-                    title: 'Add Education Degree',
-                    onAdd: (name) {
-                      setState(() {
-                        if (!_educationOptions.contains(name)) _educationOptions.add(name);
-                        _selectedEducations.add(name);
-                      });
-                    },
-                  );
+                  setState(() {
+                    if (isSel) {
+                      if (_selectedEducations.length > 1) _selectedEducations.remove(edu);
+                    } else {
+                      _selectedEducations.add(edu);
+                    }
+                  });
                 },
-              ),
-            ],
+              );
+            }).toList(),
           ),
         ],
       ),
@@ -1102,7 +1332,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 9: Profession & Annual Income
+  // Card 9: Profession & Annual Income (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildProfessionIncomeCard() {
     return _buildCardWrapper(
@@ -1110,18 +1340,33 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
-              Icon(Icons.work_outline_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
                 '9. Profession & Annual Income',
                 style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
               ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF1F2),
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: const Color(0xFFFCE7F3)),
+                ),
+                child: const Text(
+                  '₹10L – ₹50L+ p.a.',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF881337),
+                  ),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 10),
-          const Text('Profession / Sector', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
+          const SizedBox(height: 12),
+          const Text('Profession Sector', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -1133,7 +1378,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                 onTap: () {
                   setState(() {
                     if (isSel) {
-                      _selectedProfessions.remove(prof);
+                      if (_selectedProfessions.length > 1) _selectedProfessions.remove(prof);
                     } else {
                       _selectedProfessions.add(prof);
                     }
@@ -1143,17 +1388,31 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
             }).toList(),
           ),
           const SizedBox(height: 12),
-          const Text('Annual Income Range', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
+          const Text('Income Stepping', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
+          const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: _incomeOptions.map((inc) {
-              final isSel = _selectedIncome == inc;
+              final isSel = _selectedIncomeSteps.contains(inc);
               return _buildPillChip(
                 label: inc,
                 isSelected: isSel,
-                onTap: () => setState(() => _selectedIncome = inc),
+                onTap: () {
+                  setState(() {
+                    if (inc == 'Any') {
+                      _selectedIncomeSteps.clear();
+                      _selectedIncomeSteps.add('Any');
+                    } else {
+                      _selectedIncomeSteps.remove('Any');
+                      if (isSel) {
+                        if (_selectedIncomeSteps.length > 1) _selectedIncomeSteps.remove(inc);
+                      } else {
+                        _selectedIncomeSteps.add(inc);
+                      }
+                    }
+                  });
+                },
               );
             }).toList(),
           ),
@@ -1163,22 +1422,16 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 10: Diet Preference
+  // Card 10: Diet (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildDietCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.restaurant_outlined, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '10. Diet Preference',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '10. Diet',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -1207,22 +1460,16 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 11: Physical Status
+  // Card 11: Physical Status (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildPhysicalStatusCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.accessibility_new_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '11. Physical Status',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '11. Physical Status',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
@@ -1243,41 +1490,62 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 12: Profile Badges & Verification
+  // Card 12: Hobbies & Cultural Interests (Exact Reference)
   // ─────────────────────────────────────────────────────────────
-  Widget _buildProfileBadgesCard() {
+  Widget _buildHobbiesCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.verified_user_outlined, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '12. Verified Profiles & Horoscope',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '12. Hobbies & Cultural Interests',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _badgeOptions.map((b) {
-              final isSel = _selectedBadges.contains(b);
-              return _buildPillChip(
-                label: b,
-                isSelected: isSel,
+            children: _hobbyOptions.map((hobby) {
+              final String name = hobby['name'] as String;
+              final IconData? icon = hobby['icon'] as IconData?;
+              final bool isSel = _selectedHobbies.contains(name);
+
+              return InkWell(
                 onTap: () {
                   setState(() {
                     if (isSel) {
-                      _selectedBadges.remove(b);
+                      _selectedHobbies.remove(name);
                     } else {
-                      _selectedBadges.add(b);
+                      _selectedHobbies.add(name);
                     }
                   });
                 },
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: isSel ? const Color(0xFFFCEEEF) : const Color(0xFFF3EFEA),
+                    borderRadius: BorderRadius.circular(20),
+                    border: isSel ? Border.all(color: const Color(0xFFF8D7DA)) : null,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (icon != null) ...[
+                        Icon(icon, size: 14, color: isSel ? const Color(0xFF701A33) : const Color(0xFF5C5854)),
+                        const SizedBox(width: 5),
+                      ],
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
+                          color: isSel ? const Color(0xFF701A33) : const Color(0xFF5C5854),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             }).toList(),
           ),
@@ -1287,33 +1555,93 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 13: 10 Porutham Score
+  // Card 13: Lifestyle & Habits (Single-select Reference)
   // ─────────────────────────────────────────────────────────────
-  Widget _buildPoruthamScoreCard() {
+  Widget _buildLifestyleHabitsCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const Text(
+            '13. Lifestyle & Habits',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+          ),
+          const SizedBox(height: 12),
           Row(
-            children: const [
-              Icon(Icons.stars_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '13. Minimum Porutham Score',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Smoking Habits
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Smoking Habits', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF64748B))),
+                    const SizedBox(height: 8),
+                    ..._smokingOptions.map((opt) {
+                      final isSel = _selectedSmoking == opt;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: _buildBlockChip(
+                          label: opt,
+                          isSelected: isSel,
+                          onTap: () => setState(() => _selectedSmoking = opt),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 14),
+              // Drinking Habits
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Drinking Habits', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF64748B))),
+                    const SizedBox(height: 8),
+                    ..._drinkingOptions.map((opt) {
+                      final isSel = _selectedDrinking == opt;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: _buildBlockChip(
+                          label: opt,
+                          isSelected: isSel,
+                          onTap: () => setState(() => _selectedDrinking = opt),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Card 14: Profile Created By (Single-select Reference)
+  // ─────────────────────────────────────────────────────────────
+  Widget _buildProfileCreatedByCard() {
+    return _buildCardWrapper(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '14. Profile Created By',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _poruthamScoreOptions.map((score) {
-              final isSel = _selectedPoruthamScore == score;
+            children: _createdByOptions.map((opt) {
+              final isSel = _selectedCreatedBy == opt;
               return _buildPillChip(
-                label: score,
+                label: opt,
                 isSelected: isSel,
-                onTap: () => setState(() => _selectedPoruthamScore = score),
+                onTap: () => setState(() => _selectedCreatedBy = opt),
               );
             }).toList(),
           ),
@@ -1323,85 +1651,27 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 14: Preferred Stars / Nakshatras
+  // Card 15: Citizenship Type (Single-select Reference)
   // ─────────────────────────────────────────────────────────────
-  Widget _buildPreferredStarsCard() {
+  Widget _buildCitizenshipTypeCard() {
     return _buildCardWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.brightness_5_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '14. Preferred Nakshatras (நட்சத்திரம்)',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 6,
-            runSpacing: 6,
-            children: _starOptions.map((star) {
-              final isSel = _selectedStars.contains(star);
-              return _buildPillChip(
-                label: star,
-                isSelected: isSel,
-                onTap: () {
-                  setState(() {
-                    if (isSel) {
-                      _selectedStars.remove(star);
-                    } else {
-                      _selectedStars.add(star);
-                    }
-                  });
-                },
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─────────────────────────────────────────────────────────────
-  // Card 15: Languages Known
-  // ─────────────────────────────────────────────────────────────
-  Widget _buildLanguagesCard() {
-    return _buildCardWrapper(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Icon(Icons.language_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '15. Languages Known',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          const Text(
+            '15. Citizenship Type',
+            style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
           ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _languageOptions.map((lang) {
-              final isSel = _selectedLanguages.contains(lang);
+            children: _citizenshipOptions.map((opt) {
+              final isSel = _selectedCitizenship == opt;
               return _buildPillChip(
-                label: lang,
+                label: opt,
                 isSelected: isSel,
-                onTap: () {
-                  setState(() {
-                    if (isSel) {
-                      if (_selectedLanguages.length > 1) _selectedLanguages.remove(lang);
-                    } else {
-                      _selectedLanguages.add(lang);
-                    }
-                  });
-                },
+                onTap: () => setState(() => _selectedCitizenship = opt),
               );
             }).toList(),
           ),
@@ -1411,77 +1681,81 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Card 16: Family Values & Status
+  // Card 16 & 17: Family Type & Family Values (Exact Reference)
   // ─────────────────────────────────────────────────────────────
-  Widget _buildFamilyValuesStatusCard() {
+  Widget _buildFamilyTypeAndValuesCard() {
     return _buildCardWrapper(
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
-              Icon(Icons.family_restroom_rounded, size: 18, color: Color(0xFF701A33)),
-              SizedBox(width: 8),
-              Text(
-                '16. Family Values & Status',
-                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-              ),
-            ],
+          // 16. Family Type
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '16. Family Type',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                ),
+                const SizedBox(height: 12),
+                ..._familyTypeOptions.map((opt) {
+                  final isSel = _selectedFamilyType == opt;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: _buildBlockChip(
+                      label: opt,
+                      isSelected: isSel,
+                      onTap: () => setState(() => _selectedFamilyType = opt),
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
-          const SizedBox(height: 10),
-          const Text('Family Values', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _familyValueOptions.map((val) {
-              final isSel = _selectedFamilyValue == val;
-              return _buildPillChip(
-                label: val,
-                isSelected: isSel,
-                onTap: () => setState(() => _selectedFamilyValue = val),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 10),
-          const Text('Family Status', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF64748B))),
-          const SizedBox(height: 6),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _familyStatusOptions.map((st) {
-              final isSel = _selectedFamilyStatus == st;
-              return _buildPillChip(
-                label: st,
-                isSelected: isSel,
-                onTap: () => setState(() => _selectedFamilyStatus = st),
-              );
-            }).toList(),
+          const SizedBox(width: 14),
+          // 17. Family Values
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '17. Family Values',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                ),
+                const SizedBox(height: 12),
+                ..._familyValueOptions.map((val) {
+                  final isSel = _selectedFamilyValue == val;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: _buildBlockChip(
+                      label: val,
+                      isSelected: isSel,
+                      onTap: () => setState(() => _selectedFamilyValue = val),
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
+
+
   // ─────────────────────────────────────────────────────────────
-  // Card 17: 👑 Advanced Match Filters (Golden Premium Box)
+  // Advanced VIP Filters (Kalyanam Gold VIP Box - Exact Reference)
   // ─────────────────────────────────────────────────────────────
-  Widget _buildAdvancedMatchFiltersGoldenCard() {
+  Widget _buildAdvancedVIPFiltersCard() {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFFFFDF5),
+        color: const Color(0xFFFCFAF5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFE5B84B), width: 1.5),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x14D97706),
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          ),
-        ],
+        border: Border.all(color: const Color(0xFFD4A338), width: 1.2),
       ),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1489,33 +1763,40 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: const [
-                  Icon(Icons.workspace_premium_rounded, color: Color(0xFFB45309), size: 20),
-                  SizedBox(width: 8),
-                  Text(
-                    'Advanced Match Filters 👑',
-                    style: TextStyle(
-                      fontSize: 14.5,
-                      fontWeight: FontWeight.w900,
-                      color: Color(0xFF78350F),
+              Expanded(
+                child: Row(
+                  children: const [
+                    Icon(Icons.star_border_rounded, color: Color(0xFF701A33), size: 18),
+                    SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        'Advanced VIP Filters 🔒',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: 'serif',
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF701A33),
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+              const SizedBox(width: 6),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFEF3C7),
+                  color: const Color(0xFFD48806),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFF59E0B)),
                 ),
                 child: const Text(
-                  '👑 PREMIUM ONLY',
+                  'KALYANAM GOLD VIP',
                   style: TextStyle(
                     fontSize: 9.5,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xFF92400E),
+                    fontWeight: FontWeight.w800,
+                    color: Colors.white,
+                    letterSpacing: 0.3,
                   ),
                 ),
               ),
@@ -1523,113 +1804,196 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
           ),
           const SizedBox(height: 6),
           const Text(
-            'Unlock deeper compatibility filters to discover soulmate matches with 100% precision.',
+            'Precision astrological, affluence, and international filters curated for Tier-1 alliances.',
             style: TextStyle(
-              fontSize: 11,
-              color: Color(0xFF92400E),
+              fontSize: 13,
+              color: Color(0xFF8C7355),
               height: 1.35,
             ),
           ),
           const SizedBox(height: 14),
 
-          // Advanced Feature Items
-          ...List.generate(_advancedGoldFilterItems.length, (idx) {
-            final item = _advancedGoldFilterItems[idx];
+          // 1. Nakshatra / 27 Vedic Stars Matching
+          _buildVipItemCard(
+            icon: Icons.brightness_7_rounded,
+            title: '1. Nakshatra / 27 Vedic Stars Matching',
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _buildVipSmallChip('Ashwini', isPink: true),
+                _buildVipSmallChip('Rohini', isPink: false),
+                _buildVipSmallChip('Swati', isPink: false),
+                _buildVipSmallChip('Revathi', isPink: true),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
 
-            return InkWell(
-              onTap: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('👑 "${item['title']}" is unlocked with Tamil Alliance Gold/Diamond Plan.'),
-                    backgroundColor: const Color(0xFF701A33),
-                    behavior: SnackBarBehavior.floating,
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
-              borderRadius: BorderRadius.circular(10),
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: const Color(0xFFFDE68A)),
-                ),
-                child: Row(
-                  children: [
-                    Icon(item['icon'] as IconData, size: 20, color: const Color(0xFFD97706)),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item['title'] as String,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: Color(0xFF1E293B),
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            item['subtitle'] as String,
-                            style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.lock_outline_rounded, size: 16, color: Color(0xFFD97706)),
-                  ],
-                ),
-              ),
-            );
-          }),
+          // 2. Working Company Name
+          _buildVipItemCard(
+            icon: Icons.domain_rounded,
+            title: '2. Working Company Name',
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _buildVipSmallChip('Google'),
+                _buildVipSmallChip('Microsoft'),
+                _buildVipSmallChip('Govt / IAS'),
+                _buildVipSmallChip('Fortune 500 MNC'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
 
-          const SizedBox(height: 12),
+          // 3. Family Affluence Level
+          _buildVipItemCard(
+            icon: Icons.account_balance_rounded,
+            title: '3. Family Affluence Level',
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _buildVipSmallChip('High Net Worth (₹15Cr+)'),
+                _buildVipSmallChip('Upper Middle (₹35L– ₹1Cr)'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
 
-          // Gold CTA Callout Box
+          // 4. Birth Window & Astrological Timeline
+          _buildVipItemCard(
+            icon: Icons.calendar_month_rounded,
+            title: '4. Birth Window & Astrological Timeline',
+            child: const Text(
+              'Hour of birth precision & Rasi–Navamsha synastry check',
+              style: TextStyle(fontSize: 13, color: Color(0xFF78716C)),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // 5. 100% Aadhaar & Passport Verified Only
+          _buildVipItemCard(
+            icon: Icons.verified_user_outlined,
+            iconColor: const Color(0xFF059669),
+            title: '5. 100% Aadhaar & Passport Verified Only',
+            child: const Text(
+              'Strictly exclude unverified or self-declared credentials',
+              style: TextStyle(fontSize: 13, color: Color(0xFF78716C)),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // 6. Born Country & Diaspora Heritage
+          _buildVipItemCard(
+            icon: Icons.public_rounded,
+            title: '6. Born Country & Diaspora Heritage',
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _buildVipSmallChip('Born in India'),
+                _buildVipSmallChip('USA / Canada Born'),
+                _buildVipSmallChip('UK Born'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // 7. NRI Matches Only
+          _buildVipItemCard(
+            icon: Icons.flight_takeoff_rounded,
+            title: '7. NRI Matches Only',
+            child: const Text(
+              'Filtered to global professionals with green card / valid PR',
+              style: TextStyle(fontSize: 13, color: Color(0xFF78716C)),
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // 8. Asset Type & Residential Stature
+          _buildVipItemCard(
+            icon: Icons.home_work_outlined,
+            title: '8. Asset Type & Residential Stature',
+            child: Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                _buildVipSmallChip('Own Villa / Bungalow'),
+                _buildVipSmallChip('Luxury Highrise Flat'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
+          // Bottom CTA Callout Box
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFFFFFBEB), Color(0xFFFEF3C7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFF59E0B), width: 1.2),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFFD4A338), width: 1.2),
             ),
             child: Column(
               children: [
-                const Icon(Icons.verified_rounded, size: 28, color: Color(0xFFD97706)),
-                const SizedBox(height: 6),
-                const Text(
-                  'Unlock All High-Precision Gold Filters',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xFF78350F),
+                // Center Star Badge
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFFCE7A6),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF701A33),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.star_rounded,
+                        color: Color(0xFFFCE7A6),
+                        size: 16,
+                      ),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 4),
-                const Text(
-                  'Get access to advanced horoscope matching, property filters, overseas PR status & top elite family matches.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 10.5, color: Color(0xFF92400E), height: 1.3),
-                ),
                 const SizedBox(height: 10),
+                const Text(
+                  'Unlock 8 High-Precision VIP Filters',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'serif',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xFF701A33),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.4),
+                    children: [
+                      TextSpan(text: 'Find elite verified matches '),
+                      TextSpan(
+                        text: '4.8x faster ',
+                        style: TextStyle(fontWeight: FontWeight.w800, color: Color(0xFF701A33)),
+                      ),
+                      TextSpan(text: 'with Vedic Porutham star compatibility, HNI wealth tiers, and global NRI filters.'),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 14),
                 InkWell(
                   onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Redirecting to Tamil Alliance Premium Membership...'),
-                        backgroundColor: Color(0xFF701A33),
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PremiumScreen(),
                       ),
                     );
                   },
@@ -1644,20 +2008,26 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
-                        Icon(Icons.bolt_rounded, size: 16, color: Color(0xFFF3D27C)),
-                        SizedBox(width: 6),
                         Text(
-                          '⚡ Activate Gold Filter Access',
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12.5),
+                          '👑 Upgrade to VIP to Unlock →',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 13,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 const Text(
-                  'Starting at ₹999/month • Cancel Anytime',
-                  style: TextStyle(fontSize: 9.5, color: Color(0xFFB45309), fontWeight: FontWeight.w600),
+                  'Starting at ₹999/month • Instant activation with Razorpay',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF92400E),
+                  ),
                 ),
               ],
             ),
@@ -1667,8 +2037,67 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
     );
   }
 
+  Widget _buildVipItemCard({
+    required IconData icon,
+    Color iconColor = const Color(0xFFC88A2C),
+    required String title,
+    required Widget child,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFEDE9E3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 18, color: iconColor),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF2D2D2D),
+                  ),
+                ),
+              ),
+              const Icon(Icons.lock_outline_rounded, size: 15, color: Color(0xFFC88A2C)),
+            ],
+          ),
+          const SizedBox(height: 6),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildVipSmallChip(String label, {bool isPink = false}) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+      decoration: BoxDecoration(
+        color: isPink ? const Color(0xFFFCEEF0) : const Color(0xFFF3EFEA),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11.5,
+          fontWeight: FontWeight.w600,
+          color: isPink ? const Color(0xFF701A33) : const Color(0xFF64748B),
+        ),
+      ),
+    );
+  }
+
   // ─────────────────────────────────────────────────────────────
-  // Bottom Sticky Action Bar
+  // Bottom Sticky Action Bar (Exact Reference)
   // ─────────────────────────────────────────────────────────────
   Widget _buildBottomActionBar(int activeCount) {
     return Container(
@@ -1704,21 +2133,21 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      Text(
-                        '$activeCount Filters Applied',
-                        style: const TextStyle(
-                          fontSize: 12,
+                      const Text(
+                        'Standard Matches',
+                        style: TextStyle(
+                          fontSize: 13,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xFF1E293B),
+                          color: Color(0xFF701A33),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 2),
                   const Text(
-                    'Found 148 Matches',
+                    'Active filters applied',
                     style: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                       fontWeight: FontWeight.w600,
                     ),
@@ -1748,13 +2177,24 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
                       ),
                     ],
                   ),
-                  child: const Text(
-                    'Apply Filters (148)',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text(
+                        'Apply Filters',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 13,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                        size: 15,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -1806,7 +2246,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 13,
             fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
             color: isSelected ? Colors.white : const Color(0xFF5C5854),
           ),
@@ -1815,23 +2255,30 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
     );
   }
 
-  Widget _buildAddButton({required String label, required VoidCallback onTap}) {
+  Widget _buildBlockChip({
+    required String label,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      borderRadius: BorderRadius.circular(10),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: const Color(0xFFFFF8F9),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFFFB4C4), style: BorderStyle.solid),
+          color: isSelected ? const Color(0xFF701A33) : const Color(0xFFF3EFEA),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
           label,
-          style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF701A33),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+            color: isSelected ? Colors.white : const Color(0xFF5C5854),
           ),
         ),
       ),

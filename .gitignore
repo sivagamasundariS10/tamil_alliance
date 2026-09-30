@@ -46,3 +46,12 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Terminal / Flutter Screenshots & Captures
+flutter_*.png
+flutter_*.jpg
+flutter_*.jpeg
+screenshot*.png
+screenshot*.jpg
+/screenshots/
+*.screenshot.*

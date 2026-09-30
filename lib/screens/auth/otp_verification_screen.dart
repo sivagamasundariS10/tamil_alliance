@@ -143,7 +143,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 'Otp Verification',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -187,7 +187,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           Text(
                             'Back to Mobile Number',
                             style: TextStyle(
-                              fontSize: 12.5,
+                              fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF4B5563),
                             ),
@@ -201,7 +201,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         Text(
                           '$_completedPercentage% Completed',
                           style: const TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF701A33),
                           ),
@@ -216,7 +216,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           child: const Text(
                             'STEP 2 OF 3',
                             style: TextStyle(
-                              fontSize: 9.5,
+                              fontSize: 13,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 0.5,
                               color: Color(0xFF9A3412),
@@ -322,7 +322,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 const Text(
                   'Enter the 4–digit OTP sent via SMS to',
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     color: Color(0xFF6B7280),
                   ),
                 ),
@@ -349,7 +349,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           Text(
                             'Edit Number',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF1D4ED8),
                             ),
@@ -386,7 +386,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       const Text(
                         'Auto-reading SMS... 100% Secure & Instant',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF1D4ED8),
                         ),
@@ -498,7 +498,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           ? Text(
                               'Resend OTP in 00:${_resendSeconds.toString().padLeft(2, '0')}s',
                               style: const TextStyle(
-                                fontSize: 11.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xFF4B5563),
                               ),
@@ -508,7 +508,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                               child: const Text(
                                 'Resend OTP',
                                 style: TextStyle(
-                                  fontSize: 11.5,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFF701A33),
                                 ),

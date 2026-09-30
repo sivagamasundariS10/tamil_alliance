@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
 
 class ChatDetailScreen extends StatefulWidget {
   final String handle;
@@ -136,7 +135,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               Text(
                 'Report submitted for ${widget.name} (${widget.allianceId}). Our Trust & Safety team will review this chat within 15 minutes.',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), height: 1.35),
+                style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.35),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -228,7 +227,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               const Text(
                 'Your request has been prioritized under SLA < 15 min review. A dedicated relationship counselor is assigned to assist your family.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12, color: Color(0xFF64748B), height: 1.35),
+                style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.35),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -251,69 +250,6 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
     );
   }
 
-  void _handleDirectCall() {
-    print('====================================================');
-    print('📞 [USER ACTION: DIRECT CALL INITIATED]');
-    print('   Candidate   : ${widget.name}');
-    print('   Alliance ID : ${widget.allianceId}');
-    print('   Phone Line  : +91 94440 21892 (Masked Secure Bridge)');
-    print('   Status      : Connecting Family Call Line ✓');
-    print('====================================================');
-
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.phone_in_talk_rounded, color: Color(0xFF10B981), size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Initiating secure call to ${widget.name}\'s family (+91 94440 21892)...',
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: const Color(0xFF1E293B),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
-  void _handleWhatsAppTrigger() {
-    print('====================================================');
-    print('💬 [USER ACTION: OPEN WHATSAPP CHAT]');
-    print('   Candidate   : ${widget.name}');
-    print('   Alliance ID : ${widget.allianceId}');
-    print('   WhatsApp No : +91 94440 21892');
-    print('   Status      : Opening Verified WhatsApp Chat ✓');
-    print('====================================================');
-
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.chat_rounded, color: Color(0xFF25D366), size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Connecting to ${widget.name} via Tamil Alliance Verified WhatsApp...',
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: const Color(0xFF1E293B),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -360,7 +296,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     widget.allianceId,
                     style: const TextStyle(
                       color: Colors.white70,
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -370,34 +306,6 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           ],
         ),
         actions: [
-          // WhatsApp Trigger Button
-          IconButton(
-            tooltip: 'WhatsApp Message',
-            icon: Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: const Color(0xFF25D366).withAlpha(40),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.chat_bubble_rounded, color: Color(0xFF25D366), size: 16),
-            ),
-            onPressed: _handleWhatsAppTrigger,
-          ),
-
-          // Direct Phone Call Trigger Button
-          IconButton(
-            tooltip: 'Direct Phone Call',
-            icon: Container(
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: Colors.white.withAlpha(30),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.phone_rounded, color: Color(0xFFF5D68B), size: 16),
-            ),
-            onPressed: _handleDirectCall,
-          ),
-
           Theme(
             data: Theme.of(context).copyWith(
               cardColor: Colors.white,
@@ -431,30 +339,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
-                      children: [
-                        const Icon(Icons.outlined_flag_rounded, color: Color(0xFFDC2626), size: 20),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Instant Report',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF1E293B),
-                              ),
-                            ),
-                            SizedBox(height: 1),
-                            Text(
-                              'Suspicious / Dowry...',
-                              style: TextStyle(
-                                fontSize: 10.5,
-                                color: Color(0xFF64748B),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                      children: const [
+                        Icon(Icons.outlined_flag_rounded, color: Color(0xFFDC2626), size: 20),
+                        SizedBox(width: 10),
+                        Text(
+                          'Instant Report',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF1E293B),
+                          ),
                         ),
                       ],
                     ),
@@ -472,30 +366,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
-                      children: [
-                        const Icon(Icons.block_rounded, color: Color(0xFF475569), size: 19),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Silent Block',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF1E293B),
-                              ),
-                            ),
-                            SizedBox(height: 1),
-                            Text(
-                              'Sever without alert',
-                              style: TextStyle(
-                                fontSize: 10.5,
-                                color: Color(0xFF64748B),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                      children: const [
+                        Icon(Icons.block_rounded, color: Color(0xFF475569), size: 19),
+                        SizedBox(width: 10),
+                        Text(
+                          'Silent Block',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF1E293B),
+                          ),
                         ),
                       ],
                     ),
@@ -513,30 +393,16 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
-                      children: [
-                        const Icon(Icons.emergency_rounded, color: Color(0xFF701A33), size: 20),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              '24x7 SOS Desk',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF1E293B),
-                              ),
-                            ),
-                            SizedBox(height: 1),
-                            Text(
-                              'SLA < 15 min review',
-                              style: TextStyle(
-                                fontSize: 10.5,
-                                color: Color(0xFF64748B),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                      children: const [
+                        Icon(Icons.emergency_rounded, color: Color(0xFF701A33), size: 20),
+                        SizedBox(width: 10),
+                        Text(
+                          '24x7 SOS Desk',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF1E293B),
+                          ),
                         ),
                       ],
                     ),
@@ -611,7 +477,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               const Text(
                 'Mutual Interest Accepted • Oct 14',
                 style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF701A33),
                   letterSpacing: 0.1,
@@ -625,7 +491,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
           const Text(
             'Direct Chat & Verified Astrological Exchange unlocked. Both families verified via Aadhaar OTP. Protected under Sacred Privacy Charter with 256-bit encryption.',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 13,
               color: Color(0xFF64748B),
               height: 1.4,
             ),
@@ -650,7 +516,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     Text(
                       'ID Certified',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF334155),
                       ),
@@ -675,7 +541,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     Text(
                       'Zero Data Leakage',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF92400E),
                       ),
@@ -727,7 +593,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     Text(
                       msg['text'] as String,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 13,
                         color: Colors.white,
                         height: 1.4,
                       ),
@@ -739,7 +605,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         Text(
                           time,
                           style: const TextStyle(
-                            fontSize: 9.5,
+                            fontSize: 13,
                             color: Colors.white70,
                           ),
                         ),
@@ -816,7 +682,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       RichText(
                         text: TextSpan(
                           style: const TextStyle(
-                            fontSize: 12,
+                            fontSize: 13,
                             color: Color(0xFF1E293B),
                             height: 1.4,
                           ),
@@ -837,7 +703,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       Text(
                         msg['text'] as String,
                         style: const TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           color: Color(0xFF1E293B),
                           height: 1.4,
                         ),
@@ -852,7 +718,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                           Text(
                             time,
                             style: const TextStyle(
-                              fontSize: 9.5,
+                              fontSize: 13,
                               color: Color(0xFF94A3B8),
                             ),
                           ),
@@ -902,7 +768,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       decoration: const InputDecoration(
                         hintText: 'Type a respectful message.....',
                         hintStyle: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           color: Color(0xFF94A3B8),
                         ),
                         border: InputBorder.none,
@@ -953,7 +819,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                     'DRM Watermark Active • Screenshot & Screen Recording Blocked for Dignity',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 9,
+                      fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Color(0xFF64748B),
                       letterSpacing: 0.1,

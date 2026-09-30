@@ -271,7 +271,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                 'Phone Authentication',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -335,7 +335,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                                 '1',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -354,7 +354,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                           Text(
                             '$_completedPercentage% Completed',
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF701A33),
                             ),
@@ -430,7 +430,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                                 Text(
                                   'Auspicious Beginnings',
                                   style: TextStyle(
-                                    fontSize: 10.5,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFF9A3412),
                                   ),
@@ -456,7 +456,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                                 Text(
                                   'Trusted Portal',
                                   style: TextStyle(
-                                    fontSize: 10.5,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w700,
                                     color: Color(0xFF1D4ED8),
                                   ),
@@ -485,7 +485,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                       const Text(
                         'We will send an instant 4-digit verification code to validate your profile and ensure family trust.',
                         style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: 13,
                           color: Color(0xFF6B7280),
                           height: 1.4,
                         ),
@@ -528,7 +528,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                           Text(
                             'Mandatory',
                             style: TextStyle(
-                              fontSize: 11.5,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF701A33),
                             ),
@@ -652,7 +652,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                             child: Text(
                               'Direct numbers are strictly private and never shared without mutual family consent.',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 13,
                                 color: Color(0xFF6B7280),
                                 height: 1.35,
                               ),
@@ -670,7 +670,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                 const Text(
                   'CONSENTS & DECLARATIONS',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0.8,
                     color: Color(0xFF6B7280),
@@ -689,7 +689,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                   child: RichText(
                     text: const TextSpan(
                       style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           color: Color(0xFF374151),
                           height: 1.4),
                       children: [
@@ -726,7 +726,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                   child: const Text(
                     'I confirm this account is created for marriage purpose only, upholding traditional decorum and authentic family values.',
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       color: Color(0xFF374151),
                       height: 1.4,
                     ),
@@ -807,46 +807,49 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                 const SizedBox(height: 18),
 
                 // 6. Footer Trust Badges
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.verified, size: 12.5, color: Color(0xFF701A33)),
-                    SizedBox(width: 4),
-                    Text(
-                      '100% Spam Free',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF374151),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.verified, size: 12.5, color: Color(0xFF701A33)),
+                      SizedBox(width: 4),
+                      Text(
+                        '100% Spam Free',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF374151),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Text('•', style: TextStyle(color: Color(0xFF9CA3AF))),
-                    SizedBox(width: 8),
-                    Icon(Icons.shield, size: 12.5, color: Color(0xFF701A33)),
-                    SizedBox(width: 4),
-                    Text(
-                      'Anti–Commercial',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF374151),
+                      SizedBox(width: 6),
+                      Text('•', style: TextStyle(color: Color(0xFF9CA3AF))),
+                      SizedBox(width: 6),
+                      Icon(Icons.shield, size: 12.5, color: Color(0xFF701A33)),
+                      SizedBox(width: 4),
+                      Text(
+                        'Anti–Commercial',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF374151),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8),
-                    Text('•', style: TextStyle(color: Color(0xFF9CA3AF))),
-                    SizedBox(width: 8),
-                    Icon(Icons.lock, size: 12.5, color: Color(0xFF701A33)),
-                    SizedBox(width: 4),
-                    Text(
-                      '256–bit SSL',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF374151),
+                      SizedBox(width: 6),
+                      Text('•', style: TextStyle(color: Color(0xFF9CA3AF))),
+                      SizedBox(width: 6),
+                      Icon(Icons.lock, size: 12.5, color: Color(0xFF701A33)),
+                      SizedBox(width: 4),
+                      Text(
+                        '256–bit SSL',
+                        style: TextStyle(
+                          fontSize: 11.5,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF374151),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 8),
@@ -856,8 +859,9 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                     'Revered Tamil Matrimonial Network • Chennai • Madurai • Coimbatore • Global Diaspora',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 11,
                       color: Color(0xFF9CA3AF),
+                      height: 1.35,
                     ),
                   ),
                 ),

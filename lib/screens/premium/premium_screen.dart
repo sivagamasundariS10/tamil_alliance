@@ -118,7 +118,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   // ───────────────────────────────────────────────
                   Expanded(
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
+                      physics: const ClampingScrollPhysics(),
                       padding: const EdgeInsets.all(14.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,7 +169,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             badge,
                                             style: const TextStyle(
                                               color: Color(0xFFBE123C),
-                                              fontSize: 9.5,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w800,
                                               letterSpacing: 0.4,
                                             ),
@@ -180,7 +180,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     const Text(
                                       'ABID-7749',
                                       style: TextStyle(
-                                        fontSize: 10.5,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xFF94A3B8),
                                       ),
@@ -208,7 +208,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                     Text(
                                       validity,
                                       style: const TextStyle(
-                                        fontSize: 11.5,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w700,
                                         color: Color(0xFF475569),
                                       ),
@@ -221,7 +221,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                 const Text(
                                   'Accelerate verified parent connections, unlock locked jathagams, and initiate direct family alliances.',
                                   style: TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 13,
                                     color: Color(0xFF64748B),
                                     height: 1.4,
                                   ),
@@ -234,12 +234,12 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   children: [
                                     const Text(
                                       'Base Membership Price',
-                                      style: TextStyle(fontSize: 11.5, color: Color(0xFF64748B)),
+                                      style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                                     ),
                                     Text(
                                       '$price.00',
                                       style: const TextStyle(
-                                        fontSize: 12.5,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w800,
                                         color: Color(0xFF1E293B),
                                       ),
@@ -259,7 +259,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                         const Text(
                                           'TOTAL PAYABLE',
                                           style: TextStyle(
-                                            fontSize: 10,
+                                            fontSize: 13,
                                             fontWeight: FontWeight.w800,
                                             color: Color(0xFF64748B),
                                             letterSpacing: 0.5,
@@ -280,7 +280,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             const Text(
                                               'Instant Gold Activation',
                                               style: TextStyle(
-                                                fontSize: 10.5,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.w700,
                                                 color: Color(0xFF059669),
                                               ),
@@ -446,7 +446,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                       child: const Text(
                                         'Edit Info',
                                         style: TextStyle(
-                                          fontSize: 11.5,
+                                          fontSize: 13,
                                           fontWeight: FontWeight.w700,
                                           color: Color(0xFFBE123C),
                                         ),
@@ -491,7 +491,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                 Text(
                                                   'Dr. Siddharth Sundaresan',
                                                   style: TextStyle(
-                                                    fontSize: 12.5,
+                                                    fontSize: 13,
                                                     fontWeight: FontWeight.w800,
                                                     color: Color(0xFF1E293B),
                                                   ),
@@ -503,7 +503,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                             const SizedBox(height: 2),
                                             const Text(
                                               'Tamil Brahmin Iyer • TA-2026-0819',
-                                              style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B)),
+                                              style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                                             ),
                                           ],
                                         ),
@@ -518,11 +518,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   children: const [
                                     Icon(Icons.mail_outline_rounded, size: 14, color: Color(0xFF64748B)),
                                     SizedBox(width: 6),
-                                    Text('Receipt', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                                    Text('Receipt', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                                     Spacer(),
                                     Text(
                                       'siddharth.sun@gmail.com',
-                                      style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                                     ),
                                   ],
                                 ),
@@ -533,11 +533,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   children: const [
                                     Icon(Icons.chat_bubble_outline_rounded, size: 14, color: Color(0xFF64748B)),
                                     SizedBox(width: 6),
-                                    Text('Alerts', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                                    Text('Alerts', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                                     Spacer(),
                                     Text(
                                       '+91 98402 18921',
-                                      style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                                     ),
                                   ],
                                 ),
@@ -595,7 +595,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                           ),
                                           Text(
                                             'Razorpay Secure 256-Bit Gateway',
-                                            style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                                            style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                                           ),
                                         ],
                                       ),
@@ -613,7 +613,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                           Text(
                                             'RAZORPAY',
                                             style: TextStyle(
-                                              fontSize: 8.5,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w900,
                                               color: Color(0xFF1D4ED8),
                                               letterSpacing: 0.3,
@@ -667,14 +667,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                   Text(
                                                     'Instant UPI (Recommended)',
                                                     style: TextStyle(
-                                                      fontSize: 12,
+                                                      fontSize: 13,
                                                       fontWeight: FontWeight.w800,
                                                       color: Color(0xFF1E293B),
                                                     ),
                                                   ),
                                                   Text(
                                                     'Google Pay, PhonePe, Paytm, QR',
-                                                    style: TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                                                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                                                   ),
                                                 ],
                                               ),
@@ -688,7 +688,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                               child: const Text(
                                                 '0% FEE',
                                                 style: TextStyle(
-                                                  fontSize: 8.5,
+                                                  fontSize: 13,
                                                   fontWeight: FontWeight.w800,
                                                   color: Color(0xFF15803D),
                                                 ),
@@ -751,10 +751,10 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                     padding: const EdgeInsets.symmetric(horizontal: 12),
                                                     child: TextField(
                                                       controller: upiController,
-                                                      style: const TextStyle(fontSize: 11.5, color: Color(0xFF1E293B)),
+                                                      style: const TextStyle(fontSize: 13, color: Color(0xFF1E293B)),
                                                       decoration: const InputDecoration(
                                                         hintText: 'e.g. mobile@oksbi, username@apl',
-                                                        hintStyle: TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
+                                                        hintStyle: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                                                         border: InputBorder.none,
                                                         isDense: true,
                                                         contentPadding: EdgeInsets.symmetric(vertical: 10),
@@ -796,7 +796,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                                       isUpiVerified ? 'Verified ✓' : 'Verify',
                                                       style: const TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 11,
+                                                        fontSize: 13,
                                                         fontWeight: FontWeight.w800,
                                                       ),
                                                     ),
@@ -903,7 +903,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                   const Text(
                                     'PAYABLE NOW',
                                     style: TextStyle(
-                                      fontSize: 9.5,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w800,
                                       color: Color(0xFF64748B),
                                       letterSpacing: 0.5,
@@ -978,7 +978,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                                               'Pay with Razorpay',
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 12.5,
+                                                fontSize: 13,
                                                 fontWeight: FontWeight.w800,
                                                 letterSpacing: 0.3,
                                               ),
@@ -999,7 +999,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           RichText(
                             textAlign: TextAlign.center,
                             text: const TextSpan(
-                              style: TextStyle(fontSize: 9.5, color: Color(0xFF64748B), height: 1.3),
+                              style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.3),
                               children: [
                                 TextSpan(text: 'By clicking Pay, you acknowledge the '),
                                 TextSpan(
@@ -1066,7 +1066,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF1E293B),
                   ),
@@ -1074,7 +1074,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 const SizedBox(height: 1),
                 Text(
                   subtitle,
-                  style: const TextStyle(fontSize: 10, color: Color(0xFF64748B)),
+                  style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                 ),
               ],
             ),
@@ -1115,7 +1115,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 9.5,
+                  fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                   color: isSelected ? const Color(0xFFBE123C) : const Color(0xFF475569),
                 ),
@@ -1167,12 +1167,12 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                       color: const Color(0xFF1E293B),
                     ),
                   ),
-                  Text(subtitle, style: const TextStyle(fontSize: 10, color: Color(0xFF64748B))),
+                  Text(subtitle, style: const TextStyle(fontSize: 13, color: Color(0xFF64748B))),
                 ],
               ),
             ),
@@ -1185,9 +1185,11 @@ class _PremiumScreenState extends State<PremiumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+    final bool canPop = Navigator.canPop(context);
+
+    final Widget body = SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 60),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1299,6 +1301,41 @@ class _PremiumScreenState extends State<PremiumScreen> {
         ],
       ),
     );
+
+    if (canPop) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFFAF8FF),
+        appBar: AppBar(
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: const Text(
+            'VIP & Premium Plans',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          bottom: true,
+          child: body,
+        ),
+      );
+    }
+
+    return Material(
+      color: Colors.transparent,
+      child: SafeArea(
+        bottom: true,
+        child: body,
+      ),
+    );
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -1376,7 +1413,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               const Text(
                 'Unlock direct verified phone numbers, horoscope unmasked WhatsApp introductions & full 10-Porutham Horoscope dossiers tailored for authentic Tamil families.',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   color: Color(0xFFFCE7F3),
                   height: 1.45,
                   fontWeight: FontWeight.w500,
@@ -1389,7 +1426,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
                       decoration: BoxDecoration(
                         color: Colors.white.withAlpha(22),
                         borderRadius: BorderRadius.circular(12),
@@ -1399,11 +1436,14 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         children: const [
                           Icon(Icons.verified_user_rounded, color: Color(0xFFF5D68B), size: 16),
                           SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              '100% ID Verified Families',
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
-                              overflow: TextOverflow.ellipsis,
+                          Expanded(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '100% ID Verified',
+                                style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w700, color: Colors.white),
+                              ),
                             ),
                           ),
                         ],
@@ -1427,7 +1467,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         SizedBox(width: 5),
                         Text(
                           'Swift Response',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Colors.white),
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Colors.white),
                         ),
                       ],
                     ),
@@ -1526,15 +1566,17 @@ class _PremiumScreenState extends State<PremiumScreen> {
               ),
               const SizedBox(width: 5),
               Flexible(
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 11.5,
-                    fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                    color: isSelected ? activeColor : const Color(0xFF475569),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                      color: isSelected ? activeColor : const Color(0xFF475569),
+                    ),
                   ),
                 ),
               ),
@@ -1574,7 +1616,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               child: const Text(
                 'Save up to 38%',
                 style: TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF15803D),
                 ),
@@ -1585,7 +1627,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
         const SizedBox(height: 3),
         const Text(
           'All plans backed by 30-day family money-back guarantee',
-          style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+          style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
         ),
       ],
     );
@@ -1642,7 +1684,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         SizedBox(height: 2),
                         Text(
                           'Direct search, explore 100% verified profiles, and express interest on your own schedule.',
-                          style: TextStyle(fontSize: 11, color: Color(0xFF64748B), height: 1.3),
+                          style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.3),
                         ),
                       ],
                     ),
@@ -1700,7 +1742,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                         'Compare Membership Plans & Pricing',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
@@ -1741,7 +1783,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF1E293B),
                 ),
@@ -1750,7 +1792,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               Text(
                 desc,
                 style: const TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   color: Color(0xFF64748B),
                   height: 1.25,
                 ),
@@ -1803,7 +1845,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     SizedBox(height: 2),
                     Text(
                       'Our senior matrimony advisors shortlists matches, conducts astrology vetting & coordinates family calls.',
-                      style: TextStyle(fontSize: 11, color: Color(0xFF047857), height: 1.35),
+                      style: TextStyle(fontSize: 13, color: Color(0xFF047857), height: 1.35),
                     ),
                   ],
                 ),
@@ -1936,7 +1978,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               c1,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: isHeader ? FontWeight.w900 : FontWeight.w600,
                 color: isHeader ? const Color(0xFF334155) : const Color(0xFF64748B),
               ),
@@ -1948,7 +1990,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               c2,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: isHeader ? FontWeight.w900 : FontWeight.w700,
                 color: isHeader ? const Color(0xFF701A33) : const Color(0xFF701A33),
               ),
@@ -1960,7 +2002,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               c3,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: isHeader ? FontWeight.w900 : FontWeight.w700,
                 color: isHeader ? const Color(0xFFB45309) : const Color(0xFFB45309),
               ),
@@ -1972,7 +2014,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               c4,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: isHeader ? FontWeight.w900 : FontWeight.w900,
                 color: isHeader ? const Color(0xFFD97706) : const Color(0xFFD97706),
               ),
@@ -2056,7 +2098,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 0.8,
               ),
@@ -2080,7 +2122,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 const SizedBox(height: 3),
                 Text(
                   planSubtitle,
-                  style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+                  style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
                 ),
                 const SizedBox(height: 12),
 
@@ -2107,7 +2149,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       Text(
                         validity,
                         style: const TextStyle(
-                          fontSize: 11,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF64748B),
                         ),
@@ -2133,7 +2175,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                           child: Text(
                             f.text,
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               fontWeight: f.isIncluded ? FontWeight.w600 : FontWeight.w400,
                               color: f.isIncluded ? const Color(0xFF334155) : const Color(0xFF94A3B8),
                               decoration: f.isIncluded ? null : TextDecoration.lineThrough,
@@ -2156,7 +2198,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   ),
                   child: Text(
                     noticeText,
-                    style: const TextStyle(fontSize: 9.5, color: Color(0xFF64748B), fontStyle: FontStyle.italic),
+                    style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontStyle: FontStyle.italic),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -2176,7 +2218,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     child: Text(
                       buttonText,
                       style: const TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.3,
                       ),
@@ -2251,7 +2293,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFFFEF3C7),
-                fontSize: 10,
+                fontSize: 13,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 0.8,
               ),
@@ -2282,7 +2324,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 const SizedBox(height: 3),
                 const Text(
                   'The ultimate 1-year alliance package with complete access and direct assisted contact',
-                  style: TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
+                  style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                 ),
                 const SizedBox(height: 12),
 
@@ -2309,7 +2351,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       Text(
                         '365 Days Validity',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF94A3B8),
                         ),
@@ -2337,7 +2379,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                   ),
                   child: const Text(
                     '*VIP dedicated relationship manager support included',
-                    style: TextStyle(fontSize: 9.5, color: Color(0xFF94A3B8), fontStyle: FontStyle.italic),
+                    style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8), fontStyle: FontStyle.italic),
                   ),
                 ),
                 const SizedBox(height: 14),
@@ -2357,7 +2399,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     child: const Text(
                       'CHOOSE ALLIANCE SIGNATURE',
                       style: TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 0.5,
                       ),
@@ -2384,7 +2426,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
             child: Text(
               text,
               style: const TextStyle(
-                fontSize: 11,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFFE2E8F0),
               ),

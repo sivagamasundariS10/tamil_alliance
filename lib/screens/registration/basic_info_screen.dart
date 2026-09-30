@@ -295,7 +295,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                       const Text(
                         'Select or add languages you can speak fluently.',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           color: Color(0xFF64748B),
                         ),
                       ),
@@ -425,7 +425,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                                         'Add',
                                         style: TextStyle(
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 12.5,
+                                          fontSize: 13,
                                           color: Colors.white,
                                           letterSpacing: 0.2,
                                         ),
@@ -442,7 +442,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
 
                       const Text(
                         'Popular Languages:',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
                       ),
                       const SizedBox(height: 10),
 
@@ -484,7 +484,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                                   Text(
                                     lang,
                                     style: TextStyle(
-                                      fontSize: 11.5,
+                                      fontSize: 13,
                                       fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
                                       color: isSelected ? Colors.white : const Color(0xFF334155),
                                     ),
@@ -708,7 +708,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   'STEP 1 OF 6',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.8,
                   ),
@@ -777,7 +777,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                 '',
                 // 'STEP 1 OF 6 • Vital Details',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF701A33),
                   letterSpacing: 0.5,
@@ -797,7 +797,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     Text(
                       'Auspicious Beginning',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF9A3412),
                       ),
@@ -821,7 +821,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           const Text(
             "Enter the bride or groom's verified legal biodata to initiate sacred matrimonial alliances with dignity and astrological precision.",
             style: TextStyle(
-              fontSize: 11.5,
+              fontSize: 13,
               color: Color(0xFF64748B),
               height: 1.35,
             ),
@@ -880,7 +880,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     Text(
                       'Tailors communications whether managed by elders or self.',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 13,
                         color: Color(0xFF64748B),
                       ),
                     ),
@@ -928,7 +928,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                       Text(
                         item['title'] as String,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: isSelected ? Colors.white : const Color(0xFF1E293B),
                         ),
@@ -1079,7 +1079,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
               Text(
                 'Gregorian Calendar',
                 style: TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   color: Color(0xFF64748B),
                   fontWeight: FontWeight.w500,
                 ),
@@ -1137,7 +1137,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   Text(
                     '$_calculatedAge Years Old',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: Color(0xFF9A3412),
                     ),
@@ -1206,7 +1206,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     Text(
                       'Vedic coordinates for precise Lagna and Rasi computation.',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 13,
                         color: Color(0xFF64748B),
                       ),
                     ),
@@ -1228,7 +1228,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   children: [
                     const Text(
                       'Time of Birth',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
                     ),
                     const SizedBox(height: 6),
                     GestureDetector(
@@ -1266,7 +1266,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   children: [
                     const Text(
                       'Meridiem',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
                     ),
                     const SizedBox(height: 6),
                     Container(
@@ -1290,7 +1290,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                                 child: Text(
                                   'AM',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w800,
                                     color: _meridiem == 'AM' ? Colors.white : const Color(0xFF64748B),
                                   ),
@@ -1310,7 +1310,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                                 child: Text(
                                   'PM',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.w800,
                                     color: _meridiem == 'PM' ? Colors.white : const Color(0xFF64748B),
                                   ),
@@ -1331,7 +1331,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           // Place of Birth
           const Text(
             'Place of Birth (City / Town)',
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
           ),
           const SizedBox(height: 6),
           Container(
@@ -1382,7 +1382,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                       Text(
                         'Astro GPS Coordinates • Lagna Synced',
                         style: TextStyle(
-                          fontSize: 10.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w800,
                           color: Color(0xFF1E40AF),
                         ),
@@ -1391,7 +1391,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                       Text(
                         '9.9252° N, 78.1198° E (Madurai Thiruparankundram Meridian)',
                         style: TextStyle(
-                          fontSize: 9.5,
+                          fontSize: 13,
                           color: Color(0xFF3B82F6),
                         ),
                       ),
@@ -1442,7 +1442,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   Text(
                     'Dual scale for global Tamil matches',
                     style: TextStyle(
-                      fontSize: 10.5,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                     ),
                   ),
@@ -1458,7 +1458,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                 child: Text(
                   _heightFormatted,
                   style: const TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF4338CA),
                   ),
@@ -1491,9 +1491,9 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
-              Text("4' 7\" (140 cm)", style: TextStyle(fontSize: 10, color: Color(0xFF94A3B8))),
-              Text("Average: 5' 5\"", style: TextStyle(fontSize: 10, color: Color(0xFF2563EB), fontWeight: FontWeight.w700)),
-              Text("6' 11\" (210 cm)", style: TextStyle(fontSize: 10, color: Color(0xFF94A3B8))),
+              Text("4' 7\" (140 cm)", style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
+              Text("Average: 5' 5\"", style: TextStyle(fontSize: 13, color: Color(0xFF2563EB), fontWeight: FontWeight.w700)),
+              Text("6' 11\" (210 cm)", style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
             ],
           ),
         ],
@@ -1559,13 +1559,10 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          '♂',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: _gender == 'Male' ? Colors.white : const Color(0xFF701A33),
-                          ),
+                        Icon(
+                          Icons.male_rounded,
+                          size: 22,
+                          color: _gender == 'Male' ? Colors.white : const Color(0xFF701A33),
                         ),
                         const SizedBox(width: 8),
                         Column(
@@ -1582,7 +1579,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                             Text(
                               '(ஆண்)',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 color: _gender == 'Male' ? const Color(0xFFFCE7F3) : const Color(0xFF94A3B8),
                               ),
                             ),
@@ -1610,13 +1607,10 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          '♀',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: _gender == 'Female' ? Colors.white : const Color(0xFF701A33),
-                          ),
+                        Icon(
+                          Icons.female_rounded,
+                          size: 22,
+                          color: _gender == 'Female' ? Colors.white : const Color(0xFF701A33),
                         ),
                         const SizedBox(width: 8),
                         Column(
@@ -1633,7 +1627,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                             Text(
                               '(பெண்)',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 color: _gender == 'Female' ? const Color(0xFFFCE7F3) : const Color(0xFF94A3B8),
                               ),
                             ),
@@ -1696,7 +1690,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
               Text(
                 'தாய்மொழி',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF701A33),
                 ),
@@ -1764,7 +1758,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           const Text(
             'Languages Known Fluently',
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 13,
               fontWeight: FontWeight.w700,
               color: Color(0xFF475569),
             ),
@@ -1806,7 +1800,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                         Text(
                           lang,
                           style: const TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
                           ),
@@ -1836,7 +1830,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                       Text(
                         'Add More',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF2563EB),
                         ),
@@ -1894,7 +1888,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           // Religion
           const Text(
             'Religion',
-            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
           ),
           const SizedBox(height: 6),
           Container(
@@ -1921,11 +1915,11 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             children: const [
               Text(
                 'Community / Caste',
-                style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
               ),
               Text(
                 '🔍 Searchable',
-                style: TextStyle(fontSize: 10, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -1978,7 +1972,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   children: [
                     const Text(
                       'Kulam / Kootam',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
                     ),
                     const SizedBox(height: 6),
                     Container(
@@ -1993,7 +1987,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'e.g. Cheran Kulam',
-                          hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
+                          hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                         ),
                       ),
                     ),
@@ -2007,7 +2001,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   children: [
                     const Text(
                       'Gothram',
-                      style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
                     ),
                     const SizedBox(height: 6),
                     Container(
@@ -2022,7 +2016,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'e.g. Shiva Gothram',
-                          hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
+                          hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                         ),
                       ),
                     ),
@@ -2089,7 +2083,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   child: const Text(
                     'Change',
                     style: TextStyle(
-                      fontSize: 11.5,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Color(0xFF1D4ED8),
                     ),
@@ -2200,7 +2194,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
         child: Text(
           status,
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: FontWeight.w700,
             color: isSelected ? Colors.white : const Color(0xFF334155),
           ),
@@ -2265,7 +2259,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             Text(
               label,
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: 13,
                 fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                 color: isSelected ? const Color(0xFF701A33) : const Color(0xFF475569),
               ),
@@ -2307,7 +2301,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                 Text(
                   'Sacred Trust & 256–Bit Protection',
                   style: TextStyle(
-                    fontSize: 12.5,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFF1E3A8A),
                   ),
@@ -2316,7 +2310,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                 Text(
                   'Profile data is cryptographically protected. Astrological birth charts are generated server-side without publicly exposing your precise birth time or street address.',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: 13,
                     color: Color(0xFF3B82F6),
                     height: 1.35,
                   ),
@@ -2393,7 +2387,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
         child: const Text(
           'Save as Draft & Continue Later',
           style: TextStyle(
-            fontSize: 12,
+            fontSize: 13,
             fontWeight: FontWeight.w700,
             color: Color(0xFF1E40AF),
           ),

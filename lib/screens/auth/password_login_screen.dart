@@ -438,7 +438,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
               const Text(
                 'TAMIL ALLIANCE',
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFFC28E2E),
                   letterSpacing: 1.8,
@@ -484,7 +484,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                 'Log in to continue your sacred matrimonial journey',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 12.5,
+                  fontSize: 13,
                   color: Color(0xFF64748B),
                   fontWeight: FontWeight.w500,
                   height: 1.35,
@@ -517,7 +517,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                         Text(
                           'Mobile Number',
                           style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF334155),
                           ),
@@ -624,7 +624,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                         Text(
                           'Password',
                           style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF334155),
                           ),
@@ -743,7 +743,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                               const Text(
                                 'Remember me',
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 13,
                                   color: Color(0xFF475569),
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -756,7 +756,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                           child: const Text(
                             'Forgot Password?',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF2563EB),
                             ),
@@ -810,7 +810,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                           child: Text(
                             'OR',
                             style: TextStyle(
-                              fontSize: 10,
+                              fontSize: 13,
                               fontWeight: FontWeight.w800,
                               color: Colors.grey.shade400,
                               letterSpacing: 0.8,
@@ -881,7 +881,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                   const Text(
                     "Don't have an account? ",
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                     ),
                   ),
@@ -896,7 +896,7 @@ class _PasswordLoginScreenState extends State<PasswordLoginScreen> {
                     child: const Text(
                       'Register Free',
                       style: TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF701A33),
                       ),

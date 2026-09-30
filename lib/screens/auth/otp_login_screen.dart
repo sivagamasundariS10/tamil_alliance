@@ -418,7 +418,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                     child: const Text(
                       'QUICK VERIFICATION',
                       style: TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF9F1239),
                         letterSpacing: 0.8,
@@ -477,7 +477,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
               const Text(
                 'TAMIL ALLIANCE',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFFD97706),
                   letterSpacing: 2.2,
@@ -517,7 +517,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                   'Enter your registered mobile number to receive a secure 4–digit verification code',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     color: Color(0xFF64748B),
                     height: 1.35,
                   ),
@@ -552,7 +552,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                             Text(
                               'Mobile Number',
                               style: TextStyle(
-                                fontSize: 12.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 color: Color(0xFF1E293B),
                               ),
@@ -575,7 +575,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                               Text(
                                 'Verified Only',
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                   color: Color(0xFF2563EB),
                                 ),
@@ -678,7 +678,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                           ? 'OTP sent to registered mobile ending in $_maskedMobile'
                           : 'OTP will be sent to your registered mobile number',
                       style: const TextStyle(
-                        fontSize: 10.5,
+                        fontSize: 13,
                         color: Color(0xFF64748B),
                         fontWeight: FontWeight.w500,
                       ),
@@ -691,7 +691,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                         const Text(
                           'Enter 4–Digit OTP',
                           style: TextStyle(
-                            fontSize: 12.5,
+                            fontSize: 13,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF1E293B),
                           ),
@@ -706,7 +706,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                           child: const Text(
                             'Instant',
                             style: TextStyle(
-                              fontSize: 9.5,
+                              fontSize: 13,
                               fontWeight: FontWeight.w800,
                               color: Color(0xFFB45309),
                             ),
@@ -716,7 +716,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                         const Text(
                           'Auto-reading...',
                           style: TextStyle(
-                            fontSize: 10.5,
+                            fontSize: 13,
                             color: Color(0xFF94A3B8),
                             fontStyle: FontStyle.italic,
                           ),
@@ -745,7 +745,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                             Text(
                               'Resend OTP in 00:$timerSeconds',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w600,
                                 color: _resendCountdown > 0
                                     ? const Color(0xFFE11D48)
@@ -763,7 +763,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                               Text(
                                 'Resend via WhatsApp',
                                 style: TextStyle(
-                                  fontSize: 11,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w700,
                                   color: Color(0xFF0D9488),
                                 ),
@@ -817,7 +817,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                           child: Text(
                             'OR ALTERNATIVE',
                             style: TextStyle(
-                              fontSize: 9.5,
+                              fontSize: 13,
                               fontWeight: FontWeight.w800,
                               color: Colors.grey.shade400,
                               letterSpacing: 0.8,
@@ -869,7 +869,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                   const Text(
                     'New to Tamil Alliance? ',
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 13,
                       color: Color(0xFF64748B),
                     ),
                   ),
@@ -882,7 +882,7 @@ class _OtpLoginScreenState extends State<OtpLoginScreen> {
                     child: const Text(
                       'Register Free',
                       style: TextStyle(
-                        fontSize: 12.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w800,
                         color: Color(0xFF701A33),
                       ),

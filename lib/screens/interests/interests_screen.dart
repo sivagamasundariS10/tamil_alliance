@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../settings/settings_screen.dart';
 
 class InterestsScreen extends StatefulWidget {
   final VoidCallback? onNavigateToHome;
@@ -144,8 +145,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
-                        Text('Chevvai Dosham: Nil (No Dosham)', style: TextStyle(fontSize: 11.5, color: Color(0xFF64748B))),
-                        Text('Compatibility: 9/10 Poruthams', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800, color: Color(0xFFBE123C))),
+                        Text('Chevvai Dosham: Nil (No Dosham)', style: TextStyle(fontSize: 13, color: Color(0xFF64748B))),
+                        Text('Compatibility: 9/10 Poruthams', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFFBE123C))),
                       ],
                     ),
                   ],
@@ -175,7 +176,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,7 +240,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
             message,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 12.5,
+              fontSize: 13,
               fontWeight: FontWeight.w600,
               color: Color(0xFF64748B),
             ),
@@ -274,7 +275,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               children: [
                 Text(name, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: Color(0xFF1E293B))),
                 const SizedBox(height: 2),
-                Text('$id • $reason', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+                Text('$id • $reason', style: const TextStyle(fontSize: 13, color: Color(0xFF64748B))),
               ],
             ),
           ),
@@ -314,7 +315,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               child: const Text(
                 '3 ACTIVE SENT',
                 style: TextStyle(
-                  fontSize: 9.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFFB45309),
                   letterSpacing: 0.3,
@@ -455,7 +456,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                             child: Text(
                               statusText,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 color: statusColor,
                               ),
@@ -466,12 +467,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       const SizedBox(height: 2),
                       Text(
                         '$allianceId • $details',
-                        style: const TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
                       ),
                       const SizedBox(height: 1),
                       Text(
                         location,
-                        style: const TextStyle(fontSize: 10.5, color: Color(0xFF334155), fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontSize: 13, color: Color(0xFF334155), fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -496,12 +497,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     children: [
                       Text(
                         sentTime,
-                        style: const TextStyle(fontSize: 10, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
+                        style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
                       ),
                       Text(
                         stage == 3 ? 'Mutual Match Established' : (stage == 2 ? 'Profile Reviewed' : 'Awaiting Opening'),
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: stage == 3 ? const Color(0xFF059669) : const Color(0xFF475569),
                         ),
@@ -549,7 +550,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           );
                         },
                         icon: const Icon(Icons.chat_rounded, size: 14, color: Colors.white),
-                        label: const Text('Start Sacred Chat', style: TextStyle(fontSize: 11.5, fontWeight: FontWeight.w800)),
+                        label: const Text('Start Sacred Chat', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF701A33),
                           foregroundColor: Colors.white,
@@ -570,7 +571,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           );
                         },
                         icon: const Icon(Icons.notifications_active_outlined, size: 14, color: Color(0xFF701A33)),
-                        label: const Text('Send Reminder', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF701A33))),
+                        label: const Text('Send Reminder', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF701A33))),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: Color(0xFFFECDD3)),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -610,7 +611,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
         Text(
           title,
           style: TextStyle(
-            fontSize: 9.5,
+            fontSize: 13,
             fontWeight: isCurrent || isDone ? FontWeight.w800 : FontWeight.w500,
             color: isDone ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
           ),
@@ -643,7 +644,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               Text(
                 'Track sacred interests, family responses & shortlists',
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 13,
                   color: Color(0xFF64748B),
                 ),
               ),
@@ -670,10 +671,15 @@ class _InterestsScreenState extends State<InterestsScreen> {
         ),
         const SizedBox(width: 8),
 
-        // Filter / Tune Circular Button
+        // Filter / Tune Circular Button (Opens SettingsScreen)
         InkWell(
           onTap: () {
-            print('⚙️ [USER ACTION: OPEN FILTER OPTIONS]');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const SettingsScreen(),
+              ),
+            );
           },
           borderRadius: BorderRadius.circular(20),
           child: Container(
@@ -696,7 +702,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
   Widget _buildFilterPillsRow() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      physics: const BouncingScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       child: Row(
         children: _filters.map((filter) {
           final bool isSelected = filter == _selectedFilter;
@@ -722,7 +728,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 child: Text(
                   filter,
                   style: TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
                     color: isSelected ? Colors.white : const Color(0xFF475569),
                   ),
@@ -765,7 +771,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               child: const Text(
                 '3 PENDING',
                 style: TextStyle(
-                  fontSize: 9.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w900,
                   color: Colors.white,
                   letterSpacing: 0.3,
@@ -858,7 +864,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                               Text(
                                 '2d ago',
                                 style: TextStyle(
-                                  fontSize: 10.5,
+                                  fontSize: 13,
                                   color: Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -869,7 +875,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           const Text(
                             '28 Yrs • 5\' 11" • Software Architect',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Color(0xFF64748B),
                               fontWeight: FontWeight.w500,
                             ),
@@ -878,7 +884,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           const Text(
                             'B.Tech (NIT Trichy) • MS (Austin, TX)',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Color(0xFF1D4ED8),
                               fontWeight: FontWeight.w700,
                             ),
@@ -916,7 +922,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       Text(
                         'Aadhaar & Photo 100% Verified',
                         style: TextStyle(
-                          fontSize: 10.5,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: Color(0xFF1E3A8A),
                         ),
@@ -925,7 +931,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       Text(
                         'Active Parent Managed',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF475569),
                         ),
@@ -963,7 +969,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                               Text(
                                 'FAMILY MESSAGE',
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w900,
                                   color: Color(0xFFBE123C),
                                   letterSpacing: 0.5,
@@ -977,7 +983,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                               SizedBox(width: 2),
                               Text(
                                 'Seattle, USA',
-                                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w600, color: Color(0xFF64748B)),
+                                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF64748B)),
                               ),
                             ],
                           ),
@@ -987,7 +993,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       const Text(
                         '“Vanakkam. Our family reviewed Karthik & your daughter\'s Jathagam. Porutham aligns excellently. Seeking alliance from respectable family. - S. Chidambaram (Father)”',
                         style: TextStyle(
-                          fontSize: 11,
+                          fontSize: 13,
                           color: Color(0xFF334155),
                           height: 1.35,
                           fontStyle: FontStyle.italic,
@@ -1004,7 +1010,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                             Text(
                               'View 12-House Chakram Preview',
                               style: TextStyle(
-                                fontSize: 11,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 color: Color(0xFF2563EB),
                               ),
@@ -1077,7 +1083,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                         SizedBox(width: 6),
                         Text(
                           'Alliance Interest Accepted • Mutual Alliance Established',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF047857)),
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF047857)),
                         ),
                       ],
                     ),
@@ -1098,7 +1104,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                         Text(
                           'View Complete Biodata & Family Tree',
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 13,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF475569),
                           ),
@@ -1147,7 +1153,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
               child: const Text(
                 '5 Unlocked',
                 style: TextStyle(
-                  fontSize: 9.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w900,
                   color: Color(0xFF1E40AF),
                   letterSpacing: 0.3,
@@ -1238,7 +1244,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           const Text(
                             '29 Yrs • 6\' 0" • M.D., D.N.B (Cardiology)',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Color(0xFF64748B),
                               fontWeight: FontWeight.w500,
                             ),
@@ -1247,7 +1253,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           const Text(
                             'Apollo Hospitals, Chennai',
                             style: TextStyle(
-                              fontSize: 11,
+                              fontSize: 13,
                               color: Color(0xFF334155),
                               fontWeight: FontWeight.w700,
                             ),
@@ -1292,7 +1298,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                               Text(
                                 'DIRECT FAMILY CONTACTS UNLOCKED',
                                 style: TextStyle(
-                                  fontSize: 10,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w900,
                                   color: Color(0xFF1D4ED8),
                                   letterSpacing: 0.3,
@@ -1309,7 +1315,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                             child: const Text(
                               'Verified by OTP',
                               style: TextStyle(
-                                fontSize: 9.5,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: Color(0xFF0F766E),
                               ),
@@ -1335,12 +1341,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                                 children: const [
                                   Text(
                                     'Father: R. Sundaresan (Retd. Dy GM, SBI)',
-                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                                   ),
                                   SizedBox(height: 2),
                                   Text(
                                     '+91 98410 44219',
-                                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
                                   ),
                                 ],
                               ),
@@ -1387,12 +1393,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
                                 children: const [
                                   Text(
                                     'Candidate Mobile: Dr. Siddharth',
-                                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
+                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF1E293B)),
                                   ),
                                   SizedBox(height: 2),
                                   Text(
                                     '+91 94440 21892',
-                                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w600),
                                   ),
                                 ],
                               ),
@@ -1446,7 +1452,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           icon: const Icon(Icons.forum_outlined, size: 16, color: Color(0xFF1E293B)),
                           label: const Text(
                             'WhatsApp',
-                            style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFEFF6FF),
@@ -1475,7 +1481,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                           icon: const Icon(Icons.chat_rounded, size: 16, color: Colors.white),
                           label: const Text(
                             'Secure Chat',
-                            style: TextStyle(fontSize: 12.5, fontWeight: FontWeight.w800),
+                            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF701A33),
@@ -1506,7 +1512,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 10,
+          fontSize: 13,
           fontWeight: FontWeight.w700,
           color: Color(0xFF475569),
         ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_strings.dart';
 import '../welcome/welcome_screen.dart';
@@ -136,17 +137,16 @@ class _SplashScreenState extends State<SplashScreen>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
-                      child: const Text(
+                      child: Text(
                         AppStrings.appName,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 26,
+                        style: GoogleFonts.cinzel(
+                          fontSize: 27,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 2.8,
-                          fontFamily: 'serif',
                           color: Colors.white,
                           shadows: [
-                            Shadow(
+                            const Shadow(
                               offset: Offset(0, 2),
                               blurRadius: 4,
                               color: Colors.black38,
@@ -158,12 +158,12 @@ class _SplashScreenState extends State<SplashScreen>
                     const SizedBox(height: 10),
 
                     // Tagline
-                    const Text(
+                    Text(
                       AppStrings.appTagline,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                         color: AppColors.textSubtitle,
                         letterSpacing: 0.3,
                       ),
@@ -196,7 +196,7 @@ class _SplashScreenState extends State<SplashScreen>
 
             const Spacer(flex: 3),
 
-            // Bottom Footer (Lock Icon + INDO ALLIENCE PVT LIMITED + Indicator)
+            // Bottom Footer (Lock Icon + INDO ALLIANCE PVT LIMITED + Indicator)
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -211,8 +211,8 @@ class _SplashScreenState extends State<SplashScreen>
                     const SizedBox(width: 6),
                     Text(
                       AppStrings.companyFooter,
-                      style: const TextStyle(
-                        fontSize: 11,
+                      style: GoogleFonts.cinzel(
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                         letterSpacing: 1.0,
                         color: AppColors.gold,

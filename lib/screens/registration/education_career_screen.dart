@@ -644,7 +644,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                   'STEP 3 OF 6',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
-                    fontSize: 10,
+                    fontSize: 13,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0.8,
                   ),
@@ -683,42 +683,25 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
   Widget _buildStepSubheader() {
     return Padding(
       padding: const EdgeInsets.only(left: 2.0, bottom: 2.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 6,
-                height: 6,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF881337),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Expanded(
-                child: Text(
-                  'EDUCATION, CAREER & LIFESTYLE',
-                  style: TextStyle(
-                    color: Color(0xFF881337),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 0.6,
-                  ),
-                ),
-              ),
-            ],
+          Container(
+            width: 6,
+            height: 6,
+            decoration: const BoxDecoration(
+              color: Color(0xFF881337),
+              shape: BoxShape.circle,
+            ),
           ),
-          const SizedBox(height: 2),
-          const Padding(
-            padding: EdgeInsets.only(left: 12.0),
+          const SizedBox(width: 6),
+          const Expanded(
             child: Text(
-              'Profile Synthesis',
+              'EDUCATION, CAREER & LIFESTYLE',
               style: TextStyle(
-                fontSize: 11,
-                color: Color(0xFF64748B),
-                fontWeight: FontWeight.w500,
+                color: Color(0xFF881337),
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.6,
               ),
             ),
           ),
@@ -736,7 +719,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         const SizedBox(height: 2),
         const Text(
           'Select the highest formal degree completed',
-          style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+          style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
         ),
         const SizedBox(height: 6),
         InkWell(
@@ -786,7 +769,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         const Text(
           'College / University',
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: FontWeight.w600,
             color: Color(0xFF334155),
           ),
@@ -832,7 +815,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 child: Text(
                   sector,
                   style: TextStyle(
-                    fontSize: 11.5,
+                    fontSize: 13,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                     color: isSelected ? Colors.white : const Color(0xFF475569),
                   ),
@@ -855,7 +838,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         const Text(
           'Company / Organization',
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: FontWeight.w600,
             color: Color(0xFF334155),
           ),
@@ -880,7 +863,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         const Text(
           'Work Arrangement',
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: FontWeight.w600,
             color: Color(0xFF334155),
           ),
@@ -939,7 +922,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
               Text(
                 '$_currencySymbol $_currencyCode (Auto-set)',
                 style: const TextStyle(
-                  fontSize: 10.5,
+                  fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: Color(0xFF1E40AF),
                 ),
@@ -970,7 +953,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                     Text(
                       'Currency mapped to Work Location:',
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF1E3A8A),
                       ),
@@ -979,7 +962,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                     Text(
                       '${_workLocationController.text.isNotEmpty ? _workLocationController.text : "India"} -> $_currencySymbol $_currencyCode',
                       style: const TextStyle(
-                        fontSize: 11,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF2563EB),
                       ),
@@ -988,7 +971,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                     const Text(
                       'Selecting a foreign work location (e.g. USA, UK, Singapore, UAE) automatically updates the currency to USD (\$), GBP (£), SGD, or AED.',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 13,
                         color: Color(0xFF3B82F6),
                         height: 1.3,
                       ),
@@ -1023,7 +1006,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
             suffixText: 'per annum',
             suffixStyle: const TextStyle(
-              fontSize: 11,
+              fontSize: 13,
               fontWeight: FontWeight.w500,
               color: Color(0xFF64748B),
             ),
@@ -1046,7 +1029,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         const SizedBox(height: 4),
         const Text(
           'Enter your total annual gross income',
-          style: TextStyle(fontSize: 10.5, color: Color(0xFF64748B)),
+          style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
         ),
       ],
     );
@@ -1260,7 +1243,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       trailing: const Text(
         '(Select 1 or more)',
         style: TextStyle(
-          fontSize: 10.5,
+          fontSize: 13,
           fontWeight: FontWeight.w600,
           color: Color(0xFF2563EB),
         ),
@@ -1285,7 +1268,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                     Text(
                       hobby,
                       style: const TextStyle(
-                        fontSize: 11.5,
+                        fontSize: 13,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
                       ),
@@ -1336,7 +1319,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                     const SizedBox(width: 4),
                     Text(
                       suggestion,
-                      style: const TextStyle(fontSize: 11, color: Color(0xFF475569)),
+                      style: const TextStyle(fontSize: 13, color: Color(0xFF475569)),
                     ),
                   ],
                 ),
@@ -1352,7 +1335,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             Expanded(
               child: TextFormField(
                 controller: _customHobbyController,
-                style: const TextStyle(fontSize: 12.5, color: Color(0xFF0F172A)),
+                style: const TextStyle(fontSize: 13, color: Color(0xFF0F172A)),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: const Color(0xFFF1F3FB),
@@ -1361,7 +1344,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                   prefixIcon: const Icon(Icons.add_reaction_outlined, size: 16, color: Color(0xFF64748B)),
                   prefixIconConstraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                   hintText: 'Add a custom interest / hobby...',
-                  hintStyle: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+                  hintStyle: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: const BorderSide(color: Color(0xFFE8EBFA)),
@@ -1394,7 +1377,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 child: const Text(
                   '+ Add',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF881337),
                   ),
@@ -1485,7 +1468,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                       Text(
                         'Express your aspirations',
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: 13,
                           color: Color(0xFF64748B),
                         ),
                       ),
@@ -1502,7 +1485,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             maxLines: 4,
             maxLength: 500,
             style: const TextStyle(
-              fontSize: 12.5,
+              fontSize: 13,
               color: Color(0xFF334155),
               height: 1.4,
             ),
@@ -1512,7 +1495,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
               isDense: true,
               contentPadding: const EdgeInsets.all(12),
               hintText: 'Write a brief summary about yourself, hobbies, values, and what kind of partner you are looking for...',
-              hintStyle: const TextStyle(fontSize: 12, color: Color(0xFF94A3B8)),
+              hintStyle: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: Color(0xFFE9D5FF)),
@@ -1596,7 +1579,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       TextSpan(
         text: label,
         style: const TextStyle(
-          fontSize: 11.5,
+          fontSize: 13,
           fontWeight: FontWeight.w600,
           color: Color(0xFF334155),
         ),
@@ -1685,7 +1668,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
           label,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            fontSize: 11.5,
+            fontSize: 13,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             color: isSelected ? Colors.white : const Color(0xFF475569),
           ),
@@ -1729,7 +1712,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 label,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 11.5,
+                  fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                   color: isSelected ? Colors.white : const Color(0xFF475569),
                 ),
@@ -1789,7 +1772,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 child: Text(
                   'Save Draft',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF131B2E),
                     letterSpacing: 0.36,
