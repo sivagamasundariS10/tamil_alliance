@@ -500,15 +500,31 @@ class WelcomeScreen extends StatelessWidget {
 
               // 10. Terms / Disclaimer Footer
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  'By continuing, you agree to our Sacred Trust Guidelines & family privacy pledge.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey.shade600,
-                    height: 1.3,
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text.rich(
+                  TextSpan(
+                    text: 'By continuing, you agree to our ',
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF6B7280),
+                      height: 1.4,
+                    ),
+                    children: const [
+                      TextSpan(
+                        text: 'Sacred Trust Guidelines',
+                        style: TextStyle(
+                          color: Color(0xFF701A33),
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Color(0xFF701A33),
+                        ),
+                      ),
+                      TextSpan(
+                        text: ' & family privacy pledge.',
+                      ),
+                    ],
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
 

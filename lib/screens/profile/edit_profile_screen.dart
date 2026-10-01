@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'edit_preferences_screen.dart';
+import 'edit_basic_details_screen.dart';
+import 'edit_education_career_screen.dart';
+import 'edit_family_details_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String? userName;
@@ -38,6 +41,115 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     _fullName = widget.userName ?? 'Karthik Sundaram';
+  }
+
+  Future<void> _openEditBasicDetailsScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditBasicDetailsScreen(
+          initialFullName: _fullName,
+          initialDob: _dob,
+          initialMaritalStatus: _maritalStatus,
+          initialHeightWeight: _heightWeight,
+          initialMotherTongue: _motherTongue,
+          initialDietLifestyle: _dietLifestyle,
+        ),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['fullName'] != null) _fullName = result['fullName'];
+        if (result['dob'] != null) _dob = result['dob'];
+        if (result['maritalStatus'] != null) _maritalStatus = result['maritalStatus'];
+        if (result['heightWeight'] != null) _heightWeight = result['heightWeight'];
+        if (result['motherTongue'] != null) _motherTongue = result['motherTongue'];
+        if (result['dietLifestyle'] != null) _dietLifestyle = result['dietLifestyle'];
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Basic Details updated and saved successfully!',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF1E293B),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _openEditEducationCareerScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEducationCareerScreen(
+          initialHighestDegree: _highestDegree,
+          initialCollege: _college,
+          initialProfession: _profession,
+          initialEmployer: _employer,
+          initialAnnualIncome: _annualIncome,
+          initialWorkLocation: _workLocation,
+        ),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['highestDegree'] != null) _highestDegree = result['highestDegree'];
+        if (result['college'] != null) _college = result['college'];
+        if (result['profession'] != null) _profession = result['profession'];
+        if (result['employer'] != null) _employer = result['employer'];
+        if (result['annualIncome'] != null) _annualIncome = result['annualIncome'];
+        if (result['workLocation'] != null) _workLocation = result['workLocation'];
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Education & Career updated and saved successfully!',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF1E293B),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
+  void _openFamilyDetailsScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditFamilyDetailsScreen(),
+      ),
+    );
   }
 
   void _showEditSectionModal(String sectionTitle) {
@@ -508,14 +620,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             elevation: 1.5,
             shadowColor: const Color(0x33000000),
             child: InkWell(
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Editing profile sections.'),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-              },
+              onTap: _openEditBasicDetailsScreen,
               borderRadius: BorderRadius.circular(10),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -670,7 +775,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       title: 'BASIC DETAILS',
       subtitle: 'Personal identity and vitals',
       showDivider: true,
-      onEditTap: () => _showEditSectionModal('Basic Details'),
+      onEditTap: _openEditBasicDetailsScreen,
       child: Column(
         children: [
           IntrinsicHeight(
@@ -840,7 +945,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       title: 'EDUCATION & CAREER',
       subtitle: 'Professional pedigree & income',
       showDivider: true,
-      onEditTap: () => _showEditSectionModal('Education & Career'),
+      onEditTap: _openEditEducationCareerScreen,
       child: Column(
         children: [
           // Highest Degree Box
@@ -966,7 +1071,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       title: 'FAMILY LINEAGE & ROOTS',
       subtitle: 'Gothram, heritage and family background',
       showDivider: true,
-      onEditTap: () => _showEditSectionModal('Family Lineage & Roots'),
+      onEditTap: _openFamilyDetailsScreen,
       child: Column(
         children: [
           IntrinsicHeight(
@@ -1029,7 +1134,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       title: 'FAMILY AFFLUENCE & ASSETS',
       subtitle: 'Economic standing & property status',
       showDivider: true,
-      onEditTap: () => _showEditSectionModal('Family Affluence & Assets'),
+      onEditTap: _openFamilyDetailsScreen,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

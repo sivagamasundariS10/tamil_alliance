@@ -188,13 +188,10 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
 
             // 6. Lifestyle & Values
             _buildLifestyleValuesCard(),
-            const SizedBox(height: 20),
-
-            // Save Preferences Button
-            _buildSavePreferencesButton(),
           ],
         ),
       ),
+      bottomNavigationBar: _buildStickyFooter(),
     );
   }
 
@@ -932,51 +929,64 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 11. Save Preferences Bottom Button
+  // 11. Sticky Bottom Footer
   // ─────────────────────────────────────────────────────────────
-  Widget _buildSavePreferencesButton() {
-    return Material(
-      color: const Color(0xFF800E2F),
-      borderRadius: BorderRadius.circular(14),
-      elevation: 2,
-      shadowColor: const Color(0x33000000),
-      child: InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Row(
-                children: [
-                  Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
-                  SizedBox(width: 8),
-                  Text('Partner Preferences saved successfully!'),
-                ],
-              ),
-              backgroundColor: Color(0xFF059669),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-          Navigator.pop(context);
-        },
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          child: const Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Save Preferences',
-                  style: TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
-                    letterSpacing: 0.3,
+  Widget _buildStickyFooter() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x10000000),
+            offset: Offset(0, -3),
+            blurRadius: 10,
+          ),
+        ],
+        border: const Border(
+          top: BorderSide(color: Color(0xFFF1E5E9), width: 1),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(Icons.check_circle_rounded, color: Colors.white, size: 18),
+                        SizedBox(width: 8),
+                        Text('Partner Preferences saved successfully!'),
+                      ],
+                    ),
+                    backgroundColor: Color(0xFF059669),
+                    behavior: SnackBarBehavior.floating,
                   ),
+                );
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.check_circle_rounded, color: Color(0xFFF5D68B), size: 18),
+              label: const Text(
+                'Save Preferences',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                  letterSpacing: 0.3,
                 ),
-                SizedBox(width: 6),
-                Icon(Icons.check_rounded, color: Colors.white, size: 18),
-              ],
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF701A33),
+                foregroundColor: Colors.white,
+                elevation: 2,
+                shadowColor: const Color(0x33701A33),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
             ),
           ),
         ),

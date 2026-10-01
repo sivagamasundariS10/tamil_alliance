@@ -918,20 +918,23 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   child: Row(
                     children: const [
                       Icon(Icons.verified_user_outlined, size: 14, color: Color(0xFF2563EB)),
-                      SizedBox(width: 6),
-                      Text(
-                        'Aadhaar & Photo 100% Verified',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1E3A8A),
+                      SizedBox(width: 5),
+                      Expanded(
+                        child: Text(
+                          'Aadhaar & Photo 100% Verified',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF1E3A8A),
+                          ),
                         ),
                       ),
-                      Spacer(),
+                      SizedBox(width: 6),
                       Text(
                         'Active Parent Managed',
                         style: TextStyle(
-                          fontSize: 13,
+                          fontSize: 11.5,
                           fontWeight: FontWeight.w600,
                           color: Color(0xFF475569),
                         ),
@@ -1289,36 +1292,44 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: const [
-                              Icon(Icons.lock_open_rounded, size: 14, color: Color(0xFF2563EB)),
-                              SizedBox(width: 6),
-                              Text(
-                                'DIRECT FAMILY CONTACTS UNLOCKED',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900,
-                                  color: Color(0xFF1D4ED8),
-                                  letterSpacing: 0.3,
-                                ),
+                          const Icon(Icons.lock_open_rounded, size: 14, color: Color(0xFF2563EB)),
+                          const SizedBox(width: 6),
+                          const Expanded(
+                            child: Text(
+                              'DIRECT FAMILY CONTACTS UNLOCKED',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w900,
+                                color: Color(0xFF1D4ED8),
+                                letterSpacing: 0.2,
                               ),
-                            ],
+                            ),
                           ),
+                          const SizedBox(width: 6),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: const Color(0xFFCCFBF1)),
                             ),
-                            child: const Text(
-                              'Verified by OTP',
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF0F766E),
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(Icons.verified_rounded, size: 11, color: Color(0xFF0F766E)),
+                                SizedBox(width: 3),
+                                Text(
+                                  'Verified OTP',
+                                  style: TextStyle(
+                                    fontSize: 10.5,
+                                    fontWeight: FontWeight.w800,
+                                    color: Color(0xFF0F766E),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

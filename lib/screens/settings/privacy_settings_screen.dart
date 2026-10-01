@@ -24,6 +24,10 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
   bool _photoRequestToView = true;
   bool _photoBlurUnverified = true;
 
+  // Horoscope Privacy Toggles
+  bool _restrictHoroscopeDownload = true;
+  bool _horoscopePremiumOnly = false;
+
   // Masked number reveal toggle
   bool _revealNumber = false;
 
@@ -84,6 +88,8 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
       _photoPremiumOnly = true;
       _photoRequestToView = true;
       _photoBlurUnverified = true;
+      _restrictHoroscopeDownload = true;
+      _horoscopePremiumOnly = false;
       _revealNumber = false;
     });
 
@@ -245,6 +251,10 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
 
               // ── Photo Privacy Card Box ──
               _buildPhotoPrivacyBox(),
+              const SizedBox(height: 16),
+
+              // ── Horoscope Privacy Card Box ──
+              _buildHoroscopePrivacyBox(),
               const SizedBox(height: 24),
 
               // ── Bottom Action Buttons ──
@@ -584,6 +594,97 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
             value: _photoBlurUnverified,
             onChanged: (v) {
               setState(() => _photoBlurUnverified = v);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // 4. Horoscope Privacy Box
+  // ─────────────────────────────────────────────────────────────
+  Widget _buildHoroscopePrivacyBox() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFEDE9E3)),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x06000000),
+            blurRadius: 6,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Row
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFDF2F4),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.shield_rounded,
+                  color: Color(0xFF701A33),
+                  size: 17,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      'Horoscope Privacy',
+                      style: TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF1E293B),
+                      ),
+                    ),
+                    SizedBox(height: 1),
+                    Text(
+                      'You have full control over who views your horoscope',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF64748B),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+
+          // Row 1: Restrict Horoscope Download
+          _buildPhotoRow(
+            title: 'Restrict Horoscope Download',
+            subtitle: 'Prevent users from saving or downloading your horoscope as a PDF/image.',
+            value: _restrictHoroscopeDownload,
+            onChanged: (v) {
+              setState(() => _restrictHoroscopeDownload = v);
+            },
+          ),
+          const Divider(height: 22, color: Color(0xFFF1F5F9)),
+
+          // Row 2: Premium Members Only
+          _buildPhotoRow(
+            title: 'Premium Members Only',
+            subtitle: 'Grant full horoscope access exclusively to paid and identity-verified premium members.',
+            value: _horoscopePremiumOnly,
+            onChanged: (v) {
+              setState(() => _horoscopePremiumOnly = v);
             },
           ),
         ],

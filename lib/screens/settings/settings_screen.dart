@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'privacy_settings_screen.dart';
+import '../profile/download_biodata_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -219,18 +220,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           InkWell(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Row(
-                    children: [
-                      Icon(Icons.file_download_done_rounded, color: Color(0xFF10B981), size: 18),
-                      SizedBox(width: 8),
-                      Text('Biodata PDF downloaded to device storage ✓'),
-                    ],
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const DownloadBiodataScreen(
+                    candidateName: 'Dr. Siddharth S',
+                    allianceId: 'TA-889123',
                   ),
-                  backgroundColor: const Color(0xFF1E293B),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
               );
             },

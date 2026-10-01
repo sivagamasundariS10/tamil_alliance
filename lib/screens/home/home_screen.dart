@@ -27,11 +27,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late int _bottomNavIndex;
   final Set<String> _connectedProfileIds = {};
+  String? _allianceInitialProfileId;
 
   @override
   void initState() {
     super.initState();
     _bottomNavIndex = widget.initialTabIndex;
+  }
+
+  void _openAllianceProfile(String profileIdOrName) {
+    setState(() {
+      _allianceInitialProfileId = profileIdOrName;
+      _bottomNavIndex = 1;
+    });
   }
 
   void _handleConnect(String idOrName, String name) {
@@ -97,7 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color(0xFFFAF8F8),
       appBar: _buildCustomAppBar(),
       body: _bottomNavIndex == 1
-          ? AllianceScreen(onNavigateToHome: () => setState(() => _bottomNavIndex = 0))
+          ? AllianceScreen(
+              key: ValueKey('alliance_${_allianceInitialProfileId ?? 'default'}'),
+              initialProfileId: _allianceInitialProfileId,
+              onNavigateToHome: () => setState(() => _bottomNavIndex = 0),
+            )
           : _bottomNavIndex == 2
               ? PremiumScreen(onNavigateToHome: () => setState(() => _bottomNavIndex = 0))
               : _bottomNavIndex == 3
@@ -221,21 +233,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Notification Bell with Badge (Image 2 design)
                   InkWell(
                     onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Row(
-                            children: [
-                              Icon(Icons.notifications_active_rounded, color: Color(0xFFF59E0B), size: 20),
-                              SizedBox(width: 10),
-                              Text('No new notifications for Alliance match', style: TextStyle(fontWeight: FontWeight.w600)),
-                            ],
-                          ),
-                          backgroundColor: const Color(0xFF1E293B),
-                          behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          duration: const Duration(seconds: 2),
-                        ),
-                      );
+                      setState(() {
+                        _bottomNavIndex = 3;
+                      });
                     },
                     borderRadius: BorderRadius.circular(20),
                     child: Padding(
@@ -274,10 +274,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Interests & Chat Screen: Settings icon removed, keep only Alert in top bar
                   _buildAppBarAction(
                     icon: Icons.notifications_none_rounded,
-                    label: 'Alert',
-                    hasBadge: true,
-                    badgeCount: '1',
-                    onTap: () {},
+                    label: '',
+                    hasBadge: false,
+                    onTap: () {
+                      setState(() {
+                        _bottomNavIndex = 3;
+                      });
+                    },
                   ),
                 ] else ...[
                   // Settings Action
@@ -295,13 +298,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(width: 10),
 
-                  // Alert / Notification Action with Badge
+                  // Notification Action (Opens Interests screen)
                   _buildAppBarAction(
                     icon: Icons.notifications_none_rounded,
-                    label: 'Alert',
-                    hasBadge: true,
-                    badgeCount: '1',
-                    onTap: () {},
+                    label: '',
+                    hasBadge: false,
+                    onTap: () {
+                      setState(() {
+                        _bottomNavIndex = 3;
+                      });
+                    },
                   ),
                 ],
               ],
@@ -314,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildAppBarAction({
     required IconData icon,
-    required String label,
+    String label = '',
     bool hasBadge = false,
     String badgeCount = '',
     required VoidCallback onTap,
@@ -330,14 +336,14 @@ class _HomeScreenState extends State<HomeScreen> {
             clipBehavior: Clip.none,
             children: [
               Container(
-                width: 32,
-                height: 32,
+                width: 36,
+                height: 36,
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(30),
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: Icon(icon, color: Colors.white, size: 18),
+                  child: Icon(icon, color: Colors.white, size: 20),
                 ),
               ),
               if (hasBadge)
@@ -356,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 13,
+                        fontSize: 11,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
@@ -364,15 +370,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
             ],
           ),
-          const SizedBox(height: 2),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
+          if (label.isNotEmpty) ...[
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
@@ -718,141 +726,148 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 12),
 
           // Action Cards Row (Add Jathagam & More Photos)
-          Row(
-            children: [
-              // Action 1: Add Jathagam
-              Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () => _showAddJathagamModal(context),
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFFBEB),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFFDE68A)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFEF3C7),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: const Icon(
-                              Icons.auto_awesome_rounded,
-                              size: 16,
-                              color: Color(0xFFD97706),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  'Add Jathagam',
-                                  style: TextStyle(
-                                    fontSize: 11.5,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color(0xFF1E293B),
-                                  ),
-                                ),
-                                Text(
-                                  'Chart matching',
-                                  style: TextStyle(
-                                    fontSize: 9.5,
-                                    color: Color(0xFF64748B),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: const Color(0xFFF59E0B)),
-                            ),
-                            child: const Text(
-                              '+ Add',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFFB45309),
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Action 1: Add Jathagam
+                Expanded(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _showAddJathagamModal(context),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFFBEB),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFFDE68A)),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEF3C7),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.auto_awesome_rounded,
+                                size: 16,
+                                color: Color(0xFFD97706),
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    'Add Jathagam',
+                                    style: TextStyle(
+                                      fontSize: 11.5,
+                                      fontWeight: FontWeight.w800,
+                                      color: Color(0xFF1E293B),
+                                    ),
+                                  ),
+                                  Text(
+                                    'Chart matching',
+                                    style: TextStyle(
+                                      fontSize: 9.5,
+                                      color: Color(0xFF64748B),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: const Color(0xFFF59E0B)),
+                              ),
+                              child: const Text(
+                                '+ Add',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w800,
+                                  color: Color(0xFFB45309),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
+                const SizedBox(width: 10),
 
-              // Action 2: More Photos
-              Expanded(
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    onTap: () => _showMorePhotosModal(context),
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFDF2F8),
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: const Color(0xFFFBCFE8)),
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFCE7F3),
-                              borderRadius: BorderRadius.circular(8),
+                // Action 2: More Photos
+                Expanded(
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _showMorePhotosModal(context),
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFDF2F8),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFFBCFE8)),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFCE7F3),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Icon(
+                                Icons.add_a_photo_outlined,
+                                size: 16,
+                                color: Color(0xFFBE185D),
+                              ),
                             ),
-                            child: const Icon(
-                              Icons.add_a_photo_outlined,
-                              size: 16,
-                              color: Color(0xFFBE185D),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
-                                Text(
-                                  'More Photos',
-                                  style: TextStyle(
-                                    fontSize: 11.5,
-                                    fontWeight: FontWeight.w800,
-                                    color: Color(0xFF1E293B),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    'More Photos',
+                                    style: TextStyle(
+                                      fontSize: 11.5,
+                                      fontWeight: FontWeight.w800,
+                                      color: Color(0xFF1E293B),
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  '+3 photos needed',
-                                  style: TextStyle(
-                                    fontSize: 9.5,
-                                    color: Color(0xFF64748B),
+                                  Text(
+                                    '+3 photos needed',
+                                    style: TextStyle(
+                                      fontSize: 9.5,
+                                      color: Color(0xFF64748B),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -1925,6 +1940,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   details: '26 Yrs • 5\'4" • B.Tech',
                   job: 'Software Architect • ₹22L',
                   casteStar: 'Iyer - Vadama • Rohini',
+                  onTap: () => _openAllianceProfile('Samyuktha K.'),
                 ),
               ),
               const SizedBox(width: 12),
@@ -1937,6 +1953,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   details: '28 Yrs • 5\'6" • M.S, MBA',
                   job: 'Product Manager • ₹32L',
                   casteStar: 'Brahmin • Hastham',
+                  onTap: () => _openAllianceProfile('Priyadarshini S.'),
                 ),
               ),
             ],
@@ -1954,19 +1971,25 @@ class _HomeScreenState extends State<HomeScreen> {
     required String details,
     required String job,
     required String casteStar,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x0A000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2107,7 +2130,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -2121,8 +2146,8 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 'Recent Matches Handpicked For You',
                 style: TextStyle(
                   fontFamily: 'serif',
@@ -2131,12 +2156,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: Color(0xFF1E293B),
                 ),
               ),
-              Text(
-                'View >',
-                style: TextStyle(
-                  color: Color(0xFF701A33),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w800,
+              GestureDetector(
+                onTap: () => setState(() => _bottomNavIndex = 1),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                  child: Text(
+                    'View >',
+                    style: TextStyle(
+                      color: Color(0xFF701A33),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -2162,6 +2193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   details: '31 Yrs • 5\'11" • M.D',
                   job: 'Cardiologist • ₹35L',
                   casteStar: 'Iyer - Vadama • Rohini',
+                  onTap: () => _openAllianceProfile('Dr. Siddharth S.'),
                 ),
               ),
               const SizedBox(width: 12),
@@ -2170,10 +2202,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   imagePath: 'assets/images/bride_portrait.jpg',
                   matchTag: '94% Match',
                   idTag: '#TA-F-74345',
-                  name: 'Priyadarshini S.',
-                  details: '28 Yrs • 5\'6" • M.S, MBA',
-                  job: 'Product Manager • ₹32L',
+                  name: 'Soundarya R.',
+                  details: '27 Yrs • 5\'5" • M.S, MBA',
+                  job: 'Product Lead • ₹32L',
                   casteStar: 'Brahmin • Hastham',
+                  onTap: () => _openAllianceProfile('Soundarya R.'),
                 ),
               ),
             ],
@@ -2191,19 +2224,25 @@ class _HomeScreenState extends State<HomeScreen> {
     required String details,
     required String job,
     required String casteStar,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x0A000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2338,7 +2377,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 
   // ─────────────────────────────────────────────────────────────
@@ -2411,6 +2452,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   details: '28 Yrs • 5\'11" • Chennai',
                   job: 'Lead Architect • ₹30L',
                   casteStar: 'Kashyapa • Revathi',
+                  onTap: () => _openAllianceProfile('Karthik V.'),
                 ),
                 const SizedBox(width: 12),
                 _buildNewlyJoinedCard(
@@ -2421,6 +2463,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   details: '27 Yrs • 5\'6" • Bangalore',
                   job: 'Data Scientist • ₹26L',
                   casteStar: 'Bharadvaja • Anusham',
+                  onTap: () => _openAllianceProfile('Bhavani S.'),
                 ),
                 const SizedBox(width: 12),
                 _buildNewlyJoinedCard(
@@ -2431,6 +2474,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   details: '26 Yrs • 5\'3" • Coimbatore',
                   job: 'Assistant Professor • ₹12L',
                   casteStar: 'Srivatsa • Aswini',
+                  onTap: () => _openAllianceProfile('Nithya M.'),
                 ),
               ],
             ),
@@ -2448,20 +2492,26 @@ class _HomeScreenState extends State<HomeScreen> {
     required String details,
     required String job,
     required String casteStar,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      width: 165,
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(14),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
+        child: Container(
+          width: 165,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x0A000000),
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2606,7 +2656,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-    );
+    ),
+  ),
+);
   }
 
   // ─────────────────────────────────────────────────────────────
