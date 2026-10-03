@@ -1073,7 +1073,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 ] else ...[
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
                     decoration: BoxDecoration(
                       color: const Color(0xFFECFDF5),
                       borderRadius: BorderRadius.circular(10),
@@ -1084,9 +1084,19 @@ class _InterestsScreenState extends State<InterestsScreen> {
                       children: const [
                         Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 16),
                         SizedBox(width: 6),
-                        Text(
-                          'Alliance Interest Accepted • Mutual Alliance Established',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF047857)),
+                        Flexible(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'Alliance Interest Accepted • Mutual Alliance Established',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF047857),
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
                         ),
                       ],
                     ),

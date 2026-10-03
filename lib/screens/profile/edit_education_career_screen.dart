@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditEducationCareerScreen extends StatefulWidget {
   final String? initialHighestDegree;
@@ -167,49 +168,54 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAF8F8),
-      appBar: _buildAppBar(),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Top Section Tag
-            Row(
-              children: const [
-                Icon(Icons.circle, color: Color(0xFF991B1B), size: 8),
-                SizedBox(width: 8),
-                Text(
-                  'EDUCATION, CAREER & LIFESTYLE',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xFF881337),
-                    letterSpacing: 0.5,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
+    return Theme(
+      data: Theme.of(context).copyWith(
+        textTheme: GoogleFonts.plusJakartaSansTextTheme(Theme.of(context).textTheme),
+      ),
+      child: Scaffold(
+        backgroundColor: const Color(0xFFFAF8F8),
+        appBar: _buildAppBar(),
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Top Section Tag
+              // Row(
+              //   children: [
+              //     const Icon(Icons.circle, color: Color(0xFF991B1B), size: 8),
+              //     const SizedBox(width: 8),
+              //     Text(
+              //       'EDUCATION, CAREER & LIFESTYLE',
+              //       style: GoogleFonts.plusJakartaSans(
+              //         fontSize: 12,
+              //         fontWeight: FontWeight.w900,
+              //         color: const Color(0xFF881337),
+              //         letterSpacing: 0.5,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 14),
 
-            // 1. Education Details Card
-            _buildEducationDetailsCard(),
-            const SizedBox(height: 16),
+              // 1. Education Details Card
+              _buildEducationDetailsCard(),
+              const SizedBox(height: 16),
 
-            // 2. Career & Profession Card
-            _buildCareerProfessionCard(),
-            const SizedBox(height: 16),
+              // 2. Career & Profession Card
+              _buildCareerProfessionCard(),
+              const SizedBox(height: 16),
 
-            // 3. Annual Income Card
-            _buildAnnualIncomeCard(),
-            const SizedBox(height: 24),
+              // 3. Annual Income Card
+              _buildAnnualIncomeCard(),
+              const SizedBox(height: 24),
 
-            // 4. Save Profile Button
-            _buildSaveProfileButton(),
-            const SizedBox(height: 20),
-          ],
+              // 4. Save Profile Button
+              _buildSaveProfileButton(),
+              const SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
@@ -238,11 +244,10 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                   onPressed: () => Navigator.pop(context),
                 ),
                 const SizedBox(width: 4),
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Edit Profile',
-                    style: TextStyle(
-                      fontFamily: 'serif',
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -256,9 +261,9 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                     minimumSize: Size.zero,
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
-                  child: const Text(
+                  child: Text(
                     'RESET',
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 13,
                       fontWeight: FontWeight.w800,
                       color: Colors.white,
@@ -266,22 +271,6 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF531124),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white24),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 4),
               ],
             ),
           ),
@@ -297,17 +286,17 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
     return RichText(
       text: TextSpan(
         text: label,
-        style: const TextStyle(
+        style: GoogleFonts.plusJakartaSans(
           fontSize: 13,
           fontWeight: FontWeight.bold,
           color: darkSlate,
         ),
         children: isRequired
-            ? const [
+            ? [
                 TextSpan(
                   text: ' *',
-                  style: TextStyle(
-                    color: Color(0xFFDC2626),
+                  style: GoogleFonts.plusJakartaSans(
+                    color: const Color(0xFFDC2626),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -349,12 +338,12 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
-              Icon(Icons.circle, color: Color(0xFF991B1B), size: 10),
-              SizedBox(width: 8),
+            children: [
+              const Icon(Icons.circle, color: Color(0xFF991B1B), size: 10),
+              const SizedBox(width: 8),
               Text(
                 'Education Details',
-                style: TextStyle(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
                   color: darkSlate,
@@ -367,9 +356,9 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           // Highest Level of Education
           _buildFieldLabel('Highest Level of Education', isRequired: true),
           const SizedBox(height: 2),
-          const Text(
+          Text(
             'Select the highest formal degree completed',
-            style: TextStyle(fontSize: 11, color: textMuted),
+            style: GoogleFonts.plusJakartaSans(fontSize: 11, color: textMuted),
           ),
           const SizedBox(height: 6),
           Container(
@@ -384,7 +373,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 value: degreeLevels.contains(_highestLevel) ? _highestLevel : degreeLevels.first,
                 icon: const Icon(Icons.keyboard_arrow_down_rounded, color: textMuted),
                 isExpanded: true,
-                style: const TextStyle(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: darkSlate,
@@ -399,6 +388,11 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                         Flexible(
                           child: Text(
                             lvl,
+                            style: GoogleFonts.plusJakartaSans(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: darkSlate,
+                            ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -419,7 +413,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           const SizedBox(height: 6),
           TextFormField(
             controller: _degreeController,
-            style: const TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: darkSlate,
@@ -442,7 +436,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 borderSide: const BorderSide(color: primaryMaroon, width: 1.5),
               ),
               hintText: 'e.g. M.S. Software Systems',
-              hintStyle: const TextStyle(color: textMuted, fontSize: 13),
+              hintStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 13),
             ),
           ),
           const SizedBox(height: 14),
@@ -452,7 +446,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           const SizedBox(height: 6),
           TextFormField(
             controller: _collegeController,
-            style: const TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: darkSlate,
@@ -475,7 +469,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 borderSide: const BorderSide(color: primaryMaroon, width: 1.5),
               ),
               hintText: 'e.g. Anna University (CEG Guindy)',
-              hintStyle: const TextStyle(color: textMuted, fontSize: 13),
+              hintStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 13),
             ),
           ),
         ],
@@ -516,12 +510,12 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            children: const [
-              Icon(Icons.circle, color: Color(0xFF991B1B), size: 10),
-              SizedBox(width: 8),
+            children: [
+              const Icon(Icons.circle, color: Color(0xFF991B1B), size: 10),
+              const SizedBox(width: 8),
               Text(
                 'Career & Profession',
-                style: TextStyle(
+                style: GoogleFonts.plusJakartaSans(
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
                   color: darkSlate,
@@ -553,7 +547,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                   ),
                   child: Text(
                     sec,
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: isSelected ? Colors.white : darkSlate,
@@ -570,7 +564,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           const SizedBox(height: 6),
           TextFormField(
             controller: _professionController,
-            style: const TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: darkSlate,
@@ -593,7 +587,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 borderSide: const BorderSide(color: primaryMaroon, width: 1.5),
               ),
               hintText: 'e.g. Staff Software Engineer',
-              hintStyle: const TextStyle(color: textMuted, fontSize: 13),
+              hintStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 13),
             ),
           ),
           const SizedBox(height: 14),
@@ -603,7 +597,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           const SizedBox(height: 6),
           TextFormField(
             controller: _companyController,
-            style: const TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: darkSlate,
@@ -626,7 +620,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 borderSide: const BorderSide(color: primaryMaroon, width: 1.5),
               ),
               hintText: 'e.g. Zoho Corporation',
-              hintStyle: const TextStyle(color: textMuted, fontSize: 13),
+              hintStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 13),
             ),
           ),
           const SizedBox(height: 14),
@@ -636,7 +630,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           const SizedBox(height: 6),
           TextFormField(
             controller: _workLocationController,
-            style: const TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: darkSlate,
@@ -659,15 +653,15 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 borderSide: const BorderSide(color: primaryMaroon, width: 1.5),
               ),
               hintText: 'e.g. Chennai, Tamil Nadu, India',
-              hintStyle: const TextStyle(color: textMuted, fontSize: 13),
+              hintStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 13),
             ),
           ),
           const SizedBox(height: 14),
 
           // Work Arrangement
-          const Text(
+          Text(
             'Work Arrangement',
-            style: TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 13,
               fontWeight: FontWeight.bold,
               color: darkSlate,
@@ -695,7 +689,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                       child: Center(
                         child: Text(
                           arr,
-                          style: TextStyle(
+                          style: GoogleFonts.plusJakartaSans(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
                             color: isSelected ? Colors.white : darkSlate,
@@ -739,12 +733,12 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                children: const [
-                  Icon(Icons.circle, color: Color(0xFF991B1B), size: 10),
-                  SizedBox(width: 8),
+                children: [
+                  const Icon(Icons.circle, color: Color(0xFF991B1B), size: 10),
+                  const SizedBox(width: 8),
                   Text(
                     'Annual Income',
-                    style: TextStyle(
+                    style: GoogleFonts.plusJakartaSans(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: darkSlate,
@@ -765,10 +759,10 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                     const SizedBox(width: 4),
                     Text(
                       '$_currency (Auto-set)',
-                      style: const TextStyle(
+                      style: GoogleFonts.plusJakartaSans(
                         fontSize: 11,
                         fontWeight: FontWeight.w700,
-                        color: Color(0xFF1D4ED8),
+                        color: const Color(0xFF1D4ED8),
                       ),
                     ),
                   ],
@@ -802,9 +796,13 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Currency mapped to Work Location:',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: darkSlate),
+                        style: GoogleFonts.plusJakartaSans(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          color: darkSlate,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Container(
@@ -813,15 +811,19 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                           color: const Color(0xFFFCE7F3),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Chennai, India → ₹ INR',
-                          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: Color(0xFF881337)),
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF881337),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         'Selecting a foreign work location (e.g. USA, UK, Singapore, UAE) automatically updates the currency to USD (\$), GBP (£), SGD, or AED.',
-                        style: TextStyle(fontSize: 11, color: Color(0xFF475569), height: 1.3),
+                        style: GoogleFonts.plusJakartaSans(fontSize: 11, color: const Color(0xFF475569), height: 1.3),
                       ),
                     ],
                   ),
@@ -837,7 +839,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
           TextFormField(
             controller: _incomeController,
             keyboardType: TextInputType.number,
-            style: const TextStyle(
+            style: GoogleFonts.plusJakartaSans(
               fontSize: 15,
               fontWeight: FontWeight.w700,
               color: darkSlate,
@@ -847,7 +849,7 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
               fillColor: lavenderBg,
               prefixIcon: const Icon(Icons.payments_outlined, color: textMuted, size: 20),
               suffixText: 'per annum',
-              suffixStyle: const TextStyle(fontSize: 12, color: textMuted, fontWeight: FontWeight.w600),
+              suffixStyle: GoogleFonts.plusJakartaSans(fontSize: 12, color: textMuted, fontWeight: FontWeight.w600),
               contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -862,13 +864,13 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
                 borderSide: const BorderSide(color: primaryMaroon, width: 1.5),
               ),
               hintText: 'e.g. 25,00,000',
-              hintStyle: const TextStyle(color: textMuted, fontSize: 13),
+              hintStyle: GoogleFonts.plusJakartaSans(color: textMuted, fontSize: 13),
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
+          Text(
             'Enter your total annual gross income',
-            style: TextStyle(fontSize: 11, color: textMuted),
+            style: GoogleFonts.plusJakartaSans(fontSize: 11, color: textMuted),
           ),
         ],
       ),
@@ -892,9 +894,9 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        child: const Text(
+        child: Text(
           'Save Profile',
-          style: TextStyle(
+          style: GoogleFonts.plusJakartaSans(
             fontSize: 16,
             fontWeight: FontWeight.w800,
             letterSpacing: 0.3,

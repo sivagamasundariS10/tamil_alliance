@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'edit_partnerpreference_details.dart';
+import 'edit_astrology_poruthams_screen.dart';
 
 class EditPartnerPreferencesScreen extends StatefulWidget {
   final String? userName;
@@ -51,72 +53,63 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
   String _cultural =
       'Carnatic Music appreciation, traditional festivals (Marghazhi, Navarathri), temple visits, alongside modern progressive thoughts';
 
-  void _showEditSectionDialog(String sectionName) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-          top: 20,
-          left: 20,
-          right: 20,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Edit $sectionName',
-                  style: const TextStyle(
-                    fontFamily: 'serif',
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                    color: Color(0xFF1E293B),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close_rounded, color: Color(0xFF64748B)),
-                  onPressed: () => Navigator.pop(ctx),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Customize your exact match criteria for $sectionName. All potential matches will be filtered according to this rule.',
-              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('$sectionName preference criteria updated successfully!'),
-                    backgroundColor: const Color(0xFF059669),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF800E2F),
-                minimumSize: const Size(double.infinity, 46),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text('Save & Apply Criteria', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-            ),
-          ],
+  void _showEditSectionDialog([String? sectionName]) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const EditPartnerPreferenceDetailsScreen(),
+      ),
+    );
+  }
+
+  Future<void> _openEditAstrologyPoruthams() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditAstrologyPoruthamsScreen(
+          initialMinPoruthams: _minPoruthams,
+          initialChevvai: _chevvai,
+          initialRahuKethu: _rahuKethu,
+          initialPapasamyam: _papasamyam,
+          initialPreferredStars: _preferredStars,
         ),
       ),
     );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['minPoruthams'] != null) _minPoruthams = result['minPoruthams'];
+        if (result['chevvai'] != null) _chevvai = result['chevvai'];
+        if (result['rahuKethu'] != null) _rahuKethu = result['rahuKethu'];
+        if (result['papasamyam'] != null) _papasamyam = result['papasamyam'];
+        if (result['preferredStars'] != null) {
+          _preferredStars = List<String>.from(result['preferredStars']);
+        }
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Astrology & Poruthams updated successfully!',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF1E293B),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 
   void _resetPreferences() {
@@ -255,20 +248,6 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
                     ),
                   ),
                 ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: () {},
-                  borderRadius: BorderRadius.circular(16),
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white54, width: 1.2),
-                    ),
-                    child: const Icon(Icons.person, color: Colors.white, size: 18),
-                  ),
-                ),
               ],
             ),
           ),
@@ -402,69 +381,80 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: iconColor.withAlpha(20),
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: iconColor.withAlpha(35)),
-                ),
-                child: Icon(icon, color: iconColor, size: 16),
-              ),
-              const SizedBox(width: 8),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900,
-                            color: Color(0xFF1E293B),
-                            letterSpacing: 0.2,
-                          ),
+                child: InkWell(
+                  onTap: onEditTap,
+                  borderRadius: BorderRadius.circular(8),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: iconColor.withAlpha(20),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: iconColor.withAlpha(35)),
                         ),
-                        if (badgeText != null) ...[
-                          const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFF1F2),
-                              borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: const Color(0xFFFCE7F3)),
+                        child: Icon(icon, color: iconColor, size: 16),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  title,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w900,
+                                    color: Color(0xFF1E293B),
+                                    letterSpacing: 0.2,
+                                  ),
+                                ),
+                                if (badgeText != null) ...[
+                                  const SizedBox(width: 6),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1.5),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFFF1F2),
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: const Color(0xFFFCE7F3)),
+                                    ),
+                                    child: Text(
+                                      badgeText,
+                                      style: const TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w800,
+                                        color: Color(0xFF831843),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
-                            child: Text(
-                              badgeText,
+                            const SizedBox(height: 1),
+                            Text(
+                              subtitleTamil,
                               style: const TextStyle(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w800,
-                                color: Color(0xFF831843),
+                                color: Color(0xFF64748B),
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 1),
-                    Text(
-                      subtitleTamil,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF64748B),
-                        fontWeight: FontWeight.w500,
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
+              const SizedBox(width: 6),
               InkWell(
                 onTap: onEditTap,
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFAF7F2),
                     borderRadius: BorderRadius.circular(8),
@@ -472,7 +462,7 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
                   ),
                   child: const Icon(
                     Icons.edit_outlined,
-                    size: 14,
+                    size: 16,
                     color: Color(0xFF831843),
                   ),
                 ),
@@ -697,7 +687,7 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
       title: 'ASTROLOGY & PORUTHAMS',
       subtitleTamil: 'ஜாதகம் & பொருத்தங்கள்',
       badgeText: 'VEDIC',
-      onEditTap: () => _showEditSectionDialog('Astrology & Poruthams'),
+      onEditTap: _openEditAstrologyPoruthams,
       child: Column(
         children: [
           Row(

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/constants/app_colors.dart';
-import '../registration/education_career_screen.dart';
 
 class EditSiblingInfo {
   final TextEditingController nameController;
@@ -61,39 +59,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
   String? _affluenceTier;
   String? _propertyStatus;
 
-  // Track previous visibility states to auto-scroll on new unlock
-  bool _prevMotherVisible = false;
-  bool _prevSiblingsVisible = false;
-  bool _prevStructureVisible = false;
-  bool _prevLocationVisible = false;
-  bool _prevAffluenceVisible = false;
-
-  // Progressive Validation Getters
-  bool get _isFatherComplete => _fatherOccController.text.trim().isNotEmpty;
-
-  bool get _isMotherComplete =>
-      _isFatherComplete && _motherOccController.text.trim().isNotEmpty;
-
-  bool get _isSiblingsComplete {
-    if (!_isMotherComplete) return false;
-    if (_noSiblings) return true;
-    if (_siblings.isEmpty) return false;
-    return _siblings.every(
-      (s) => s.relationship != null && s.maritalStatus != null,
-    );
-  }
-
-  bool get _isStructureComplete =>
-      _isSiblingsComplete && _familyType != null && _familyValues != null;
-
-  bool get _isLocationComplete =>
-      _isStructureComplete &&
-      _residenceCityController.text.trim().isNotEmpty &&
-      _nativeTownController.text.trim().isNotEmpty;
-
-  bool get _isAffluenceComplete =>
-      _isLocationComplete && _affluenceTier != null && _propertyStatus != null;
-
   @override
   void initState() {
     super.initState();
@@ -104,74 +69,11 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
       relationship: null,
       maritalStatus: null,
     );
-    initialSibling.nameController.addListener(_onFieldChanged);
     _siblings.add(initialSibling);
-
-    _fatherNameController.addListener(_onFieldChanged);
-    _fatherOccController.addListener(_onFieldChanged);
-    _motherNameController.addListener(_onFieldChanged);
-    _motherOccController.addListener(_onFieldChanged);
-    _residenceCityController.addListener(_onFieldChanged);
-    _nativeTownController.addListener(_onFieldChanged);
-  }
-
-  void _onFieldChanged() {
-    if (!mounted) return;
-    _checkAndTriggerAutoScroll();
-    setState(() {});
-  }
-
-  void _checkAndTriggerAutoScroll() {
-    bool shouldScroll = false;
-
-    if (_isFatherComplete && !_prevMotherVisible) {
-      _prevMotherVisible = true;
-      shouldScroll = true;
-    } else if (!_isFatherComplete) {
-      _prevMotherVisible = false;
-    }
-
-    if (_isMotherComplete && !_prevSiblingsVisible) {
-      _prevSiblingsVisible = true;
-      shouldScroll = true;
-    } else if (!_isMotherComplete) {
-      _prevSiblingsVisible = false;
-    }
-
-    if (_isSiblingsComplete && !_prevStructureVisible) {
-      _prevStructureVisible = true;
-      shouldScroll = true;
-    } else if (!_isSiblingsComplete) {
-      _prevStructureVisible = false;
-    }
-
-    if (_isStructureComplete && !_prevLocationVisible) {
-      _prevLocationVisible = true;
-      shouldScroll = true;
-    } else if (!_isStructureComplete) {
-      _prevLocationVisible = false;
-    }
-
-    if (_isLocationComplete && !_prevAffluenceVisible) {
-      _prevAffluenceVisible = true;
-      shouldScroll = true;
-    } else if (!_isLocationComplete) {
-      _prevAffluenceVisible = false;
-    }
-
-    if (shouldScroll) {
-      _scrollToBottom();
-    }
   }
 
   @override
   void dispose() {
-    _fatherNameController.removeListener(_onFieldChanged);
-    _fatherOccController.removeListener(_onFieldChanged);
-    _motherNameController.removeListener(_onFieldChanged);
-    _motherOccController.removeListener(_onFieldChanged);
-    _residenceCityController.removeListener(_onFieldChanged);
-    _nativeTownController.removeListener(_onFieldChanged);
     _scrollController.dispose();
     _fatherNameController.dispose();
     _fatherOccController.dispose();
@@ -203,7 +105,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
       relationship: null,
       maritalStatus: null,
     );
-    newSibling.nameController.addListener(_onFieldChanged);
     setState(() {
       _siblings.add(newSibling);
     });
@@ -219,50 +120,13 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
         _noSiblings = true;
       }
     });
-    _checkAndTriggerAutoScroll();
   }
 
-  void _onSaveDraft() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Family Details Draft Saved Successfully!'),
-        backgroundColor: Color(0xFF10B981),
-        duration: Duration(milliseconds: 1000),
-      ),
-    );
-  }
-
-  void _onContinue() {
+  void _saveProfile() {
     FocusScope.of(context).unfocus();
 
-    if (!_isAffluenceComplete) {
-      String message = 'Please fill all mandatory fields marked with *';
-      if (!_isFatherComplete) {
-        message = "Please enter Father's Occupation & Status *";
-      } else if (!_isMotherComplete) {
-        message = "Please enter Mother's Occupation & Status *";
-      } else if (!_isSiblingsComplete) {
-        message = 'Please select relationship & marital status for siblings or check No Siblings *';
-      } else if (!_isStructureComplete) {
-        message = 'Please choose Family Type and Family Values *';
-      } else if (!_isLocationComplete) {
-        message = 'Please enter Residence City and Native Town *';
-      } else if (!_isAffluenceComplete) {
-        message = 'Please choose Affluence Tier and Property Status *';
-      }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: const Color(0xFFE11D48),
-          duration: const Duration(milliseconds: 2000),
-        ),
-      );
-      return;
-    }
-
     print('====================================================');
-    print('👨‍👩‍👧‍👦 [USER INPUT: STEP 2 - FAMILY DETAILS]');
+    print('👨‍👩‍👧‍👦 [USER INPUT: EDIT FAMILY DETAILS - SAVE PROFILE]');
     print('   Father Name       : ${_fatherNameController.text.trim()}');
     print('   Father Occupation : ${_fatherOccController.text.trim()}');
     print('   Mother Name       : ${_motherNameController.text.trim()}');
@@ -283,189 +147,167 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Family Details Saved! Proceeding to Step 3.'),
+        content: Text('Family details updated successfully!'),
         backgroundColor: Color(0xFF10B981),
         duration: Duration(milliseconds: 1200),
       ),
     );
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => EducationCareerScreen(
-          mobileNumber: widget.mobileNumber,
-          countryCode: widget.countryCode,
-          email: widget.email,
-        ),
-      ),
-    );
+    final result = {
+      'fatherName': _fatherNameController.text.trim(),
+      'fatherOcc': _fatherOccController.text.trim(),
+      'motherName': _motherNameController.text.trim(),
+      'motherOcc': _motherOccController.text.trim(),
+      'noSiblings': _noSiblings,
+      'familyType': _familyType,
+      'familyValues': _familyValues,
+      'residenceCity': _residenceCityController.text.trim(),
+      'nativeTown': _nativeTownController.text.trim(),
+      'affluenceTier': _affluenceTier,
+      'propertyStatus': _propertyStatus,
+    };
+
+    Navigator.of(context).pop(result);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8FF),
+      appBar: _buildAppBar(),
       bottomNavigationBar: _buildBottomNavigationBar(context),
-      body: SafeArea(
-        bottom: false,
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        physics: const ClampingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 1. Top Custom App Bar
-            _buildCustomAppBar(context),
-
-            // 2. Scrollable Body Content
-            Expanded(
-              child: SingleChildScrollView(
-                controller: _scrollController,
-                physics: const ClampingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // A) Step 2 Subheader
+            // A) Step 2 Subheader
                     _buildStepSubheader(),
                     const SizedBox(height: 14),
 
-                    // B) Father's Details Card (Always Visible)
+                    // B) Father's Details Card
                     _buildFatherDetailsCard(),
                     const SizedBox(height: 14),
 
-                    // C) Mother's Details Card (Revealed after Father's mandatory details)
-                    _buildProgressiveCard(
-                      isVisible: _isFatherComplete,
-                      child: _buildMotherDetailsCard(),
-                    ),
+                    // C) Mother's Details Card
+                    _buildMotherDetailsCard(),
+                    const SizedBox(height: 14),
 
-                    // D) Siblings Details Card (Revealed after Mother's mandatory details)
-                    _buildProgressiveCard(
-                      isVisible: _isMotherComplete,
-                      child: _buildSiblingsDetailsCard(),
-                    ),
+                    // D) Siblings Details Card
+                    _buildSiblingsDetailsCard(),
+                    const SizedBox(height: 14),
 
-                    // E) Structure & Family Values Card (Revealed after Siblings details)
-                    _buildProgressiveCard(
-                      isVisible: _isSiblingsComplete,
-                      child: _buildStructureFamilyValuesCard(),
-                    ),
+                    // E) Structure & Family Values Card
+                    _buildStructureFamilyValuesCard(),
+                    const SizedBox(height: 14),
 
-                    // F) Location & Native Roots Card (Revealed after Structure & Values)
-                    _buildProgressiveCard(
-                      isVisible: _isStructureComplete,
-                      child: _buildLocationNativeRootsCard(),
-                    ),
+                    // F) Location & Native Roots Card
+                    _buildLocationNativeRootsCard(),
+                    const SizedBox(height: 14),
 
-                    // G) Family Affluence & Assets Card (Revealed after Location)
-                    _buildProgressiveCard(
-                      isVisible: _isLocationComplete,
-                      child: _buildFamilyAffluenceCard(),
-                    ),
+                    // G) Family Affluence & Assets Card
+                    _buildFamilyAffluenceCard(),
+                    const SizedBox(height: 14),
 
-                    // H) Security Footer Badge (Revealed after Affluence)
-                    _buildProgressiveCard(
-                      isVisible: _isAffluenceComplete,
-                      child: _buildSecurityFooterBadge(),
-                    ),
-
+                    // H) Security Footer Badge
+                    _buildSecurityFooterBadge(),
                     const SizedBox(height: 16),
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
+    );
+  }
+
+  // Reset form values to default
+  void _resetToDefault() {
+    setState(() {
+      _fatherNameController.clear();
+      _fatherOccController.clear();
+      _motherNameController.clear();
+      _motherOccController.clear();
+      _residenceCityController.clear();
+      _nativeTownController.clear();
+      _familyType = null;
+      _familyValues = null;
+      _affluenceTier = null;
+      _propertyStatus = null;
+      _noSiblings = false;
+      for (var s in _siblings) {
+        s.dispose();
+      }
+      _siblings.clear();
+      final initialSibling = EditSiblingInfo(
+        name: '',
+        relationship: null,
+        maritalStatus: null,
+      );
+      _siblings.add(initialSibling);
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Form values reset to default.'),
+        backgroundColor: Color(0xFF701A31),
+        duration: Duration(seconds: 1),
       ),
     );
   }
 
-  // Progressive Animated Card Container
-  Widget _buildProgressiveCard({
-    required bool isVisible,
-    required Widget child,
-  }) {
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 380),
-      curve: Curves.easeInOutCubic,
-      alignment: Alignment.topCenter,
-      child: isVisible
-          ? AnimatedOpacity(
-              duration: const Duration(milliseconds: 320),
-              opacity: isVisible ? 1.0 : 0.0,
-              curve: Curves.easeIn,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 14.0),
-                child: child,
-              ),
-            )
-          : const SizedBox.shrink(),
-    );
-  }
-
-  // 1. Custom App Bar (Height: 58px, #881337 Deep Maroon)
-  // 1. Top Custom App Bar
-  Widget _buildCustomAppBar(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: AppColors.primary,
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
-      child: Row(
-        children: [
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-            splashRadius: 22,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: const [
-                Text(
-                  'Profile Registration',
-                  style: TextStyle(
+  // 1. Custom App Bar matching Edit Profile
+  PreferredSizeWidget _buildAppBar() {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(60),
+      child: Container(
+        color: const Color(0xFF701A31),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
                     color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
+                    size: 20,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                const SizedBox(width: 4),
+                const Expanded(
+                  child: Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                      fontFamily: 'serif',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                SizedBox(height: 2),
-                Text(
-                  'STEP 2 OF 6',
-                  style: TextStyle(
-                    color: Color(0xFFE5A93C),
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.8,
+                TextButton(
+                  onPressed: _resetToDefault,
+                  style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Text(
+                    'RESET',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          Container(
-            width: 32,
-            height: 32,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: Image.asset(
-              'assets/images/logo.png',
-              fit: BoxFit.contain,
-              errorBuilder: (ctx, err, stack) => Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: const Color(0xFFE5A93C), width: 1.5),
-                ),
-                child: const Center(
-                  child: Icon(Icons.favorite_rounded, color: Color(0xFFE5A93C), size: 16),
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -725,7 +567,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
               setState(() {
                 _noSiblings = !_noSiblings;
               });
-              _checkAndTriggerAutoScroll();
             },
             borderRadius: BorderRadius.circular(12),
             child: Container(
@@ -748,7 +589,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                       value: _noSiblings,
                       onChanged: (val) {
                         setState(() => _noSiblings = val ?? false);
-                        _checkAndTriggerAutoScroll();
                       },
                       activeColor: const Color(0xFF881337),
                       shape: RoundedRectangleBorder(
@@ -939,7 +779,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: sibling.relationship == 'Elder Brother',
                   onTap: () {
                     setState(() => sibling.relationship = 'Elder Brother');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -950,7 +789,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: sibling.relationship == 'Younger Brother',
                   onTap: () {
                     setState(() => sibling.relationship = 'Younger Brother');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -965,7 +803,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: sibling.relationship == 'Elder Sister',
                   onTap: () {
                     setState(() => sibling.relationship = 'Elder Sister');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -976,7 +813,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: sibling.relationship == 'Younger Sister',
                   onTap: () {
                     setState(() => sibling.relationship = 'Younger Sister');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -995,7 +831,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: sibling.maritalStatus == 'Married',
                   onTap: () {
                     setState(() => sibling.maritalStatus = 'Married');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1006,7 +841,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: sibling.maritalStatus == 'Unmarried',
                   onTap: () {
                     setState(() => sibling.maritalStatus = 'Unmarried');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1147,7 +981,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _familyType == 'Nuclear Family',
                   onTap: () {
                     setState(() => _familyType = 'Nuclear Family');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1158,7 +991,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _familyType == 'Joint Family',
                   onTap: () {
                     setState(() => _familyType = 'Joint Family');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1178,7 +1010,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _familyValues == 'Orthodox',
                   onTap: () {
                     setState(() => _familyValues = 'Orthodox');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1189,7 +1020,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _familyValues == 'Moderate',
                   onTap: () {
                     setState(() => _familyValues = 'Moderate');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1291,7 +1121,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _affluenceTier == 'Middle Class',
                   onTap: () {
                     setState(() => _affluenceTier = 'Middle Class');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1303,7 +1132,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _affluenceTier == 'Upper Middle',
                   onTap: () {
                     setState(() => _affluenceTier = 'Upper Middle');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1319,7 +1147,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _affluenceTier == 'Affluent/Rich',
                   onTap: () {
                     setState(() => _affluenceTier = 'Affluent/Rich');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1331,7 +1158,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _affluenceTier == 'Elite',
                   onTap: () {
                     setState(() => _affluenceTier = 'Elite');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1350,7 +1176,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _propertyStatus == 'Own House / Villa',
                   onTap: () {
                     setState(() => _propertyStatus = 'Own House / Villa');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1361,7 +1186,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
                   isSelected: _propertyStatus == 'Rented / Leased',
                   onTap: () {
                     setState(() => _propertyStatus = 'Rented / Leased');
-                    _checkAndTriggerAutoScroll();
                   },
                 ),
               ),
@@ -1648,93 +1472,50 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
     );
   }
 
-  // Bottom Actions Bar (Height 64px, #FAF8FF with shadow)
+  // Bottom Actions Bar - Save Profile Button
   Widget _buildBottomNavigationBar(BuildContext context) {
-    final bool canContinue = _isAffluenceComplete;
-
-    return SafeArea(
-      top: false,
-      child: Container(
-        height: 64,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xFFF2F3FF), width: 1)),
-          boxShadow: [
-            BoxShadow(
-              color: Color(0x0A000000),
-              blurRadius: 10,
-              offset: Offset(0, -2),
-            ),
-          ],
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Color(0x10000000),
+            offset: Offset(0, -3),
+            blurRadius: 10,
+          ),
+        ],
+        border: Border(
+          top: BorderSide(color: Color(0xFFF1E5E9), width: 1),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Previous Action
-            InkWell(
-              onTap: () => Navigator.of(context).pop(),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: Text(
-                  'Previous',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF1760A3),
-                    letterSpacing: 0.14,
-                  ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          child: SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: _saveProfile,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF701A31),
+                foregroundColor: Colors.white,
+                elevation: 2,
+                shadowColor: const Color(0x33701A31),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Save Profile',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.3,
                 ),
               ),
             ),
-
-            // Save Draft Action
-            InkWell(
-              onTap: _onSaveDraft,
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                child: Text(
-                  'Save Draft',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF131B2E),
-                    letterSpacing: 0.36,
-                  ),
-                ),
-              ),
-            ),
-
-            // Continue CTA Button
-            Material(
-              color: canContinue ? const Color(0xFF881337) : const Color(0xFF94A3B8),
-              borderRadius: BorderRadius.circular(12),
-              elevation: canContinue ? 1 : 0,
-              child: InkWell(
-                onTap: _onContinue,
-                borderRadius: BorderRadius.circular(12),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 11),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Continue',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                          letterSpacing: 0.14,
-                        ),
-                      ),
-                      SizedBox(width: 6),
-                      Icon(Icons.arrow_forward_rounded, size: 16, color: Colors.white),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

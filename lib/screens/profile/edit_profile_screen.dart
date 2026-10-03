@@ -3,6 +3,7 @@ import 'edit_preferences_screen.dart';
 import 'edit_basic_details_screen.dart';
 import 'edit_education_career_screen.dart';
 import 'edit_family_details_screen.dart';
+import 'edit_astrology_horoscope_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String? userName;
@@ -36,6 +37,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String _employer = 'Amazon Web Services (AWS) • OMR Chennai';
   String _annualIncome = '₹34,00,000 / Year';
   String _workLocation = 'Chennai (Hybrid /\nOnsite)';
+
+  // Astrology states
+  String _rasi = 'Makaram (Capricorn)';
+  String _nakshatram = 'Uthiradam (Padam 2)';
+  String _lagnam = 'Mesham (Aries)';
+  String _dosham = 'No Dosham\n(Shuddha)';
+  String _jathagamPdf = 'Certified_Jathagam_Karthik.pdf';
+  String _birthTime = '06:45 AM';
+  String _birthPlace = 'Coimbatore, Tamil Nadu';
+  String _gothram = 'Siva / Shiva (சிவன்)';
+  String _kuladeivam = 'Sri Karuppasamy, Perur';
 
   @override
   void initState() {
@@ -152,102 +164,71 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  void _showEditSectionModal(String sectionTitle) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-          top: 20,
-          left: 20,
-          right: 20,
-        ),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF1F2),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Icon(Icons.edit_outlined, color: Color(0xFF881337), size: 16),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Edit $sectionTitle',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                        color: Color(0xFF1E293B),
-                      ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  icon: const Icon(Icons.close, size: 20),
-                  onPressed: () => Navigator.pop(ctx),
-                ),
-              ],
-            ),
-            const SizedBox(height: 14),
-            Text(
-              'Update your verified information for $sectionTitle. Changes are instantly reflected across prospective alliance matches.',
-              style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.4),
-            ),
-            const SizedBox(height: 18),
-            SizedBox(
-              width: double.infinity,
-              height: 44,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Row(
-                        children: [
-                          const Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              '$sectionTitle updated and saved successfully!',
-                              style: const TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ),
-                      backgroundColor: const Color(0xFF1E293B),
-                      behavior: SnackBarBehavior.floating,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF881337),
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                ),
-                child: const Text('Save & Update Section', style: TextStyle(fontWeight: FontWeight.w800)),
-              ),
-            ),
-          ],
+  void _openPartnerPreferencesScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditPartnerPreferencesScreen(
+          userName: widget.userName,
         ),
       ),
     );
+  }
+
+  Future<void> _openEditAstrologyScreen() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditAstrologyHoroscopeScreen(
+          initialRasi: _rasi,
+          initialNakshatram: _nakshatram,
+          initialLagnam: _lagnam,
+          initialDosham: _dosham,
+          initialPdf: _jathagamPdf,
+          initialBirthTime: _birthTime,
+          initialBirthPlace: _birthPlace,
+          initialGothram: _gothram,
+          initialKuladeivam: _kuladeivam,
+        ),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['rasi'] != null) _rasi = result['rasi'];
+        if (result['nakshatram'] != null) _nakshatram = result['nakshatram'];
+        if (result['lagnam'] != null) _lagnam = result['lagnam'];
+        if (result['dosham'] != null) _dosham = result['dosham'];
+        if (result['pdf'] != null) _jathagamPdf = result['pdf'];
+        if (result['birthTime'] != null) _birthTime = result['birthTime'];
+        if (result['birthPlace'] != null) _birthPlace = result['birthPlace'];
+        if (result['gothram'] != null) _gothram = result['gothram'];
+        if (result['kuladeivam'] != null) _kuladeivam = result['kuladeivam'];
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Astrology & Horoscope updated and saved successfully!',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF1E293B),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -828,7 +809,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       badgeColor: const Color(0xFFFEF3C7),
       badgeTextColor: const Color(0xFF92400E),
       showDivider: true,
-      onEditTap: () => _showEditSectionModal('Astrology & Horoscope'),
+      onEditTap: _openEditAstrologyScreen,
       child: Column(
         children: [
           IntrinsicHeight(
@@ -838,14 +819,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Expanded(
                   child: _buildPreferenceDataBox(
                     'RASI (MOON SIGN)',
-                    'Makaram (Capricorn)',
+                    _rasi,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildPreferenceDataBox(
                     'NAKSHATRAM (STAR)',
-                    'Uthiradam (Padam 2)',
+                    _nakshatram,
                   ),
                 ),
               ],
@@ -859,15 +840,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Expanded(
                   child: _buildPreferenceDataBox(
                     'LAGNAM (ASCENDANT)',
-                    'Mesham (Aries)',
+                    _lagnam,
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: _buildPreferenceDataBox(
                     'CHEVVAI / RAHU DOSHAM',
-                    'No Dosham\n(Shuddha)',
-                    isVerifiedDosham: true,
+                    _dosham,
+                    isVerifiedDosham: _dosham.toLowerCase().contains('no dosham') || _dosham.toLowerCase().contains('shuddha'),
                   ),
                 ),
               ],
@@ -900,14 +881,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        'Certified_Jathagam_Karthik.pdf',
-                        style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                        _jathagamPdf,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 2),
-                      Text(
+                      const SizedBox(height: 2),
+                      const Text(
                         'Auto-parsed by Vedic AstroEngine • 12 Houses\nValidated',
                         style: TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.25),
                       ),
@@ -915,7 +896,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 InkWell(
-                  onTap: () => _showEditSectionModal('Jathagam Chart'),
+                  onTap: _openEditAstrologyScreen,
                   child: const Text(
                     'Edit\nChart',
                     textAlign: TextAlign.center,
@@ -1385,7 +1366,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       badgeColor: const Color(0xFFFFF1F2),
       badgeTextColor: const Color(0xFF9F1239),
       showDivider: true,
-      onEditTap: () => _showEditSectionModal('Partner Preferences'),
+      onEditTap: _openPartnerPreferencesScreen,
       child: Column(
         children: [
           IntrinsicHeight(
@@ -1459,14 +1440,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
           // Edit All Partner Preferences Button
           InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EditPartnerPreferencesScreen(),
-                ),
-              );
-            },
+            onTap: _openPartnerPreferencesScreen,
             borderRadius: BorderRadius.circular(10),
             child: Container(
               width: double.infinity,
