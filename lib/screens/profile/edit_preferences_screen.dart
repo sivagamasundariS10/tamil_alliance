@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'edit_partnerpreference_details.dart';
 import 'edit_astrology_poruthams_screen.dart';
+import 'edit_location_residence_screen.dart';
+import 'edit_lifestyle_values_screen.dart';
 
 class EditPartnerPreferencesScreen extends StatefulWidget {
   final String? userName;
@@ -44,12 +46,18 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
   String _employmentSector = 'Private / Corporate';
 
   String _targetCities = 'Chennai, Bangalore, Hyderabad, Coimbatore';
+  String _relocationNote = 'Willingness to relocate to Chennai or Hybrid work';
   String _countries = 'India, USA, Singapore';
+  String _visaNote = 'H1B / PR acceptable';
   String _ancestralRoots = 'Tamil Nadu Origin';
+  String _ancestralBelt = 'Thanjavur, Trichy belt';
 
   String _dietary = 'Vegetarian (சைவம்)';
+  String _dietaryNote = 'No eggs / non-veg inside domestic household';
   String _habits = 'Teetotaler';
+  String _habitsNote = 'Non-Smoker, Non-Drinker';
   String _familyStructure = 'Joint / Nuclear';
+  String _familyStructureNote = 'Harmonious bonding';
   String _cultural =
       'Carnatic Music appreciation, traditional festivals (Marghazhi, Navarathri), temple visits, alongside modern progressive thoughts';
 
@@ -60,6 +68,108 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
         builder: (context) => const EditPartnerPreferenceDetailsScreen(),
       ),
     );
+  }
+
+  Future<void> _openEditLifestyleValues() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditLifestyleValuesScreen(
+          initialDietary: _dietary,
+          initialDietaryNote: _dietaryNote,
+          initialHabits: _habits,
+          initialHabitsNote: _habitsNote,
+          initialFamilyStructure: _familyStructure,
+          initialFamilyStructureNote: _familyStructureNote,
+          initialCultural: _cultural,
+        ),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['dietary'] != null) _dietary = result['dietary'];
+        if (result['dietaryNote'] != null) _dietaryNote = result['dietaryNote'];
+        if (result['habits'] != null) _habits = result['habits'];
+        if (result['habitsNote'] != null) _habitsNote = result['habitsNote'];
+        if (result['familyStructure'] != null) _familyStructure = result['familyStructure'];
+        if (result['familyStructureNote'] != null) _familyStructureNote = result['familyStructureNote'];
+        if (result['cultural'] != null) _cultural = result['cultural'];
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Lifestyle & Values preferences updated successfully!',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF1E293B),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _openEditLocationResidence() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditLocationResidenceScreen(
+          initialTargetCities: _targetCities,
+          initialRelocationNote: _relocationNote,
+          initialCountries: _countries,
+          initialVisaNote: _visaNote,
+          initialAncestralRoots: _ancestralRoots,
+          initialAncestralBelt: _ancestralBelt,
+        ),
+      ),
+    );
+
+    if (result != null && result is Map<String, dynamic>) {
+      setState(() {
+        if (result['targetCities'] != null) _targetCities = result['targetCities'];
+        if (result['relocationNote'] != null) _relocationNote = result['relocationNote'];
+        if (result['countries'] != null) _countries = result['countries'];
+        if (result['visaNote'] != null) _visaNote = result['visaNote'];
+        if (result['ancestralRoots'] != null) _ancestralRoots = result['ancestralRoots'];
+        if (result['ancestralBelt'] != null) _ancestralBelt = result['ancestralBelt'];
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Row(
+              children: [
+                Icon(Icons.check_circle_rounded, color: Color(0xFF10B981), size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Location & Residence preferences updated successfully!',
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            ),
+            backgroundColor: const Color(0xFF1E293B),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _openEditAstrologyPoruthams() async {
@@ -838,13 +948,13 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
       iconColor: const Color(0xFF831843),
       title: 'LOCATION & RESIDENCE',
       subtitleTamil: 'இருப்பிடம் & பூர்வீகம்',
-      onEditTap: () => _showEditSectionDialog('Location & Residence'),
+      onEditTap: _openEditLocationResidence,
       child: Column(
         children: [
           _buildDataBox(
             label: 'TARGET CITIES',
-            value: _targetCities,
-            subtitle: 'Willingness to relocate to Chennai or Hybrid work',
+            value: _targetCities.isNotEmpty ? _targetCities : 'Flexible / Any City',
+            subtitle: _relocationNote,
           ),
           const SizedBox(height: 8),
           Row(
@@ -852,16 +962,16 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
               Expanded(
                 child: _buildDataBox(
                   label: 'COUNTRIES',
-                  value: _countries,
-                  subtitle: 'H1B / PR acceptable',
+                  value: _countries.isNotEmpty ? _countries : 'Any Country',
+                  subtitle: _visaNote,
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _buildDataBox(
                   label: 'ANCESTRAL ROOTS',
-                  value: _ancestralRoots,
-                  subtitle: 'Thanjavur, Trichy belt',
+                  value: _ancestralRoots.isNotEmpty ? _ancestralRoots : 'Not Specified',
+                  subtitle: _ancestralBelt,
                 ),
               ),
             ],
@@ -876,17 +986,17 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
   // ─────────────────────────────────────────────────────────────
   Widget _buildLifestyleValuesCard() {
     return _buildSectionCard(
-      icon: Icons.location_on_outlined,
+      icon: Icons.volunteer_activism_outlined,
       iconColor: const Color(0xFF831843),
       title: 'LIFESTYLE & VALUES',
       subtitleTamil: 'வாழ்க்கை முறை & ஒழுக்கம்',
-      onEditTap: () => _showEditSectionDialog('Lifestyle & Values'),
+      onEditTap: _openEditLifestyleValues,
       child: Column(
         children: [
           _buildDataBox(
             label: 'DIETARY EXPECTATION',
-            value: _dietary,
-            subtitle: 'No eggs / non-veg inside domestic household',
+            value: _dietary.isNotEmpty ? _dietary : 'Flexible / Any Diet',
+            subtitle: _dietaryNote,
           ),
           const SizedBox(height: 8),
           Row(
@@ -894,16 +1004,16 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
               Expanded(
                 child: _buildDataBox(
                   label: 'HABITS',
-                  value: _habits,
-                  subtitle: 'Non-Smoker, Non-Drinker',
+                  value: _habits.isNotEmpty ? _habits : 'Flexible',
+                  subtitle: _habitsNote,
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: _buildDataBox(
                   label: 'FAMILY STRUCTURE',
-                  value: _familyStructure,
-                  subtitle: 'Harmonious bonding',
+                  value: _familyStructure.isNotEmpty ? _familyStructure : 'Flexible',
+                  subtitle: _familyStructureNote,
                 ),
               ),
             ],
@@ -911,7 +1021,7 @@ class _EditPartnerPreferencesScreenState extends State<EditPartnerPreferencesScr
           const SizedBox(height: 8),
           _buildDataBox(
             label: 'CULTURAL INCLINATION',
-            value: _cultural,
+            value: _cultural.isNotEmpty ? _cultural : 'Not Specified',
           ),
         ],
       ),

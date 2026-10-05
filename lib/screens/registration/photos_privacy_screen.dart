@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../core/constants/app_colors.dart';
 import 'govt_id_verification_screen.dart';
 
@@ -17,43 +20,203 @@ class PhotosPrivacyScreen extends StatefulWidget {
 }
 
 class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
-  // Primary photo state
-  String _primaryPhotoAsset = 'assets/images/bride_portrait.jpg';
+  // Primary photo state (Empty by default)
+  String? _primaryPhotoAsset;
   double _zoomScale = 1.0;
   int _rotationTurns = 0;
+  Offset _panOffset = Offset.zero;
+  bool _isFlipped = false;
+  String _activeFilter = 'Original';
 
-  // Available sample photos in assets
-  final List<Map<String, String>> _sampleOptions = [
-    {'name': 'Traditional Saree', 'asset': 'assets/images/bride_portrait.jpg'},
-    {'name': 'Family & Kalyanam', 'asset': 'assets/images/wedding_hero.jpg'},
-    {'name': 'Full Length Attire', 'asset': 'assets/images/groom_full.jpg'},
-    {'name': 'Close-Up Portrait', 'asset': 'assets/images/bride_portrait.jpg'},
-  ];
+  // Gallery photos list (Empty by default)
+  final List<Map<String, String>> _galleryPhotos = [];
 
-  // Gallery photos list (Initial slots)
-  final List<Map<String, String>> _galleryPhotos = [
-    {
-      'id': '1',
-      'asset': 'assets/images/bride_portrait.jpg',
-      'label': 'Traditional Attire',
-      'status': 'Approved',
-      'slot': 'Slot 1 of 5',
-    },
-    {
-      'id': '2',
-      'asset': 'assets/images/wedding_hero.jpg',
-      'label': 'Family / Outdoor',
-      'status': 'Approved',
-      'slot': 'Slot 2 of 5',
-    },
-    {
-      'id': '3',
-      'asset': 'assets/images/groom_full.jpg',
-      'label': 'Full Length',
-      'status': 'Approved',
-      'slot': 'Slot 3 of 5',
-    },
-  ];
+  final ImagePicker _picker = ImagePicker();
+
+  ImageProvider _getImageProvider(String path) {
+    if (path.startsWith('assets/')) {
+      return AssetImage(path);
+    } else {
+      return FileImage(File(path));
+    }
+  }
+
+  Widget _buildImageView(
+    String path, {
+    BoxFit fit = BoxFit.cover,
+    Color? color,
+    BlendMode? colorBlendMode,
+    double? width,
+    double? height,
+  }) {
+    if (path.startsWith('assets/')) {
+      return Image.asset(
+        path,
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        width: width,
+        height: height,
+        errorBuilder: (_, __, ___) => Container(
+          width: width,
+          height: height,
+          color: const Color(0xFF334155),
+          child: const Center(
+            child: Icon(Icons.person, size: 60, color: Colors.white70),
+          ),
+        ),
+      );
+    } else {
+      return Image.file(
+        File(path),
+        fit: fit,
+        color: color,
+        colorBlendMode: colorBlendMode,
+        width: width,
+        height: height,
+        errorBuilder: (_, __, ___) => Container(
+          width: width,
+          height: height,
+          color: const Color(0xFF334155),
+          child: const Center(
+            child: Icon(Icons.person, size: 60, color: Colors.white70),
+          ),
+        ),
+      );
+    }
+  }
+
+  ColorFilter? _getFilterMatrix(String filterName) {
+    switch (filterName) {
+      case 'Warm Glow':
+        return const ColorFilter.matrix([
+          1.15, 0, 0, 0, 15,
+          0, 1.05, 0, 0, 10,
+          0, 0, 0.90, 0, -5,
+          0, 0, 0, 1, 0,
+        ]);
+      case 'Vivid':
+        return const ColorFilter.matrix([
+          1.25, 0, 0, 0, -10,
+          0, 1.25, 0, 0, -10,
+          0, 0, 1.25, 0, -10,
+          0, 0, 0, 1, 0,
+        ]);
+      case 'Studio':
+        return const ColorFilter.matrix([
+          1.10, 0, 0, 0, 15,
+          0, 1.10, 0, 0, 15,
+          0, 0, 1.15, 0, 20,
+          0, 0, 0, 1, 0,
+        ]);
+      case 'Soft Classic':
+        return const ColorFilter.matrix([
+          1.05, 0, 0, 0, 8,
+          0, 1.02, 0, 0, 8,
+          0, 0, 0.95, 0, 5,
+          0, 0, 0, 1, 0,
+        ]);
+      default:
+        return null;
+    }
+  }
+
+  Widget _buildTransformedPhoto({
+    required String assetPath,
+    required double scale,
+    required int rotationTurns,
+    required Offset panOffset,
+    required bool isFlipped,
+    required String filter,
+    BoxFit fit = BoxFit.contain,
+    Color? overlayColor,
+    BlendMode? blendMode,
+    double? width,
+    double? height,
+  }) {
+    Widget img = _buildImageView(
+      assetPath,
+      fit: fit,
+      color: overlayColor,
+      colorBlendMode: blendMode,
+      width: width,
+      height: height,
+    );
+
+    final colorFilter = _getFilterMatrix(filter);
+    if (colorFilter != null) {
+      img = ColorFiltered(colorFilter: colorFilter, child: img);
+    }
+
+    if (isFlipped) {
+      img = Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.rotationY(math.pi),
+        child: img,
+      );
+    }
+
+    if (rotationTurns != 0) {
+      img = RotatedBox(quarterTurns: rotationTurns, child: img);
+    }
+
+    if (scale != 1.0 || panOffset != Offset.zero) {
+      img = Transform.translate(
+        offset: panOffset,
+        child: Transform.scale(
+          scale: scale,
+          child: img,
+        ),
+      );
+    }
+
+    return img;
+  }
+
+  Future<void> _pickImageFromSource({
+    required ImageSource source,
+    required bool isPrimary,
+    required String slotLabel,
+  }) async {
+    try {
+      if (!isPrimary && source == ImageSource.gallery) {
+        final List<XFile> pickedFiles = await _picker.pickMultiImage(imageQuality: 90);
+        if (pickedFiles.isNotEmpty) {
+          for (var file in pickedFiles) {
+            if (_galleryPhotos.length >= 5) break;
+            _handlePhotoSelection(
+              asset: file.path,
+              isPrimary: false,
+              slotLabel: slotLabel,
+            );
+          }
+          return;
+        }
+      }
+
+      final XFile? pickedFile = await _picker.pickImage(
+        source: source,
+        imageQuality: 90,
+      );
+
+      if (pickedFile != null) {
+        _handlePhotoSelection(
+          asset: pickedFile.path,
+          isPrimary: isPrimary,
+          slotLabel: slotLabel,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to access photos: $e'),
+            backgroundColor: const Color(0xFFE11D48),
+          ),
+        );
+      }
+    }
+  }
 
   // ─────────────────────────────────────────────────────────────
   // Photo Upload / Picker Sheet (Camera, Gallery, Sample)
@@ -106,10 +269,10 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 iconColor: const Color(0xFF1D4ED8),
                 title: 'Take Photo (Camera)',
                 subtitle: 'Open camera to capture new clear portrait',
-                onTap: () {
+                onTap: () async {
                   Navigator.of(ctx).pop();
-                  _handlePhotoSelection(
-                    asset: 'assets/images/bride_portrait.jpg',
+                  await _pickImageFromSource(
+                    source: ImageSource.camera,
                     isPrimary: isPrimary,
                     slotLabel: slotLabel ?? 'Camera Shot',
                   );
@@ -122,25 +285,15 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 icon: Icons.photo_library_rounded,
                 iconBg: const Color(0xFFFAF5FF),
                 iconColor: const Color(0xFF7E22CE),
-                title: 'Choose from Gallery / Photos',
+                title: 'Choose from Phone Gallery',
                 subtitle: 'Select from existing images on your phone',
-                onTap: () {
+                onTap: () async {
                   Navigator.of(ctx).pop();
-                  _showSamplePickerSheet(isPrimary: isPrimary, slotLabel: slotLabel);
-                },
-              ),
-              const SizedBox(height: 10),
-
-              // Option 3: Choose from Matrimony Samples
-              _buildPickerOption(
-                icon: Icons.auto_awesome_rounded,
-                iconBg: const Color(0xFFFFF1F2),
-                iconColor: const Color(0xFFBE123C),
-                title: 'Choose Sample Attire / Pose',
-                subtitle: 'Select recommended high quality samples',
-                onTap: () {
-                  Navigator.of(ctx).pop();
-                  _showSamplePickerSheet(isPrimary: isPrimary, slotLabel: slotLabel);
+                  await _pickImageFromSource(
+                    source: ImageSource.gallery,
+                    isPrimary: isPrimary,
+                    slotLabel: slotLabel ?? 'Gallery Photo',
+                  );
                 },
               ),
             ],
@@ -210,78 +363,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
     );
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // Sample Photo Selector Sheet
-  // ─────────────────────────────────────────────────────────────
-  void _showSamplePickerSheet({required bool isPrimary, String? slotLabel}) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) => Container(
-        padding: const EdgeInsets.all(20),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Select Photo',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xFF1E293B),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                height: 130,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _sampleOptions.length,
-                  separatorBuilder: (_, __) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) {
-                    final item = _sampleOptions[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(ctx).pop();
-                        _handlePhotoSelection(
-                          asset: item['asset']!,
-                          isPrimary: isPrimary,
-                          slotLabel: slotLabel ?? item['name']!,
-                        );
-                      },
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.asset(
-                              item['asset']!,
-                              width: 90,
-                              height: 90,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            item['name']!,
-                            style: const TextStyle(fontSize: 10.5, fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 
   void _handlePhotoSelection({
     required String asset,
@@ -291,6 +373,11 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
     if (isPrimary) {
       setState(() {
         _primaryPhotoAsset = asset;
+        _zoomScale = 1.0;
+        _rotationTurns = 0;
+        _panOffset = Offset.zero;
+        _isFlipped = false;
+        _activeFilter = 'Original';
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -330,203 +417,312 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // Adjust / Crop Modal (Golden Ratio Focus Adjuster)
+  // Adjust, Crop, Rotate & Filter Modal Photo Editor
   // ─────────────────────────────────────────────────────────────
   void _onAdjustPrimary() {
+    if (_primaryPhotoAsset == null || _primaryPhotoAsset!.isEmpty) {
+      _showPhotoSourcePicker(isPrimary: true);
+      return;
+    }
     double tempScale = _zoomScale;
+    double baseScale = _zoomScale;
     int tempRotationTurns = _rotationTurns;
+    Offset tempPanOffset = _panOffset;
+    bool tempIsFlipped = _isFlipped;
+    String tempFilter = _activeFilter;
+    int activeTabIndex = 0; // 0: Pan & Zoom, 1: Rotate & Flip
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: true,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
-        builder: (dialogCtx, setDialogState) => Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          backgroundColor: Colors.white,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+        builder: (bottomSheetCtx, setModalState) => Container(
+          height: MediaQuery.of(context).size.height * 0.82,
+          decoration: const BoxDecoration(
+            color: Color(0xFF0F172A),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          child: SafeArea(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.center_focus_strong, color: Color(0xFF881337), size: 20),
-                        SizedBox(width: 8),
-                        Text(
-                          'Adjust Golden Ratio Framing',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close, size: 20, color: Color(0xFF64748B)),
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      padding: EdgeInsets.zero,
-                      constraints: const BoxConstraints(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Align face inside the rose-gold circular frame',
-                    style: TextStyle(fontSize: 11, color: Color(0xFF64748B)),
-                  ),
-                ),
-                const SizedBox(height: 14),
-
-                // Interactive Framing Box
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(14),
+                // Drag handle
+                Center(
                   child: Container(
-                    width: 230,
-                    height: 230,
-                    color: Colors.black,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        RotatedBox(
-                          quarterTurns: tempRotationTurns,
-                          child: Transform.scale(
-                            scale: tempScale,
-                            child: Image.asset(
-                              _primaryPhotoAsset,
-                              width: 230,
-                              height: 230,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        // Dark mask outside aperture
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.35),
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Circular Spotlight focus ring
-                        Container(
-                          width: 170,
-                          height: 170,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: const Color(0xFFFDA4AF), width: 2),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.5),
-                                blurRadius: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Center crosshair
-                        const Icon(Icons.add, size: 20, color: Color(0xFFFDA4AF)),
-                      ],
+                    margin: const EdgeInsets.only(top: 10, bottom: 6),
+                    width: 44,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.white24,
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
 
-                // Zoom Controls Slider
-                Row(
-                  children: [
-                    const Icon(Icons.zoom_out, size: 18, color: Color(0xFF64748B)),
-                    Expanded(
-                      child: Slider(
-                        value: tempScale,
-                        min: 1.0,
-                        max: 2.5,
-                        activeColor: const Color(0xFF881337),
-                        inactiveColor: const Color(0xFFE2E8F0),
-                        onChanged: (val) {
-                          setDialogState(() {
-                            tempScale = val;
-                          });
-                        },
-                      ),
-                    ),
-                    const Icon(Icons.zoom_in, size: 18, color: Color(0xFF881337)),
-                  ],
-                ),
-
-                // Rotate Controls
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        setDialogState(() {
-                          tempRotationTurns = (tempRotationTurns - 1) % 4;
-                        });
-                      },
-                      icon: const Icon(Icons.rotate_left_rounded, size: 15),
-                      label: const Text('Rotate Left', style: TextStyle(fontSize: 11)),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF475569),
-                        side: const BorderSide(color: Color(0xFFCBD5E1)),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                    ),
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        setDialogState(() {
-                          tempRotationTurns = (tempRotationTurns + 1) % 4;
-                        });
-                      },
-                      icon: const Icon(Icons.rotate_right_rounded, size: 15),
-                      label: const Text('Rotate Right', style: TextStyle(fontSize: 11)),
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: const Color(0xFF475569),
-                        side: const BorderSide(color: Color(0xFFCBD5E1)),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Action Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () => Navigator.of(ctx).pop(),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          side: const BorderSide(color: Color(0xFFCBD5E1)),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                // Top Header Row
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.crop_rotate_rounded, color: Color(0xFFF43F5E), size: 20),
+                      const SizedBox(width: 8),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Adjust & Rotate Photo',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'Pan to position, zoom scale, and rotate angle',
+                              style: TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
+                            ),
+                          ],
                         ),
-                        child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w600)),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF881337),
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
+                      TextButton.icon(
                         onPressed: () {
-                          setState(() {
-                            _zoomScale = tempScale;
-                            _rotationTurns = tempRotationTurns;
+                          setModalState(() {
+                            tempScale = 1.0;
+                            baseScale = 1.0;
+                            tempRotationTurns = 0;
+                            tempPanOffset = Offset.zero;
+                            tempIsFlipped = false;
+                            tempFilter = 'Original';
                           });
-                          Navigator.of(ctx).pop();
                         },
-                        child: const Text('Apply Focus', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        icon: const Icon(Icons.replay_rounded, size: 14, color: Color(0xFFCBD5E1)),
+                        label: const Text('Reset', style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 12)),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.of(ctx).pop(),
+                        icon: const Icon(Icons.close_rounded, color: Colors.white70, size: 20),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Interactive Photo Adjust Canvas Area (Exact same frame size as Primary Biodata Portrait)
+                Expanded(
+                  child: Center(
+                    child: Container(
+                      width: double.infinity,
+                      height: 310,
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF020617),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: const Color(0xFFE2E8F0).withOpacity(0.35),
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: GestureDetector(
+                          onScaleStart: (details) {
+                            baseScale = tempScale;
+                          },
+                          onScaleUpdate: (details) {
+                            setModalState(() {
+                              // 1. Direct pinch-to-zoom on the photo with two fingers
+                              if (details.pointerCount > 1 || details.scale != 1.0) {
+                                tempScale = (baseScale * details.scale).clamp(0.8, 3.5);
+                              }
+                              // 2. Drag / pan the photo smoothly
+                              tempPanOffset += details.focalPointDelta;
+                            });
+                          },
+                          onDoubleTap: () {
+                            setModalState(() {
+                              if (tempScale > 1.2) {
+                                tempScale = 1.0;
+                                baseScale = 1.0;
+                                tempPanOffset = Offset.zero;
+                              } else {
+                                tempScale = 2.0;
+                                baseScale = 2.0;
+                              }
+                            });
+                          },
+                          child: Container(
+                            color: Colors.transparent,
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                // 1. Crisp Transformed Photo Base
+                                Positioned.fill(
+                                  child: _buildTransformedPhoto(
+                                    assetPath: _primaryPhotoAsset!,
+                                    scale: tempScale,
+                                    rotationTurns: tempRotationTurns,
+                                    panOffset: tempPanOffset,
+                                    isFlipped: tempIsFlipped,
+                                    filter: tempFilter,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+
+                                // Bottom gesture hint
+                                Positioned(
+                                  bottom: 12,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.68),
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(color: Colors.white12),
+                                    ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.pinch_rounded, size: 13, color: Color(0xFFCBD5E1)),
+                                        SizedBox(width: 6),
+                                        Text(
+                                          'Pinch to zoom • Drag to pan photo',
+                                          style: TextStyle(
+                                            fontSize: 10.5,
+                                            color: Color(0xFFCBD5E1),
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ],
+                  ),
+                ),
+
+                // Tool Navigation Tabs (Pan & Zoom, Rotate & Flip)
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E293B),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      _buildEditorTab(
+                        index: 0,
+                        currentIndex: activeTabIndex,
+                        icon: Icons.zoom_in_rounded,
+                        label: 'Pan & Zoom',
+                        onTap: () => setModalState(() => activeTabIndex = 0),
+                      ),
+                      _buildEditorTab(
+                        index: 1,
+                        currentIndex: activeTabIndex,
+                        icon: Icons.rotate_90_degrees_cw_rounded,
+                        label: 'Rotate & Flip',
+                        onTap: () => setModalState(() => activeTabIndex = 1),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Tool Controls Content Box
+                Container(
+                  height: 68,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  alignment: Alignment.center,
+                  child: activeTabIndex == 0
+                      ? _buildCropZoomControls(
+                          tempScale: tempScale,
+                          onScaleChanged: (s) => setModalState(() => tempScale = s),
+                          onCenterTap: () => setModalState(() {
+                            tempPanOffset = Offset.zero;
+                            tempScale = 1.0;
+                          }),
+                        )
+                      : _buildRotateFlipControls(
+                          tempRotationTurns: tempRotationTurns,
+                          tempIsFlipped: tempIsFlipped,
+                          onRotateLeft: () => setModalState(() => tempRotationTurns = (tempRotationTurns - 1) % 4),
+                          onRotateRight: () => setModalState(() => tempRotationTurns = (tempRotationTurns + 1) % 4),
+                          onFlipHorizontal: () => setModalState(() => tempIsFlipped = !tempIsFlipped),
+                          onResetRotation: () => setModalState(() {
+                            tempRotationTurns = 0;
+                            tempIsFlipped = false;
+                          }),
+                        ),
+                ),
+
+                // Bottom Action Buttons (Cancel / Apply Changes)
+                Container(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF0F172A),
+                    border: Border(top: BorderSide(color: Color(0xFF1E293B))),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.of(ctx).pop(),
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFF334155)),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: const Text('Cancel', style: TextStyle(color: Color(0xFF94A3B8), fontWeight: FontWeight.w700)),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        flex: 2,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _zoomScale = tempScale;
+                              _rotationTurns = tempRotationTurns;
+                              _panOffset = tempPanOffset;
+                              _isFlipped = tempIsFlipped;
+                              _activeFilter = tempFilter;
+                            });
+                            Navigator.of(ctx).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Photo adjusted & updated!'),
+                                backgroundColor: Color(0xFF10B981),
+                                duration: Duration(milliseconds: 1400),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.check_rounded, color: Colors.white, size: 18),
+                          label: const Text(
+                            'Apply Changes',
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFBE123C),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -536,64 +732,150 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
     );
   }
 
-  // ─────────────────────────────────────────────────────────────
-  // Fullscreen Watermarked Preview Modal
-  // ─────────────────────────────────────────────────────────────
-  void _onPreviewPrimary() {
-    showDialog(
-      context: context,
-      builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(16),
-        child: Stack(
-          alignment: Alignment.center,
+  Widget _buildEditorTab({
+    required int index,
+    required int currentIndex,
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    final isSelected = index == currentIndex;
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            color: isSelected ? const Color(0xFFBE123C) : Colors.transparent,
+            borderRadius: BorderRadius.circular(9),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 14, color: isSelected ? Colors.white : const Color(0xFF94A3B8)),
+              const SizedBox(width: 5),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
+                  color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCropZoomControls({
+    required double tempScale,
+    required ValueChanged<double> onScaleChanged,
+    required VoidCallback onCenterTap,
+  }) {
+    return Row(
+      children: [
+        const Icon(Icons.zoom_out, size: 18, color: Color(0xFF94A3B8)),
+        Expanded(
+          child: Slider(
+            value: tempScale.clamp(0.8, 3.5),
+            min: 0.8,
+            max: 3.5,
+            activeColor: const Color(0xFFBE123C),
+            inactiveColor: const Color(0xFF334155),
+            onChanged: onScaleChanged,
+          ),
+        ),
+        const Icon(Icons.zoom_in, size: 18, color: Color(0xFFBE123C)),
+        const SizedBox(width: 10),
+        InkWell(
+          onTap: onCenterTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E293B),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFF334155)),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.filter_center_focus_rounded, size: 13, color: Colors.white70),
+                SizedBox(width: 4),
+                Text('Center', style: TextStyle(fontSize: 11.5, color: Colors.white70, fontWeight: FontWeight.w600)),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRotateFlipControls({
+    required int tempRotationTurns,
+    required bool tempIsFlipped,
+    required VoidCallback onRotateLeft,
+    required VoidCallback onRotateRight,
+    required VoidCallback onFlipHorizontal,
+    required VoidCallback onResetRotation,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        _buildEditorActionButton(
+          icon: Icons.rotate_left_rounded,
+          label: 'Rotate -90°',
+          onTap: onRotateLeft,
+        ),
+        _buildEditorActionButton(
+          icon: Icons.rotate_right_rounded,
+          label: 'Rotate +90°',
+          onTap: onRotateRight,
+        ),
+        _buildEditorActionButton(
+          icon: Icons.flip_rounded,
+          label: tempIsFlipped ? 'Flipped' : 'Flip Horiz.',
+          isActive: tempIsFlipped,
+          onTap: onFlipHorizontal,
+        ),
+        _buildEditorActionButton(
+          icon: Icons.restart_alt_rounded,
+          label: 'Reset',
+          onTap: onResetRotation,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEditorActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    bool isActive = false,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFFBE123C).withOpacity(0.2) : const Color(0xFF1E293B),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: isActive ? const Color(0xFFBE123C) : const Color(0xFF334155)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                _primaryPhotoAsset,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 300,
-                  height: 400,
-                  color: const Color(0xFF701A33),
-                  child: const Center(
-                    child: Icon(Icons.person, size: 80, color: Colors.white70),
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: IconButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                icon: const CircleAvatar(
-                  backgroundColor: Colors.black54,
-                  child: Icon(Icons.close, color: Colors.white, size: 18),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFFFCC00).withOpacity(0.5)),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.lock_outline, color: Color(0xFFFFCC00), size: 14),
-                    SizedBox(width: 6),
-                    Text(
-                      'TAMIL ALLIANCE • CONFIDENTIAL WATERMARK',
-                      style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
+            Icon(icon, size: 20, color: isActive ? const Color(0xFFFDA4AF) : Colors.white),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10.5,
+                color: isActive ? const Color(0xFFFDA4AF) : const Color(0xFFCBD5E1),
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -602,64 +884,96 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
     );
   }
 
+
+
+  // ─────────────────────────────────────────────────────────────
+  // Fullscreen Watermarked Preview Modal & Photo Deletion
+  // ─────────────────────────────────────────────────────────────
+  void _onDeletePrimaryPhoto() {
+    setState(() {
+      _primaryPhotoAsset = null;
+      _zoomScale = 1.0;
+      _rotationTurns = 0;
+      _panOffset = Offset.zero;
+      _isFlipped = false;
+      _activeFilter = 'Original';
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Primary photo deleted successfully'),
+        backgroundColor: Color(0xFFE11D48),
+        duration: Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
+  void _onPreviewPrimary() {
+    if (_primaryPhotoAsset == null || _primaryPhotoAsset!.isEmpty) {
+      _showPhotoSourcePicker(isPrimary: true);
+      return;
+    }
+    _showPhotoPreviewModal(_primaryPhotoAsset!, 'Primary Biodata Portrait');
+  }
+
   void _showPhotoPreviewModal(String asset, String title) {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.all(16),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.asset(
-                asset,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 300,
-                  height: 400,
-                  color: const Color(0xFF701A33),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.82,
+            maxWidth: MediaQuery.of(context).size.width * 0.95,
+          ),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0F172A),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
+            ],
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // 1. Full uncropped uploaded image with interactive pinch & zoom
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: InteractiveViewer(
+                  minScale: 1.0,
+                  maxScale: 4.0,
                   child: Center(
-                    child: Text(title, style: const TextStyle(color: Colors.white)),
+                    child: _buildImageView(
+                      asset,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 10,
-              right: 10,
-              child: IconButton(
-                onPressed: () => Navigator.of(ctx).pop(),
-                icon: const CircleAvatar(
-                  backgroundColor: Colors.black54,
-                  child: Icon(Icons.close, color: Colors.white, size: 18),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 16,
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black87,
+
+              // 2. Close button top right
+              Positioned(
+                top: 12,
+                right: 12,
+                child: InkWell(
+                  onTap: () => Navigator.of(ctx).pop(),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFFFCC00).withOpacity(0.5)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.lock_outline, color: Color(0xFFFFCC00), size: 14),
-                    const SizedBox(width: 6),
-                    Text(
-                      '$title • TAMIL ALLIANCE',
-                      style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                  child: Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: const BoxDecoration(
+                      color: Colors.black54,
+                      shape: BoxShape.circle,
                     ),
-                  ],
+                    child: const Icon(Icons.close_rounded, color: Colors.white, size: 20),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -685,6 +999,16 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   void _onContinueToGovtId() {
+    if (_primaryPhotoAsset == null || _primaryPhotoAsset!.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please upload your Primary Biodata Portrait to proceed'),
+          backgroundColor: Color(0xFFE11D48),
+          duration: Duration(milliseconds: 1500),
+        ),
+      );
+      return;
+    }
     print('====================================================');
     print('📸 [USER INPUT: STEP 4 - PHOTOS & PRIVACY]');
     print('   Primary Photo   : $_primaryPhotoAsset');
@@ -790,7 +1114,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 ),
                 SizedBox(height: 2),
                 Text(
-                  'STEP 4 OF 6',
+                  'STEP 4 OF 5',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
                     fontSize: 10,
@@ -955,220 +1279,196 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
             ),
           ),
 
-          // Portrait Image with Golden Ratio Focus Frame & Watermark
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            child: GestureDetector(
-              onTap: () => _showPhotoSourcePicker(isPrimary: true),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: SizedBox(
+          // Portrait Image with Golden Ratio Focus Frame & Watermark OR Empty Upload Prompt
+          if (_primaryPhotoAsset != null && _primaryPhotoAsset!.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: GestureDetector(
+                onTap: () => _showPhotoSourcePicker(isPrimary: true),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    height: 310,
+                    width: double.infinity,
+                    color: const Color(0xFF0F172A),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // 1. Crisp Transformed Base Real Photo
+                        Positioned.fill(
+                          child: _buildTransformedPhoto(
+                            assetPath: _primaryPhotoAsset!,
+                            scale: _zoomScale,
+                            rotationTurns: _rotationTurns,
+                            panOffset: _panOffset,
+                            isFlipped: _isFlipped,
+                            filter: _activeFilter,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Metadata strip under photo
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.visibility_outlined, size: 14, color: Color(0xFF92400E)),
+                      SizedBox(width: 5),
+                      Text(
+                        'High Resolution (3000 x 3000 px)',
+                        style: TextStyle(
+                          fontSize: 10.5,
+                          color: Color(0xFF64748B),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: const Text(
+                      'Ready for Kalyanam Bio',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0284C7),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Action Buttons: Delete, Adjust, Preview
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 6, 14, 14),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _buildActionButton(
+                      icon: Icons.delete_outline_rounded,
+                      label: 'Delete',
+                      iconColor: const Color(0xFFDC2626),
+                      textColor: const Color(0xFFDC2626),
+                      bgColor: const Color(0xFFFEF2F2),
+                      borderColor: const Color(0xFFFECACA),
+                      onTap: _onDeletePrimaryPhoto,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildActionButton(
+                      icon: Icons.crop_rotate_rounded,
+                      label: 'Adjust',
+                      onTap: _onAdjustPrimary,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _buildActionButton(
+                      icon: Icons.fullscreen_rounded,
+                      label: 'Preview',
+                      onTap: _onPreviewPrimary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ] else ...[
+            // Empty State Upload Prompt for Primary Portrait
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 4, 14, 16),
+              child: GestureDetector(
+                onTap: () => _showPhotoSourcePicker(isPrimary: true),
+                child: Container(
                   height: 310,
                   width: double.infinity,
-                  child: Stack(
-                    alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: const Color(0xFFCBD5E1),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // 1. Darkened Base Image (Exterior of spotlight)
-                      Positioned.fill(
-                        child: Transform.scale(
-                          scale: _zoomScale,
-                          child: RotatedBox(
-                            quarterTurns: _rotationTurns,
-                            child: Image.asset(
-                              _primaryPhotoAsset,
-                              fit: BoxFit.cover,
-                              color: Colors.black.withOpacity(0.42),
-                              colorBlendMode: BlendMode.darken,
-                              errorBuilder: (_, __, ___) => Container(
-                                color: const Color(0xFF334155),
-                                child: const Center(
-                                  child: Icon(Icons.person, size: 70, color: Colors.white70),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // 2. Bright Central Circular Aperture (Golden Ratio Spotlight)
-                      ClipOval(
-                        child: SizedBox(
-                          width: 240,
-                          height: 240,
-                          child: Transform.scale(
-                            scale: _zoomScale,
-                            child: RotatedBox(
-                              quarterTurns: _rotationTurns,
-                              child: Image.asset(
-                                _primaryPhotoAsset,
-                                fit: BoxFit.cover,
-                                errorBuilder: (_, __, ___) => Container(
-                                  color: const Color(0xFF701A33),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // 3. Golden Ratio Concentric Guidelines & Rosy Ring
                       Container(
-                        width: 240,
-                        height: 240,
-                        decoration: BoxDecoration(
+                        width: 64,
+                        height: 64,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFFCE7F3),
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFFFDA4AF).withOpacity(0.9),
-                            width: 1.8,
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.add_a_photo_rounded,
+                            color: Color(0xFF701A33),
+                            size: 30,
                           ),
-                          boxShadow: [
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      const Text(
+                        'Upload Primary Biodata Portrait',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF1E293B),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Text(
+                          'Clear front-facing portrait in traditional or formal attire with bright lighting',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Color(0xFF64748B),
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF701A33),
+                          borderRadius: BorderRadius.circular(22),
+                          boxShadow: const [
                             BoxShadow(
-                              color: const Color(0xFF881337).withOpacity(0.25),
-                              blurRadius: 12,
-                              spreadRadius: 2,
+                              color: Color(0x33701A33),
+                              blurRadius: 8,
+                              offset: Offset(0, 3),
                             ),
                           ],
                         ),
-                      ),
-
-                      // Outer concentric decorative golden ring
-                      Container(
-                        width: 275,
-                        height: 275,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFFFDE68A).withOpacity(0.22),
-                            width: 1.0,
-                          ),
-                        ),
-                      ),
-
-                      // Central subtle focus crosshair (+)
-                      IgnorePointer(
-                        child: Icon(
-                          Icons.add,
-                          size: 20,
-                          color: const Color(0xFFFDA4AF).withOpacity(0.7),
-                        ),
-                      ),
-
-                      // 4. Cryptographic Watermark Overlay (Repeated diagonal strings)
-                      Positioned.fill(
-                        child: IgnorePointer(
-                          child: Transform.rotate(
-                            angle: -0.42,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'TA-98402-K • TAMIL ALLIANCE • TA-98402-K',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 2.2,
-                                    color: Colors.white.withOpacity(0.32),
-                                  ),
-                                ),
-                                Text(
-                                  'TAMIL ALLIANCE • DO NOT DISTRIBUTE • CONFIDENTIAL',
-                                  style: TextStyle(
-                                    fontSize: 10.5,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 2.5,
-                                    color: Colors.white.withOpacity(0.35),
-                                  ),
-                                ),
-                                Text(
-                                  'TA-98402-K • CONFIDENTIAL • TAMIL ALLIANCE',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 2.2,
-                                    color: Colors.white.withOpacity(0.32),
-                                  ),
-                                ),
-                                Text(
-                                  'TAMIL ALLIANCE • TA-98402-K • PROTECTED',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 2.0,
-                                    color: Colors.white.withOpacity(0.28),
-                                  ),
-                                ),
-                              ],
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.upload_file_rounded, size: 16, color: Colors.white),
+                            SizedBox(width: 7),
+                            Text(
+                              'Choose Photo',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-
-                      // 5. Top Badge: Golden Ratio Focus
-                      Positioned(
-                        top: 26,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4.5),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF881337),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.35),
-                                blurRadius: 6,
-                              ),
-                            ],
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.center_focus_strong, size: 11, color: Color(0xFFFFCC00)),
-                              SizedBox(width: 5),
-                              Text(
-                                'GOLDEN RATIO FOCUS',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9.5,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      // 6. Bottom Right Badge: Live Watermark
-                      Positioned(
-                        bottom: 14,
-                        right: 14,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF881337),
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.4),
-                                blurRadius: 6,
-                              ),
-                            ],
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(Icons.branding_watermark_rounded, size: 12, color: Colors.white),
-                              SizedBox(width: 5),
-                              Text(
-                                'LIVE WATERMARK',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9.5,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: 0.4,
-                                ),
-                              ),
-                            ],
-                          ),
+                          ],
                         ),
                       ),
                     ],
@@ -1176,74 +1476,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 ),
               ),
             ),
-          ),
-
-          // Metadata strip under photo
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.visibility_outlined, size: 14, color: Color(0xFF92400E)),
-                    SizedBox(width: 5),
-                    Text(
-                      'High Resolution (3000 x 3000 px)',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        color: Color(0xFF64748B),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: const Text(
-                    'Ready for Kalyanam Bio',
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF0284C7),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Action Buttons: Replace, Adjust, Preview
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 6, 14, 14),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildActionButton(
-                    icon: Icons.photo_camera_outlined,
-                    label: 'Replace',
-                    onTap: () => _showPhotoSourcePicker(isPrimary: true),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _buildActionButton(
-                    icon: Icons.crop_rotate_rounded,
-                    label: 'Adjust',
-                    onTap: _onAdjustPrimary,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: _buildActionButton(
-                    icon: Icons.fullscreen_rounded,
-                    label: 'Preview',
-                    onTap: _onPreviewPrimary,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
         ],
       ),
     );
@@ -1253,9 +1486,18 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
     required IconData icon,
     required String label,
     required VoidCallback onTap,
+    Color? iconColor,
+    Color? textColor,
+    Color? bgColor,
+    Color? borderColor,
   }) {
+    final effectiveIconColor = iconColor ?? const Color(0xFF1D4ED8);
+    final effectiveTextColor = textColor ?? const Color(0xFF1D4ED8);
+    final effectiveBgColor = bgColor ?? const Color(0xFFEFF6FF);
+    final effectiveBorderColor = borderColor ?? const Color(0xFFDBEAFE);
+
     return Material(
-      color: const Color(0xFFEFF6FF),
+      color: effectiveBgColor,
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
         onTap: onTap,
@@ -1264,19 +1506,19 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: const Color(0xFFDBEAFE)),
+            border: Border.all(color: effectiveBorderColor),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 14, color: const Color(0xFF1D4ED8)),
+              Icon(icon, size: 14, color: effectiveIconColor),
               const SizedBox(width: 5),
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 11.5,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1D4ED8),
+                  color: effectiveTextColor,
                 ),
               ),
             ],
@@ -1290,16 +1532,33 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   // 5. Additional Gallery Photos Section
   // ─────────────────────────────────────────────────────────────
   Widget _buildAdditionalGallerySection() {
+    final gallerySlotPresets = [
+      {
+        'title': 'Selfie Pose',
+        'subtitle': 'Casual / Hobby',
+        'icon': Icons.camera_alt_outlined,
+        'iconBg': const Color(0xFFFCE7F3),
+        'iconColor': const Color(0xFFDB2777),
+      },
+      {
+        'title': 'Family Gathering',
+        'subtitle': 'Optional slot',
+        'icon': Icons.groups_outlined,
+        'iconBg': const Color(0xFFEDE9FE),
+        'iconColor': const Color(0xFF7C3AED),
+      },
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Additional Gallery Photos',
                   style: TextStyle(
                     fontSize: 15,
@@ -1307,58 +1566,58 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                     color: Color(0xFF1E293B),
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
-                  'Upload 2 to 5 photos for parent & family review',
-                  style: TextStyle(
+                  'Upload up to 5 photos for parent & family review',
+                  style: const TextStyle(
                     fontSize: 11,
                     color: Color(0xFF64748B),
                   ),
                 ),
               ],
             ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  // Interactive reverse / reorder demonstration
-                  _galleryPhotos.insert(0, _galleryPhotos.removeLast());
-                  for (int i = 0; i < _galleryPhotos.length; i++) {
-                    _galleryPhotos[i]['slot'] = 'Slot ${i + 1} of 5';
-                  }
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Gallery photos reordered!'),
-                    backgroundColor: Color(0xFF701A33),
-                    duration: Duration(milliseconds: 1000),
-                  ),
-                );
-              },
-              borderRadius: BorderRadius.circular(12),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEDE9FE),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFDDD6FE)),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.drag_indicator_rounded, size: 12, color: Color(0xFF6D28D9)),
-                    SizedBox(width: 3),
-                    Text(
-                      'DRAG TO REORDER',
-                      style: TextStyle(
-                        fontSize: 8.5,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF6D28D9),
-                      ),
+            if (_galleryPhotos.length > 1)
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    _galleryPhotos.insert(0, _galleryPhotos.removeLast());
+                    for (int i = 0; i < _galleryPhotos.length; i++) {
+                      _galleryPhotos[i]['slot'] = 'Slot ${i + 1} of 5';
+                    }
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Gallery photos reordered!'),
+                      backgroundColor: Color(0xFF701A33),
+                      duration: Duration(milliseconds: 1000),
                     ),
-                  ],
+                  );
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEDE9FE),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFDDD6FE)),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.drag_indicator_rounded, size: 12, color: Color(0xFF6D28D9)),
+                      SizedBox(width: 3),
+                      Text(
+                        'DRAG TO REORDER',
+                        style: TextStyle(
+                          fontSize: 8.5,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF6D28D9),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -1375,28 +1634,19 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 for (int i = 0; i < _galleryPhotos.length; i++)
                   _buildUploadedPhotoTile(i, itemWidth),
 
-                // Render Slot placeholder (Selfie Pose)
-                if (_galleryPhotos.length < 4)
+                // Render Slot placeholders for remaining slots
+                for (int i = _galleryPhotos.length; i < gallerySlotPresets.length; i++)
                   _buildEmptySlotTile(
                     width: itemWidth,
-                    icon: Icons.camera_alt_outlined,
-                    iconBg: const Color(0xFFFCE7F3),
-                    iconColor: const Color(0xFFDB2777),
-                    title: 'Selfie Pose',
-                    subtitle: 'Casual / Hobby',
-                    onTap: () => _showPhotoSourcePicker(isPrimary: false, slotLabel: 'Selfie Pose'),
-                  ),
-
-                // Render Slot placeholder (Family Gathering)
-                if (_galleryPhotos.length < 5)
-                  _buildEmptySlotTile(
-                    width: itemWidth,
-                    icon: Icons.groups_outlined,
-                    iconBg: const Color(0xFFE0F2FE),
-                    iconColor: const Color(0xFF0284C7),
-                    title: 'Family Gathering',
-                    subtitle: 'Optional slot',
-                    onTap: () => _showPhotoSourcePicker(isPrimary: false, slotLabel: 'Family Gathering'),
+                    icon: gallerySlotPresets[i]['icon'] as IconData,
+                    iconBg: gallerySlotPresets[i]['iconBg'] as Color,
+                    iconColor: gallerySlotPresets[i]['iconColor'] as Color,
+                    title: gallerySlotPresets[i]['title'] as String,
+                    subtitle: gallerySlotPresets[i]['subtitle'] as String,
+                    onTap: () => _showPhotoSourcePicker(
+                      isPrimary: false,
+                      slotLabel: gallerySlotPresets[i]['title'] as String,
+                    ),
                   ),
 
                 // Max Photos Notice Tile
@@ -1460,7 +1710,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                           title: const Text('Replace Photo'),
                           onTap: () {
                             Navigator.of(ctx).pop();
-                            _showSamplePickerSheet(isPrimary: false, slotLabel: item['label']);
+                            _showPhotoSourcePicker(isPrimary: false, slotLabel: item['label']);
                           },
                         ),
                         ListTile(
@@ -1482,7 +1732,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 image: DecorationImage(
-                  image: AssetImage(item['asset']!),
+                  image: _getImageProvider(item['asset']!),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -1570,7 +1820,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                item['slot']!,
+                'Slot ${index + 1} of 5',
                 style: const TextStyle(
                   fontSize: 9,
                   color: Color(0xFF64748B),
@@ -1662,30 +1912,79 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   Widget _buildInfoSlotTile(double width) {
-    return Container(
+    final count = _galleryPhotos.length;
+    final isMax = count >= 5;
+    return SizedBox(
       width: width,
-      height: 125,
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-      decoration: BoxDecoration(
+      child: Material(
         color: const Color(0xFFF8FAFC),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE2E8F0)),
-      ),
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.check_circle_outline, size: 22, color: Color(0xFF94A3B8)),
-          SizedBox(height: 6),
-          Text(
-            'Max 5 Photos for\nfocused matches',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 9.5,
-              color: Color(0xFF64748B),
-              height: 1.3,
+        child: InkWell(
+          onTap: () {
+            if (isMax) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Maximum 5 gallery photos already reached'),
+                  backgroundColor: Color(0xFFE11D48),
+                ),
+              );
+            } else {
+              _showPhotoSourcePicker(
+                isPrimary: false,
+                slotLabel: 'Gallery Photo ${count + 1}',
+              );
+            }
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            height: 125,
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isMax ? const Color(0xFFE2E8F0) : const Color(0xFFCBD5E1),
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  isMax ? Icons.check_circle_outline : Icons.add_photo_alternate_outlined,
+                  size: 22,
+                  color: isMax ? const Color(0xFF94A3B8) : const Color(0xFF701A33),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Max 5 Photos for\nfocused matches',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 9.5,
+                    color: Color(0xFF64748B),
+                    height: 1.3,
+                  ),
+                ),
+                if (!isMax) ...[
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFCE7F3),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      '+ Add Photo ($count/5)',
+                      style: const TextStyle(
+                        fontSize: 8.5,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFBE123C),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -1721,7 +2020,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                   ),
                   TextSpan(
                     text:
-                        'Profiles with at least 1 traditional attire photo and 1 family gathering photo receive ',
+                        'Profiles with family and casual photos receive ',
                   ),
                   TextSpan(
                     text: 'parent endorsements 3x quicker.',
@@ -1777,18 +2076,18 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   color: const Color(0xFF78350F),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 child: const Text(
-                  '12 HOURS SLA',
+                  '24 HOURS SLA',
                   style: TextStyle(
-                    fontSize: 8.5,
+                    fontSize: 11,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,
-                    letterSpacing: 0.4,
+                    letterSpacing: 0.5,
                   ),
                 ),
               ),

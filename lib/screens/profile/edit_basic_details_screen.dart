@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/widgets/custom_date_picker_dialog.dart';
 
 class EditBasicDetailsScreen extends StatefulWidget {
   final String? initialFullName;
@@ -185,23 +186,11 @@ class _EditBasicDetailsScreenState extends State<EditBasicDetailsScreen> {
   }
 
   Future<void> _pickDateOfBirth() async {
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
       initialDate: _selectedDob,
       firstDate: DateTime(1960),
       lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: primaryMaroon,
-              onPrimary: Colors.white,
-              onSurface: darkSlate,
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
       setState(() {

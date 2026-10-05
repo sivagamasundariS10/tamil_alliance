@@ -38,12 +38,12 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
   String _currencyCode = 'INR';
   String _currencySymbol = '₹';
 
-  // 4. Citizenship
-  String? _citizenship;
-  final TextEditingController _otherCitizenshipController = TextEditingController();
+  // 4. Citizenship & Residency
+  String? _citizenshipCountry = 'India';
+  String? _residencyStatus;
 
   // 5. Lifestyle & Habits
-  String? _dietaryPreference;
+  final Set<String> _selectedDietaryPreferences = {};
   String? _smokingHabit;
   String? _drinkingHabit;
 
@@ -54,6 +54,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   // 7. Bio / About Me
   final TextEditingController _bioController = TextEditingController();
+  bool _hasUserEditedBio = false;
 
   // Track previous visibility states to auto-scroll on new unlock
   bool _prevCareerVisible = false;
@@ -78,30 +79,30 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   bool get _isCitizenshipComplete =>
       _isIncomeComplete &&
-      (_citizenship == 'India' ||
-          (_citizenship == 'Other' &&
-              _otherCitizenshipController.text.trim().isNotEmpty));
+      _citizenshipCountry != null &&
+      _citizenshipCountry!.trim().isNotEmpty &&
+      _residencyStatus != null &&
+      _residencyStatus!.trim().isNotEmpty;
 
   bool get _isLifestyleComplete =>
       _isCitizenshipComplete &&
-      _dietaryPreference != null &&
+      _selectedDietaryPreferences.isNotEmpty &&
       _smokingHabit != null &&
       _drinkingHabit != null;
 
   bool get _isInterestsComplete =>
       _isLifestyleComplete &&
-      _selectedHobbies.isNotEmpty &&
       _culturalOutlook != null;
 
   final List<String> _educationLevels = [
+    "Doctorate / Ph.D", 
     "Master's / Post Graduate",
     "Bachelor's / Graduate",
-    "Doctorate / Ph.D",
-    "Diploma / Polytechnic",
-    "Higher Secondary (12th)",
-    "Professional Certification (CA / CS / CFA)",
     "Medical / Dental (MBBS / MD / BDS)",
     "Law (LLB / LLM)",
+    "Professional Certification (CA / CS / CFA)",
+    "Diploma / Polytechnic",
+    "Higher Secondary (12th)",
   ];
 
   final List<String> _employmentSectors = [
@@ -126,12 +127,14 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       _onFieldChanged();
     });
     _incomeController.addListener(_onFieldChanged);
-    _otherCitizenshipController.addListener(_onFieldChanged);
     _bioController.addListener(_onFieldChanged);
   }
 
   void _onFieldChanged() {
     if (!mounted) return;
+    if (!_hasUserEditedBio && _isInterestsComplete && _bioController.text.trim().isEmpty) {
+      _bioController.text = _generateDefaultBio();
+    }
     _checkAndTriggerAutoScroll();
     setState(() {});
   }
@@ -177,6 +180,9 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     if (_isInterestsComplete && !_prevBioVisible) {
       _prevBioVisible = true;
       shouldScroll = true;
+      if (!_hasUserEditedBio && _bioController.text.trim().isEmpty) {
+        _bioController.text = _generateDefaultBio();
+      }
     } else if (!_isInterestsComplete) {
       _prevBioVisible = false;
     }
@@ -207,7 +213,6 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     _companyController.dispose();
     _workLocationController.dispose();
     _incomeController.dispose();
-    _otherCitizenshipController.dispose();
     _customHobbyController.dispose();
     _bioController.dispose();
     super.dispose();
@@ -215,21 +220,60 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   void _updateCurrencyFromLocation(String location) {
     final lower = location.toLowerCase();
-    if (lower.contains('usa') || lower.contains('united states') || lower.contains('us')) {
+    if (lower.contains('usa') || lower.contains('united states') || lower.contains('us') || lower.contains('america')) {
       _currencyCode = 'USD';
       _currencySymbol = r'$';
-    } else if (lower.contains('uk') || lower.contains('united kingdom') || lower.contains('london')) {
+    } else if (lower.contains('uk') || lower.contains('united kingdom') || lower.contains('london') || lower.contains('england')) {
       _currencyCode = 'GBP';
       _currencySymbol = '£';
     } else if (lower.contains('singapore') || lower.contains('sg')) {
       _currencyCode = 'SGD';
       _currencySymbol = r'S$';
-    } else if (lower.contains('uae') || lower.contains('dubai') || lower.contains('emirates')) {
+    } else if (lower.contains('uae') || lower.contains('dubai') || lower.contains('emirates') || lower.contains('abu dhabi')) {
       _currencyCode = 'AED';
       _currencySymbol = 'AED';
-    } else if (lower.contains('europe') || lower.contains('germany') || lower.contains('france')) {
+    } else if (lower.contains('europe') || lower.contains('germany') || lower.contains('france') || lower.contains('italy') || lower.contains('netherlands') || lower.contains('spain') || lower.contains('ireland')) {
       _currencyCode = 'EUR';
       _currencySymbol = '€';
+    } else if (lower.contains('canada') || lower.contains('toronto') || lower.contains('vancouver')) {
+      _currencyCode = 'CAD';
+      _currencySymbol = r'C$';
+    } else if (lower.contains('australia') || lower.contains('sydney') || lower.contains('melbourne')) {
+      _currencyCode = 'AUD';
+      _currencySymbol = r'A$';
+    } else if (lower.contains('malaysia') || lower.contains('kuala lumpur')) {
+      _currencyCode = 'MYR';
+      _currencySymbol = 'RM';
+    } else if (lower.contains('saudi') || lower.contains('riyadh') || lower.contains('ksa') || lower.contains('jeddah')) {
+      _currencyCode = 'SAR';
+      _currencySymbol = 'SAR';
+    } else if (lower.contains('qatar') || lower.contains('doha')) {
+      _currencyCode = 'QAR';
+      _currencySymbol = 'QAR';
+    } else if (lower.contains('kuwait')) {
+      _currencyCode = 'KWD';
+      _currencySymbol = 'KWD';
+    } else if (lower.contains('oman') || lower.contains('muscat')) {
+      _currencyCode = 'OMR';
+      _currencySymbol = 'OMR';
+    } else if (lower.contains('bahrain') || lower.contains('manama')) {
+      _currencyCode = 'BHD';
+      _currencySymbol = 'BHD';
+    } else if (lower.contains('switzerland') || lower.contains('swiss') || lower.contains('zurich')) {
+      _currencyCode = 'CHF';
+      _currencySymbol = 'CHF';
+    } else if (lower.contains('japan') || lower.contains('tokyo')) {
+      _currencyCode = 'JPY';
+      _currencySymbol = '¥';
+    } else if (lower.contains('new zealand') || lower.contains('nz') || lower.contains('auckland')) {
+      _currencyCode = 'NZD';
+      _currencySymbol = r'NZ$';
+    } else if (lower.contains('sri lanka') || lower.contains('colombo') || lower.contains('jaffna')) {
+      _currencyCode = 'LKR';
+      _currencySymbol = 'Rs';
+    } else if (lower.contains('south africa') || lower.contains('johannesburg')) {
+      _currencyCode = 'ZAR';
+      _currencySymbol = 'R';
     } else {
       _currencyCode = 'INR';
       _currencySymbol = '₹';
@@ -240,104 +284,217 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     final currencies = [
       {'code': 'INR', 'symbol': '₹', 'name': 'Indian Rupee (India)'},
       {'code': 'USD', 'symbol': r'$', 'name': 'US Dollar (USA)'},
-      {'code': 'GBP', 'symbol': '£', 'name': 'British Pound (UK)'},
+      {'code': 'GBP', 'symbol': '£', 'name': 'British Pound (United Kingdom / UK)'},
       {'code': 'SGD', 'symbol': r'S$', 'name': 'Singapore Dollar (Singapore)'},
       {'code': 'AED', 'symbol': 'AED', 'name': 'UAE Dirham (Dubai / UAE)'},
-      {'code': 'EUR', 'symbol': '€', 'name': 'Euro (Europe)'},
+      {'code': 'EUR', 'symbol': '€', 'name': 'Euro (Germany / France / Europe)'},
       {'code': 'CAD', 'symbol': r'C$', 'name': 'Canadian Dollar (Canada)'},
       {'code': 'AUD', 'symbol': r'A$', 'name': 'Australian Dollar (Australia)'},
       {'code': 'MYR', 'symbol': 'RM', 'name': 'Malaysian Ringgit (Malaysia)'},
+      {'code': 'SAR', 'symbol': 'SAR', 'name': 'Saudi Riyal (Saudi Arabia)'},
       {'code': 'QAR', 'symbol': 'QAR', 'name': 'Qatari Riyal (Qatar)'},
+      {'code': 'KWD', 'symbol': 'KWD', 'name': 'Kuwaiti Dinar (Kuwait)'},
+      {'code': 'OMR', 'symbol': 'OMR', 'name': 'Omani Rial (Oman)'},
+      {'code': 'BHD', 'symbol': 'BHD', 'name': 'Bahraini Dinar (Bahrain)'},
+      {'code': 'CHF', 'symbol': 'CHF', 'name': 'Swiss Franc (Switzerland)'},
+      {'code': 'JPY', 'symbol': '¥', 'name': 'Japanese Yen (Japan)'},
+      {'code': 'NZD', 'symbol': r'NZ$', 'name': 'New Zealand Dollar (New Zealand)'},
+      {'code': 'LKR', 'symbol': 'Rs', 'name': 'Sri Lankan Rupee (Sri Lanka)'},
+      {'code': 'ZAR', 'symbol': 'R', 'name': 'South African Rand (South Africa)'},
+      {'code': 'HKD', 'symbol': r'HK$', 'name': 'Hong Kong Dollar (Hong Kong)'},
+      {'code': 'SEK', 'symbol': 'kr', 'name': 'Swedish Krona (Sweden)'},
+      {'code': 'NOK', 'symbol': 'kr', 'name': 'Norwegian Krone (Norway)'},
+      {'code': 'DKK', 'symbol': 'kr', 'name': 'Danish Krone (Denmark)'},
+      {'code': 'PLN', 'symbol': 'zł', 'name': 'Polish Zloty (Poland)'},
+      {'code': 'THB', 'symbol': '฿', 'name': 'Thai Baht (Thailand)'},
+      {'code': 'KRW', 'symbol': '₩', 'name': 'South Korean Won (South Korea)'},
+      {'code': 'IDR', 'symbol': 'Rp', 'name': 'Indonesian Rupiah (Indonesia)'},
+      {'code': 'PHP', 'symbol': '₱', 'name': 'Philippine Peso (Philippines)'},
+      {'code': 'BDT', 'symbol': '৳', 'name': 'Bangladeshi Taka (Bangladesh)'},
+      {'code': 'RUB', 'symbol': '₽', 'name': 'Russian Ruble (Russia)'},
+      {'code': 'CNY', 'symbol': '¥', 'name': 'Chinese Yuan (China)'},
+      {'code': 'BRL', 'symbol': r'R$', 'name': 'Brazilian Real (Brazil)'},
+      {'code': 'MXN', 'symbol': r'Mex$', 'name': 'Mexican Peso (Mexico)'},
     ];
+
+    String searchQuery = '';
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
-        return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: 44,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Select Income Currency',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF0F172A),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: currencies.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1, color: Color(0xFFF1F5F9)),
-                    itemBuilder: (c, idx) {
-                      final item = currencies[idx];
-                      final isSelected = _currencyCode == item['code'];
-                      return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        leading: Container(
-                          width: 36,
-                          height: 36,
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final filteredCurrencies = currencies.where((item) {
+              final q = searchQuery.toLowerCase().trim();
+              if (q.isEmpty) return true;
+              return item['name']!.toLowerCase().contains(q) ||
+                  item['code']!.toLowerCase().contains(q) ||
+                  item['symbol']!.toLowerCase().contains(q);
+            }).toList();
+
+            return SafeArea(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.78,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 44,
+                          height: 4,
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? const Color(0xFF881337).withValues(alpha: 0.1)
-                                : const Color(0xFFF1F5F9),
-                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(2),
                           ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            item['symbol']!,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Select Income Currency',
                             style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? const Color(0xFF881337) : const Color(0xFF475569),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF0F172A),
                             ),
                           ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F5F9),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              '${filteredCurrencies.length} Countries',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: Color(0xFF64748B),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      // Search Box
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFE2E8F0)),
                         ),
-                        title: Text(
-                          item['name']!,
-                          style: TextStyle(
-                            fontSize: 13.5,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                            color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+                        child: TextField(
+                          onChanged: (val) {
+                            setModalState(() {
+                              searchQuery = val;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Search country or currency...',
+                            hintStyle: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+                            prefixIcon: const Icon(Icons.search, size: 18, color: Color(0xFF64748B)),
+                            suffixIcon: searchQuery.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear, size: 16, color: Color(0xFF64748B)),
+                                    onPressed: () {
+                                      setModalState(() {
+                                        searchQuery = '';
+                                      });
+                                    },
+                                  )
+                                : null,
+                            border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            focusedErrorBorder: InputBorder.none,
+                            filled: false,
+                            fillColor: Colors.transparent,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                           ),
                         ),
-                        trailing: isSelected
-                            ? const Icon(Icons.check_circle_rounded, color: Color(0xFF881337), size: 20)
-                            : null,
-                        onTap: () {
-                          setState(() {
-                            _currencyCode = item['code']!;
-                            _currencySymbol = item['symbol']!;
-                          });
-                          Navigator.pop(ctx);
-                        },
-                      );
-                    },
+                      ),
+                      const SizedBox(height: 10),
+                      Expanded(
+                        child: filteredCurrencies.isEmpty
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.search_off_rounded, size: 40, color: Colors.grey.shade400),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      'No country found for "$searchQuery"',
+                                      style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ListView.separated(
+                                itemCount: filteredCurrencies.length,
+                                separatorBuilder: (_, __) => const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                                itemBuilder: (c, idx) {
+                                  final item = filteredCurrencies[idx];
+                                  final isSelected = _currencyCode == item['code'];
+                                  return ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                    leading: Container(
+                                      width: 44,
+                                      height: 36,
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? const Color(0xFF881337).withValues(alpha: 0.1)
+                                            : const Color(0xFFF1F5F9),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        item['symbol']!,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                          color: isSelected ? const Color(0xFF881337) : const Color(0xFF475569),
+                                        ),
+                                      ),
+                                    ),
+                                    title: Text(
+                                      item['name']!,
+                                      style: TextStyle(
+                                        fontSize: 13.5,
+                                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                        color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+                                      ),
+                                    ),
+                                    trailing: isSelected
+                                        ? const Icon(Icons.check_circle_rounded, color: Color(0xFF881337), size: 20)
+                                        : null,
+                                    onTap: () {
+                                      setState(() {
+                                        _currencyCode = item['code']!;
+                                        _currencySymbol = item['symbol']!;
+                                      });
+                                      Navigator.pop(ctx);
+                                    },
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -416,6 +573,186 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     );
   }
 
+  final List<String> _citizenshipCountries = [
+    'India',
+    'United States (USA)',
+    'United Kingdom (UK)',
+    'Canada',
+    'Australia',
+    'Singapore',
+    'United Arab Emirates (UAE)',
+    'Malaysia',
+    'Germany',
+    'New Zealand',
+    'Saudi Arabia',
+    'Qatar',
+    'Kuwait',
+    'Oman',
+    'Bahrain',
+    'France',
+    'Ireland',
+    'Switzerland',
+    'Netherlands',
+    'Italy',
+    'Sweden',
+    'Norway',
+    'Denmark',
+    'South Africa',
+    'Japan',
+    'Sri Lanka',
+  ];
+
+  void _showCitizenshipCountryPicker() {
+    String searchQuery = '';
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            final filteredCountries = _citizenshipCountries.where((c) {
+              final q = searchQuery.toLowerCase().trim();
+              if (q.isEmpty) return true;
+              return c.toLowerCase().contains(q);
+            }).toList();
+
+            return SafeArea(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 44,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Select Citizenship Country',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFF0F172A),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF8FAFC),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: const Color(0xFFE2E8F0)),
+                        ),
+                        child: TextField(
+                          onChanged: (val) {
+                            setModalState(() {
+                              searchQuery = val;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Search country...',
+                            hintStyle: const TextStyle(fontSize: 13, color: Color(0xFF94A3B8)),
+                            prefixIcon: const Icon(Icons.search, size: 18, color: Color(0xFF64748B)),
+                            suffixIcon: searchQuery.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear, size: 16, color: Color(0xFF64748B)),
+                                    onPressed: () {
+                                      setModalState(() {
+                                        searchQuery = '';
+                                      });
+                                    },
+                                  )
+                                : null,
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Expanded(
+                        child: filteredCountries.isEmpty && searchQuery.trim().isNotEmpty
+                            ? ListTile(
+                                leading: const Icon(Icons.add_circle_outline, color: Color(0xFF881337)),
+                                title: Text(
+                                  'Use "${searchQuery.trim()}"',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF881337),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    _citizenshipCountry = searchQuery.trim();
+                                  });
+                                  Navigator.pop(ctx);
+                                  _checkAndTriggerAutoScroll();
+                                },
+                              )
+                            : ListView.separated(
+                                itemCount: filteredCountries.length,
+                                separatorBuilder: (_, _) => const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                                itemBuilder: (c, idx) {
+                                  final country = filteredCountries[idx];
+                                  final isSelected = _citizenshipCountry == country;
+                                  return ListTile(
+                                    contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                                    leading: Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? const Color(0xFF881337).withValues(alpha: 0.1)
+                                            : const Color(0xFFF1F5F9),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Icon(Icons.public, size: 18, color: Color(0xFF64748B)),
+                                    ),
+                                    title: Text(
+                                      country,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                                        color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+                                      ),
+                                    ),
+                                    trailing: isSelected
+                                        ? const Icon(Icons.check_circle_rounded, color: Color(0xFF881337), size: 20)
+                                        : null,
+                                    onTap: () {
+                                      setState(() {
+                                        _citizenshipCountry = country;
+                                      });
+                                      Navigator.pop(ctx);
+                                      _checkAndTriggerAutoScroll();
+                                    },
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _addCustomHobby() {
     final text = _customHobbyController.text.trim();
     if (text.isNotEmpty && !_selectedHobbies.contains(text)) {
@@ -432,6 +769,64 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       _selectedHobbies.remove(hobby);
     });
     _checkAndTriggerAutoScroll();
+  }
+
+  String _generateDefaultBio() {
+    final List<String> sentences = [];
+
+    // 1. Profession & Company
+    final desig = _designationController.text.trim();
+    final comp = _companyController.text.trim();
+    final loc = _workLocationController.text.trim();
+    final deg = _degreeController.text.trim();
+    final college = _collegeController.text.trim();
+
+    if (desig.isNotEmpty && comp.isNotEmpty && loc.isNotEmpty) {
+      sentences.add("I am currently working as a $desig at $comp in $loc.");
+    } else if (desig.isNotEmpty && comp.isNotEmpty) {
+      sentences.add("I am working as a $desig at $comp.");
+    } else if (desig.isNotEmpty && loc.isNotEmpty) {
+      sentences.add("I am working as a $desig based in $loc.");
+    } else if (desig.isNotEmpty) {
+      sentences.add("I am working as a $desig.");
+    } else if (_employmentSector != null && _employmentSector != 'Not Working') {
+      sentences.add("I am employed in the $_employmentSector sector.");
+    }
+
+    // 2. Education
+    if (deg.isNotEmpty && college.isNotEmpty) {
+      sentences.add("I have completed my $deg from $college.");
+    } else if (deg.isNotEmpty) {
+      sentences.add("I have completed my education in $deg.");
+    } else if (_highestEducation != null) {
+      sentences.add("I hold a $_highestEducation degree.");
+    }
+
+    // 3. Cultural outlook & personality
+    if (_culturalOutlook != null) {
+      if (_culturalOutlook == 'Traditional') {
+        sentences.add("I hold traditional values with deep respect for family customs and Tamil cultural roots.");
+      } else if (_culturalOutlook == 'Modern & Traditional') {
+        sentences.add("I blend modern thinking with strong traditional family values.");
+      } else if (_culturalOutlook == 'Moderate') {
+        sentences.add("I have a moderate outlook, balancing personal ambitions with family harmony.");
+      } else if (_culturalOutlook == 'Liberal') {
+        sentences.add("I have a progressive, open-minded approach towards life.");
+      } else if (_culturalOutlook == 'Orthodox') {
+        sentences.add("I have deep faith in our traditions, spirituality, and cultural heritage.");
+      }
+    }
+
+    // 4. Hobbies
+    if (_selectedHobbies.isNotEmpty) {
+      final hobbies = _selectedHobbies.take(3).join(', ');
+      sentences.add("In my leisure time, I enjoy $hobbies.");
+    }
+
+    // 5. Partner expectation
+    sentences.add("Looking for an understanding, caring, and compatible partner to walk together through life's journey.");
+
+    return sentences.join(' ');
   }
 
   void _onSaveDraft() {
@@ -460,7 +855,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       } else if (!_isLifestyleComplete) {
         message = 'Please select Dietary, Smoking & Drinking preferences *';
       } else if (!_isInterestsComplete) {
-        message = 'Please select at least 1 Hobby and Cultural Outlook *';
+        message = 'Please select Cultural Outlook *';
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -471,6 +866,10 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         ),
       );
       return;
+    }
+
+    if (_bioController.text.trim().isEmpty) {
+      _bioController.text = _generateDefaultBio();
     }
 
     print('====================================================');
@@ -484,8 +883,9 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     print('   Work Location      : ${_workLocationController.text.trim()}');
     print('   Work Arrangement   : $_workArrangement');
     print('   Annual Income      : $_currencySymbol ${_incomeController.text.trim()}');
-    print('   Citizenship        : $_citizenship ${_citizenship == "Other" ? "(${_otherCitizenshipController.text.trim()})" : ""}');
-    print('   Dietary Preference : $_dietaryPreference');
+    print('   Citizenship Country: $_citizenshipCountry');
+    print('   Residency Status   : $_residencyStatus');
+    print('   Dietary Preference : $_selectedDietaryPreferences');
     print('   Smoking Habit      : $_smokingHabit');
     print('   Drinking Habit     : $_drinkingHabit');
     print('   Hobbies            : $_selectedHobbies');
@@ -641,7 +1041,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 ),
                 SizedBox(height: 2),
                 Text(
-                  'STEP 3 OF 6',
+                  'STEP 3 OF 5',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
                     fontSize: 13,
@@ -1035,46 +1435,113 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     );
   }
 
-  // E) Citizenship Card
+  // E) Citizenship & Residency Card
   Widget _buildCitizenshipCard() {
     return _buildCardWrapper(
       title: 'Citizenship',
       children: [
         _buildMandatoryLabel('Citizenship Country'),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: _buildPillSelectTile(
-                label: 'India',
-                isSelected: _citizenship == 'India',
-                onTap: () {
-                  setState(() => _citizenship = 'India');
-                  _checkAndTriggerAutoScroll();
-                },
+        const SizedBox(height: 6),
+        InkWell(
+          onTap: _showCitizenshipCountryPicker,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            height: 48,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F3FB),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: _citizenshipCountry != null ? const Color(0xFF881337) : const Color(0xFFE8EBFA),
+                width: _citizenshipCountry != null ? 1.5 : 1.0,
               ),
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _buildPillSelectTile(
-                label: 'Other',
-                isSelected: _citizenship == 'Other',
-                onTap: () {
-                  setState(() => _citizenship = 'Other');
-                  _checkAndTriggerAutoScroll();
-                },
-              ),
+            child: Row(
+              children: [
+                const Icon(Icons.public_outlined, size: 18, color: Color(0xFF64748B)),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _citizenshipCountry ?? 'Select Country',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: _citizenshipCountry != null ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
+                    ),
+                  ),
+                ),
+                const Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: Color(0xFF64748B)),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 14),
+        _buildMandatoryLabel('Residency Status'),
+        const SizedBox(height: 6),
+        DropdownButtonFormField<String>(
+          initialValue: _residencyStatus,
+          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF64748B), size: 20),
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF0F172A),
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: const Color(0xFFF1F3FB),
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            prefixIcon: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Icon(Icons.badge_outlined, size: 18, color: Color(0xFF64748B)),
+            ),
+            prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
+            hintText: 'Select Residency Status',
+            hintStyle: const TextStyle(
+              color: Color(0xFF94A3B8),
+              fontSize: 13,
+              fontWeight: FontWeight.w400,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xFF881337), width: 1.5),
+            ),
+          ),
+          dropdownColor: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          items: const [
+            DropdownMenuItem(
+              value: 'Citizenship',
+              child: Text('Citizenship'),
+            ),
+            DropdownMenuItem(
+              value: 'Work Visa',
+              child: Text('Work Visa'),
+            ),
+            DropdownMenuItem(
+              value: 'Permanent Resident (PR)',
+              child: Text('Permanent Resident (PR)'),
+            ),
+            DropdownMenuItem(
+              value: 'Student Visa',
+              child: Text('Student Visa'),
             ),
           ],
+          onChanged: (val) {
+            setState(() {
+              _residencyStatus = val;
+            });
+            _checkAndTriggerAutoScroll();
+          },
         ),
-        if (_citizenship == 'Other') ...[
-          const SizedBox(height: 10),
-          _buildSingleInputField(
-            controller: _otherCitizenshipController,
-            hintText: 'Specify Country of Citizenship (e.g. USA, UK, Singapore)',
-            prefixIcon: Icons.public_outlined,
-          ),
-        ],
       ],
     );
   }
@@ -1084,17 +1551,33 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     return _buildCardWrapper(
       title: 'Lifestyle & Habits',
       children: [
-        _buildMandatoryLabel('Dietary Preference'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildMandatoryLabel('Dietary Preference'),
+            if (_selectedDietaryPreferences.isNotEmpty)
+              Text(
+                '${_selectedDietaryPreferences.length} Selected',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
+              ),
+          ],
+        ),
         const SizedBox(height: 8),
         Row(
           children: [
             Expanded(
               child: _buildDietTile(
-                label: 'Vegetarian',
+                label: 'Pure Veg',
                 icon: Icons.eco_outlined,
-                isSelected: _dietaryPreference == 'Vegetarian',
+                isSelected: _selectedDietaryPreferences.contains('Pure Veg'),
                 onTap: () {
-                  setState(() => _dietaryPreference = 'Vegetarian');
+                  setState(() {
+                    if (_selectedDietaryPreferences.contains('Pure Veg')) {
+                      _selectedDietaryPreferences.remove('Pure Veg');
+                    } else {
+                      _selectedDietaryPreferences.add('Pure Veg');
+                    }
+                  });
                   _checkAndTriggerAutoScroll();
                 },
               ),
@@ -1102,11 +1585,17 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             const SizedBox(width: 8),
             Expanded(
               child: _buildDietTile(
-                label: 'Vegan',
-                icon: Icons.spa_outlined,
-                isSelected: _dietaryPreference == 'Vegan',
+                label: 'Non-Veg',
+                icon: Icons.restaurant_outlined,
+                isSelected: _selectedDietaryPreferences.contains('Non-Veg'),
                 onTap: () {
-                  setState(() => _dietaryPreference = 'Vegan');
+                  setState(() {
+                    if (_selectedDietaryPreferences.contains('Non-Veg')) {
+                      _selectedDietaryPreferences.remove('Non-Veg');
+                    } else {
+                      _selectedDietaryPreferences.add('Non-Veg');
+                    }
+                  });
                   _checkAndTriggerAutoScroll();
                 },
               ),
@@ -1119,10 +1608,16 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             Expanded(
               child: _buildDietTile(
                 label: 'Eggetarian',
-                icon: Icons.egg_alt_outlined,
-                isSelected: _dietaryPreference == 'Eggetarian',
+                icon: Icons.egg_outlined,
+                isSelected: _selectedDietaryPreferences.contains('Eggetarian'),
                 onTap: () {
-                  setState(() => _dietaryPreference = 'Eggetarian');
+                  setState(() {
+                    if (_selectedDietaryPreferences.contains('Eggetarian')) {
+                      _selectedDietaryPreferences.remove('Eggetarian');
+                    } else {
+                      _selectedDietaryPreferences.add('Eggetarian');
+                    }
+                  });
                   _checkAndTriggerAutoScroll();
                 },
               ),
@@ -1130,11 +1625,17 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             const SizedBox(width: 8),
             Expanded(
               child: _buildDietTile(
-                label: 'Non-Vegetarian',
-                icon: Icons.restaurant_rounded,
-                isSelected: _dietaryPreference == 'Non-Vegetarian',
+                label: 'Vegan',
+                icon: Icons.grass_outlined,
+                isSelected: _selectedDietaryPreferences.contains('Vegan'),
                 onTap: () {
-                  setState(() => _dietaryPreference = 'Non-Vegetarian');
+                  setState(() {
+                    if (_selectedDietaryPreferences.contains('Vegan')) {
+                      _selectedDietaryPreferences.remove('Vegan');
+                    } else {
+                      _selectedDietaryPreferences.add('Vegan');
+                    }
+                  });
                   _checkAndTriggerAutoScroll();
                 },
               ),
@@ -1249,7 +1750,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         ),
       ),
       children: [
-        _buildMandatoryLabel('Hobbies & Passions'),
+        _buildOptionalLabel('Hobbies & Passions'),
         const SizedBox(height: 8),
         if (_selectedHobbies.isNotEmpty) ...[
           Wrap(
@@ -1421,6 +1922,13 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   // H) Bio Card
   Widget _buildBioCard() {
+    if (!_hasUserEditedBio && _bioController.text.trim().isEmpty) {
+      final defaultBio = _generateDefaultBio();
+      if (defaultBio.isNotEmpty) {
+        _bioController.text = defaultBio;
+      }
+    }
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
@@ -1509,7 +2017,10 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 borderSide: const BorderSide(color: Color(0xFF881337), width: 1.5),
               ),
             ),
-            onChanged: (_) => setState(() {}),
+            onChanged: (_) {
+              _hasUserEditedBio = true;
+              setState(() {});
+            },
           ),
         ],
       ),
@@ -1592,6 +2103,18 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  // Optional label without asterisk
+  Widget _buildOptionalLabel(String label) {
+    return Text(
+      label,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF334155),
       ),
     );
   }
@@ -1684,41 +2207,44 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
+    return Material(
+      color: isSelected ? const Color(0xFFFFD1D8) : const Color(0xFFEFF4FF),
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        height: 42,
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF881337) : const Color(0xFFF1F3FB),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? const Color(0xFF881337) : const Color(0xFFE8EBFA),
-            width: isSelected ? 1.5 : 1.0,
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 16,
-              color: isSelected ? Colors.white : const Color(0xFF64748B),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          height: 42,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ? const Color(0xFFFDA4AF) : const Color(0xFFDBEAFE),
+              width: 1.0,
             ),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text(
-                label,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                  color: isSelected ? Colors.white : const Color(0xFF475569),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+              ),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                    color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

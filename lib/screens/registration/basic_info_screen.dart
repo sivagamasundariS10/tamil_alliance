@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/widgets/custom_date_picker_dialog.dart';
 import 'family_details_screen.dart';
 
 class BasicInfoScreen extends StatefulWidget {
@@ -138,23 +139,11 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
 
   Future<void> _pickDateOfBirth() async {
     final now = DateTime.now();
-    final picked = await showDatePicker(
+    final picked = await showAppDatePicker(
       context: context,
-      initialDate: DateTime(now.year - 25, 1, 1),
+      initialDate: _selectedDob ?? DateTime(now.year - 25, 1, 1),
       firstDate: DateTime(now.year - 80),
       lastDate: DateTime(now.year - 18),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFF701A33),
-              onPrimary: Colors.white,
-              onSurface: Color(0xFF1E293B),
-            ),
-          ),
-          child: child!,
-        );
-      },
     );
 
     if (picked != null) {
@@ -166,9 +155,29 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       setState(() {
         _selectedDob = picked;
         _calculatedAge = age;
-        _dobController.text = '$mm / $dd / $yyyy';
+        _dobController.text = '$dd / $mm / $yyyy';
       });
       _scrollToBottom();
+    }
+  }
+
+  void _onDobTyped(String val) {
+    final parsed = parseDateFromSlashString(val);
+    if (parsed != null) {
+      final now = DateTime.now();
+      final age = now.year - parsed.year - ((now.month > parsed.month || (now.month == parsed.month && now.day >= parsed.day)) ? 0 : 1);
+      setState(() {
+        _selectedDob = parsed;
+        _calculatedAge = age;
+      });
+      _scrollToBottom();
+    } else {
+      if (_selectedDob != null) {
+        setState(() {
+          _selectedDob = null;
+          _calculatedAge = null;
+        });
+      }
     }
   }
 
@@ -359,6 +368,13 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                                     fontWeight: FontWeight.w400,
                                   ),
                                   border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  focusedErrorBorder: InputBorder.none,
+                                  filled: false,
+                                  fillColor: Colors.transparent,
                                   isDense: true,
                                   contentPadding: EdgeInsets.symmetric(vertical: 8),
                                 ),
@@ -705,7 +721,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                 ),
                 SizedBox(height: 2),
                 Text(
-                  'STEP 1 OF 6',
+                  'STEP 1 OF 5',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
                     fontSize: 13,
@@ -994,7 +1010,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           ),
           const SizedBox(height: 10),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(10),
@@ -1018,6 +1034,15 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 13),
                       hintText: 'Enter full legal name',
                       hintStyle: TextStyle(
                         color: Color(0xFF94A3B8),
@@ -1087,35 +1112,65 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             ],
           ),
           const SizedBox(height: 10),
-          GestureDetector(
-            onTap: _pickDateOfBirth,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF1F5F9),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: _pickDateOfBirth,
+                  child: const Icon(
                     Icons.calendar_month_outlined,
                     color: Color(0xFF64748B),
                     size: 18,
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      _dobController.text.isEmpty ? 'MM / DD / YYYY' : _dobController.text,
-                      style: TextStyle(
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    controller: _dobController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      DateSlashFormatter(),
+                    ],
+                    onChanged: (val) {
+                      _onDobTyped(val);
+                    },
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF1E293B),
+                      fontWeight: FontWeight.w600,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 12),
+                      hintText: 'DD / MM / YYYY',
+                      hintStyle: TextStyle(
+                        color: Color(0xFF94A3B8),
                         fontSize: 14,
-                        color: _dobController.text.isEmpty ? const Color(0xFF94A3B8) : const Color(0xFF1E293B),
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
-                  const Icon(Icons.arrow_drop_down, color: Color(0xFF64748B)),
-                ],
-              ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.calendar_today_outlined, color: Color(0xFF64748B), size: 18),
+                  onPressed: _pickDateOfBirth,
+                  tooltip: 'Open calendar',
+                  splashRadius: 18,
+                ),
+              ],
             ),
           ),
           if (_calculatedAge != null) ...[
@@ -1335,7 +1390,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           ),
           const SizedBox(height: 6),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: BoxDecoration(
               color: const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(10),
@@ -1351,6 +1406,15 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(vertical: 13),
                       hintText: 'e.g. Madurai, Tamil Nadu, India',
                       hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                     ),
@@ -1491,7 +1555,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
-              Text("4' 7\" (140 cm)", style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
+              Text("4' 5\" (137 cm)", style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
               Text("Average: 5' 5\"", style: TextStyle(fontSize: 13, color: Color(0xFF2563EB), fontWeight: FontWeight.w700)),
               Text("6' 11\" (210 cm)", style: TextStyle(fontSize: 13, color: Color(0xFF94A3B8))),
             ],
@@ -1886,13 +1950,26 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           const SizedBox(height: 14),
 
           // Religion
-          const Text(
-            'Religion',
-            style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+          Row(
+            children: const [
+              Text(
+                'Religion',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+              ),
+              SizedBox(width: 4),
+              Text(
+                '*',
+                style: TextStyle(
+                  color: Color(0xFFE11D48),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 6),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: const Color(0xFFF1F5F9),
               borderRadius: BorderRadius.circular(10),
@@ -1902,6 +1979,15 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
               style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
               decoration: const InputDecoration(
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                focusedErrorBorder: InputBorder.none,
+                filled: false,
+                fillColor: Colors.transparent,
+                isDense: true,
+                contentPadding: EdgeInsets.symmetric(vertical: 13),
                 hintText: 'e.g. Hindu',
                 hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
               ),
@@ -1912,12 +1998,25 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           // Community / Caste
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                'Community / Caste',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+            children: [
+              Row(
+                children: const [
+                  Text(
+                    'Community / Caste',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: Color(0xFF475569)),
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    '*',
+                    style: TextStyle(
+                      color: Color(0xFFE11D48),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
               ),
-              Text(
+              const Text(
                 '🔍 Searchable',
                 style: TextStyle(fontSize: 13, color: Color(0xFF64748B), fontWeight: FontWeight.w500),
               ),
@@ -1976,7 +2075,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     ),
                     const SizedBox(height: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10),
@@ -1986,6 +2085,15 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          filled: false,
+                          fillColor: Colors.transparent,
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 12),
                           hintText: 'e.g. Cheran Kulam',
                           hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                         ),
@@ -2005,7 +2113,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     ),
                     const SizedBox(height: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(10),
@@ -2015,6 +2123,15 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          filled: false,
+                          fillColor: Colors.transparent,
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(vertical: 12),
                           hintText: 'e.g. Shiva Gothram',
                           hintStyle: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
                         ),
@@ -2217,7 +2334,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: isFullWidth ? double.infinity : null,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFFCE7F3) : const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(10),
@@ -2232,8 +2349,8 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
           children: [
             // Custom Radio Button Icon
             Container(
-              width: 16,
-              height: 16,
+              width: 15,
+              height: 15,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -2255,13 +2372,17 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                     )
                   : null,
             ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                color: isSelected ? const Color(0xFF701A33) : const Color(0xFF475569),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                  color: isSelected ? const Color(0xFF701A33) : const Color(0xFF475569),
+                ),
               ),
             ),
           ],

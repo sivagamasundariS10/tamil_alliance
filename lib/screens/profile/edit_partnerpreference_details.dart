@@ -25,8 +25,7 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
   bool get _requiresChildrenSelection =>
       _maritalStatus == 'Divorced' ||
       _maritalStatus == 'Awaiting Divorce' ||
-      _maritalStatus == 'Widowed' ||
-      _maritalStatus == 'Annulled';
+      _maritalStatus == 'Widowed';
 
   String? _selectedMotherTongue;
   final List<String> _motherTongues = [
@@ -76,6 +75,7 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
     'Kalathra Dosham (களத்திர தோஷம்)',
     'Sarpa Dosham (சர்ப்ப தோஷம்)',
   ];
+  final Set<String> _customDoshams = {};
   final Set<String> _selectedSpecificDoshams = {};
 
   final Set<String> _selectedLocations = {};
@@ -179,6 +179,43 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
       _casteOptions.remove(name);
       _customCastes.remove(name);
       _selectedCastes.remove(name);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$name removed'),
+        backgroundColor: const Color(0xFF881337),
+        duration: const Duration(milliseconds: 1000),
+      ),
+    );
+  }
+
+  void _editDosham(String oldName) {
+    _showEditCustomItemDialog(
+      title: 'Edit Specific Dosham',
+      currentName: oldName,
+      onEdited: (newName) {
+        setState(() {
+          final index = _specificDoshams.indexOf(oldName);
+          if (index != -1) {
+            _specificDoshams[index] = newName;
+          }
+          _customDoshams.remove(oldName);
+          _customDoshams.add(newName);
+          if (_selectedSpecificDoshams.contains(oldName)) {
+            _selectedSpecificDoshams.remove(oldName);
+            _selectedSpecificDoshams.add(newName);
+          }
+        });
+      },
+      onDeleted: () => _deleteDosham(oldName),
+    );
+  }
+
+  void _deleteDosham(String name) {
+    setState(() {
+      _specificDoshams.remove(name);
+      _customDoshams.remove(name);
+      _selectedSpecificDoshams.remove(name);
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -746,7 +783,7 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
       },
       child: Container(
         width: isFullWidth ? double.infinity : null,
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 6),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFFCE7F3) : const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(10),
@@ -760,8 +797,8 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 16,
-              height: 16,
+              width: 15,
+              height: 15,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -771,13 +808,17 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
                 color: Colors.white,
               ),
             ),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w700,
-                color: isSelected ? const Color(0xFFBE123C) : const Color(0xFF475569),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  color: isSelected ? const Color(0xFFBE123C) : const Color(0xFF475569),
+                ),
               ),
             ),
           ],
@@ -1068,9 +1109,11 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Dosham (தோஷம்)',
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+              const Expanded(
+                child: Text(
+                  'Dosham (தோஷம்)',
+                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
+                ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
@@ -1181,23 +1224,38 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
                     Wrap(
                       spacing: 6,
                       runSpacing: 6,
-                      children: _specificDoshams.map((d) {
-                        final isSelected = _selectedSpecificDoshams.contains(d);
-                        return _buildSelectableChip(
-                          label: d,
-                          isSelected: isSelected,
-                          showCheck: isSelected,
-                          onTap: () {
+                      children: [
+                        ..._specificDoshams.map((d) {
+                          final isSelected = _selectedSpecificDoshams.contains(d);
+                          final isCustom = _customDoshams.contains(d);
+                          return _buildSelectableChip(
+                            label: d,
+                            isSelected: isSelected,
+                            showCheck: isSelected,
+                            isCustom: isCustom,
+                            onEdit: isCustom ? () => _editDosham(d) : null,
+                            onDelete: isCustom ? () => _deleteDosham(d) : null,
+                            onTap: () {
+                              setState(() {
+                                if (isSelected) {
+                                  _selectedSpecificDoshams.remove(d);
+                                } else {
+                                  _selectedSpecificDoshams.add(d);
+                                }
+                              });
+                            },
+                          );
+                        }),
+                        _buildAddButton('+ Add More Dosham', () {
+                          _showAddCustomItemDialog('Add Specific Dosham', (val) {
                             setState(() {
-                              if (isSelected) {
-                                _selectedSpecificDoshams.remove(d);
-                              } else {
-                                _selectedSpecificDoshams.add(d);
-                              }
+                              _specificDoshams.add(val);
+                              _customDoshams.add(val);
+                              _selectedSpecificDoshams.add(val);
                             });
-                          },
-                        );
-                      }).toList(),
+                          });
+                        }),
+                      ],
                     ),
                   ],
                 ],
@@ -1270,6 +1328,13 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
                 prefixIcon: Icon(Icons.search_rounded, size: 16, color: Color(0xFF64748B)),
                 prefixIconConstraints: BoxConstraints(minWidth: 28, minHeight: 28),
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                focusedErrorBorder: InputBorder.none,
+                filled: false,
+                fillColor: Colors.transparent,
                 isDense: true,
                 contentPadding: EdgeInsets.symmetric(vertical: 11),
               ),
@@ -1535,36 +1600,18 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Annual Income Range Header with Tamil Subtitle & Pink Badge
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Annual Income Range',
-                    style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
-                  ),
-                  SizedBox(height: 1),
-                  Text(
-                    '(ஆண்டு வருமான வரம்பு)',
-                    style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
-                  ),
-                ],
+          // Annual Income Range Header with Tamil Subtitle
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'Annual Income Range',
+                style: TextStyle(fontSize: 13.5, fontWeight: FontWeight.w800, color: Color(0xFF1E293B)),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFE4E6),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  (_minIncome != null && _maxIncome != null)
-                      ? '$_minIncome – $_maxIncome'
-                      : (_minIncome != null ? 'From $_minIncome' : (_maxIncome != null ? 'Up to $_maxIncome' : '₹15L – ₹40L')),
-                  style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w800, color: Color(0xFF881337)),
-                ),
+              SizedBox(height: 1),
+              Text(
+                '(ஆண்டு வருமான வரம்பு)',
+                style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
               ),
             ],
           ),
@@ -1633,13 +1680,6 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 10),
-          Text(
-            (_minIncome != null && _maxIncome != null)
-                ? 'Filtering matches earning $_minIncome – $_maxIncome per annum.'
-                : 'Filtering matches earning ₹15L – ₹40L per annum.',
-            style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
           ),
         ],
       ),
@@ -1968,7 +2008,7 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
         borderRadius: BorderRadius.circular(20),
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: isCenter ? 6 : (isCustom ? 8 : 12),
+            horizontal: isCenter ? 3 : (isCustom ? 8 : 12),
             vertical: 7,
           ),
           decoration: BoxDecoration(
@@ -1982,15 +2022,23 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (showCheck && isSelected) ...[
-                const Icon(Icons.check, size: 12, color: Colors.white),
-                const SizedBox(width: 3),
+                const Icon(Icons.check, size: 11, color: Colors.white),
+                const SizedBox(width: 2),
               ],
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w700,
-                  color: isSelected ? Colors.white : const Color(0xFF1E293B),
+              Flexible(
+                fit: isCenter ? FlexFit.tight : FlexFit.loose,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: isCenter ? 12 : 13,
+                      fontWeight: FontWeight.w700,
+                      color: isSelected ? Colors.white : const Color(0xFF1E293B),
+                    ),
+                  ),
                 ),
               ),
               if (isCustom) ...[

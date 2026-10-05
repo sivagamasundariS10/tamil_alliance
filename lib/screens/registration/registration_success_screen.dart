@@ -255,14 +255,14 @@ class _RegistrationSuccessScreenState extends State<RegistrationSuccessScreen>
   }
 
   void _onContinue() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (_) => HomeScreen(
-          userPhone: widget.mobileNumber,
-        ),
-      ),
-      (route) => false,
-    );
+    // Navigator.of(context).pushAndRemoveUntil(
+    //   MaterialPageRoute(
+    //     builder: (_) => HomeScreen(
+    //       userPhone: widget.mobileNumber,
+    //     ),
+    //   ),
+    //   (route) => false,
+    // );
   }
 
   @override
@@ -360,7 +360,7 @@ class _RegistrationSuccessScreenState extends State<RegistrationSuccessScreen>
             'TAMIL ALLIANCE',
             style: TextStyle(
               color: Color(0xFFF5D68B),
-              fontFamily: 'serif',
+              fontFamily: 'Cinzel',
               fontSize: 16,
               fontWeight: FontWeight.w900,
               letterSpacing: 1.1,

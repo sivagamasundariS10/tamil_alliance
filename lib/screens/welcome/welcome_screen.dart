@@ -274,12 +274,12 @@ class WelcomeScreen extends StatelessWidget {
                   ],
                 ),
                 iconBgColor: const Color(0xFFE5EDFF),
-                title: '100% Lineage Verified',
+                title: '100% Mobile Verified',
                 badgeText: 'Strict',
                 badgeBg: const Color(0xFFF3E8FF),
                 badgeTextColor: const Color(0xFF701A33),
                 description:
-                    'Mobile number and government ID verified',
+                    'Mobile number verified',
               ),
 
               const SizedBox(height: 12),
@@ -314,7 +314,7 @@ class WelcomeScreen extends StatelessWidget {
                 badgeBg: const Color(0xFFE0F2FE),
                 badgeTextColor: const Color(0xFF0369A1),
                 description:
-                    'Contact numbers and full photo albums are unveiled only upon mutual consent.',
+                    'Contact numbers and full photo albums.',
               ),
 
               const SizedBox(height: 14),
@@ -358,14 +358,14 @@ class WelcomeScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 6),
-                    const Text(
-                      'Trusted across Chennai, Coimbatore, Madurai, Bengaluru, Singapore, Malaysia, the UK & North America.',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Color(0xFF4B5563),
-                        height: 1.35,
-                      ),
-                    ),
+                    // const Text(
+                    //   'Trusted across Chennai, Coimbatore, Madurai, Bengaluru, Singapore, Malaysia, the UK & North America.',
+                    //   style: TextStyle(
+                    //     fontSize: 13,
+                    //     color: Color(0xFF4B5563),
+                    //     height: 1.35,
+                    //   ),
+                    // ),
                     const SizedBox(height: 10),
                     // Castes & Community Tags
                     Wrap(
@@ -480,9 +480,9 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (_) => const PasswordLoginScreen()),
-                      );
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(builder: (_) => const PasswordLoginScreen()),
+                      // );
                     },
                     child: const Text(
                       'Log In',

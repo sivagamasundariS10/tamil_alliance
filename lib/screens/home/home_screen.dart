@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'TAMIL ALLIANCE',
                           style: TextStyle(
                             color: Color(0xFFF5D68B),
-                            fontFamily: 'serif',
+                            fontFamily: 'Cinzel',
                             fontSize: 15,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.0,

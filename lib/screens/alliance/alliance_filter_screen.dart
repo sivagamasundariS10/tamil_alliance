@@ -21,8 +21,7 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
   bool get _requiresChildrenSelection =>
       _maritalStatus == 'Awaiting Divorce' ||
       _maritalStatus == 'Widowed' ||
-      _maritalStatus == 'Divorced' ||
-      _maritalStatus == 'Annulled';
+      _maritalStatus == 'Divorced';
 
   // 3. Mother Tongue
   final Set<String> _selectedMotherTongue = {'Tamil'};
@@ -96,7 +95,27 @@ class _AllianceFilterScreenState extends State<AllianceFilterScreen> {
     'Doesn\'t Matter',
   ];
 
-  final List<String> _countryOptions = ['India', 'USA', 'United Kingdom'];
+  final List<String> _countryOptions = [
+    'India',
+    'USA',
+    'United Kingdom',
+    'Canada',
+    'Australia',
+    'Singapore',
+    'UAE / Dubai',
+    'Malaysia',
+    'Saudi Arabia',
+    'Qatar',
+    'Kuwait',
+    'Oman',
+    'Bahrain',
+    'Germany',
+    'France',
+    'Switzerland',
+    'New Zealand',
+    'Sri Lanka',
+    'South Africa',
+  ];
   final List<String> _stateOptions = ['Tamil Nadu', 'Karnataka', 'Other States'];
 
   final List<String> _educationOptions = [

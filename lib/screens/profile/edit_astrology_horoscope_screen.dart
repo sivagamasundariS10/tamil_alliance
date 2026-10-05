@@ -397,25 +397,14 @@ class _EditAstrologyHoroscopeScreenState extends State<EditAstrologyHoroscopeScr
     );
   }
 
-  // Mandatory Label
-  Widget _buildMandatoryLabel(String label) {
-    return Text.rich(
-      TextSpan(
-        text: label,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: Color(0xFF334155),
-        ),
-        children: const [
-          TextSpan(
-            text: ' *',
-            style: TextStyle(
-              color: Color(0xFFDC2626),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+  // Field Label
+  Widget _buildFieldLabel(String label) {
+    return Text(
+      label,
+      style: const TextStyle(
+        fontSize: 13,
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF334155),
       ),
     );
   }
@@ -466,8 +455,8 @@ class _EditAstrologyHoroscopeScreenState extends State<EditAstrologyHoroscopeScr
           ),
           const SizedBox(height: 14),
 
-          // Rasi (Moon Sign) *
-          _buildMandatoryLabel('Rasi (Moon Sign)'),
+          // Rasi (Moon Sign)
+          _buildFieldLabel('Rasi (Moon Sign)'),
           const SizedBox(height: 6),
           _buildDropdownField(
             value: _selectedRasi,
@@ -479,8 +468,8 @@ class _EditAstrologyHoroscopeScreenState extends State<EditAstrologyHoroscopeScr
           ),
           const SizedBox(height: 14),
 
-          // Nakshatram (Star) *
-          _buildMandatoryLabel('Nakshatram (Birth Star)'),
+          // Nakshatram (Star)
+          _buildFieldLabel('Nakshatram (Birth Star)'),
           const SizedBox(height: 6),
           _buildDropdownField(
             value: _selectedNakshatra,
@@ -492,8 +481,8 @@ class _EditAstrologyHoroscopeScreenState extends State<EditAstrologyHoroscopeScr
           ),
           const SizedBox(height: 14),
 
-          // Padam *
-          _buildMandatoryLabel('Padam (Quarter)'),
+          // Padam
+          _buildFieldLabel('Padam (Quarter)'),
           const SizedBox(height: 6),
           Row(
             children: _padamList.map((padam) {
@@ -563,8 +552,8 @@ class _EditAstrologyHoroscopeScreenState extends State<EditAstrologyHoroscopeScr
           ),
           const SizedBox(height: 14),
 
-          // Lagnam (Ascendant) *
-          _buildMandatoryLabel('Lagnam (Ascendant Rising Sign)'),
+          // Lagnam (Ascendant)
+          _buildFieldLabel('Lagnam (Ascendant Rising Sign)'),
           const SizedBox(height: 6),
           _buildDropdownField(
             value: _selectedLagnam,
@@ -576,8 +565,8 @@ class _EditAstrologyHoroscopeScreenState extends State<EditAstrologyHoroscopeScr
           ),
           const SizedBox(height: 14),
 
-          // Dosham Status *
-          _buildMandatoryLabel('Chevvai / Rahu-Kethu Dosham Status'),
+          // Dosham Status
+          _buildFieldLabel('Chevvai / Rahu-Kethu Dosham Status'),
           const SizedBox(height: 6),
           _buildDropdownField(
             value: _selectedDosham,

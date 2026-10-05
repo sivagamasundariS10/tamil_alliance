@@ -540,7 +540,7 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                       // Phone Input Row with Country Code
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                            horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
                           color: const Color(0xFFF8FAFC),
                           borderRadius: BorderRadius.circular(14),
@@ -548,26 +548,13 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                         ),
                         child: Row(
                           children: [
-                            // Interactive Country Code Selector (No Flag)
-                            InkWell(
+                            // Interactive Country Code Selector (Seamless, no double border)
+                            GestureDetector(
                               onTap: _showCountryPicker,
-                              borderRadius: BorderRadius.circular(10),
-                              child: Container(
+                              behavior: HitTestBehavior.opaque,
+                              child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 9),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: const Color(0xFFE5E7EB)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color:
-                                          Colors.black.withValues(alpha: 0.03),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 1),
-                                    ),
-                                  ],
-                                ),
+                                    horizontal: 8, vertical: 10),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -589,7 +576,13 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            Container(
+                              width: 1,
+                              height: 26,
+                              color: const Color(0xFFCBD5E1),
+                              margin: const EdgeInsets.symmetric(horizontal: 6),
+                            ),
+                            const SizedBox(width: 4),
                             // Mobile Number Text Input
                             Expanded(
                               child: TextField(
@@ -607,10 +600,14 @@ class _MobileAuthScreenState extends State<MobileAuthScreen> {
                                 ),
                                 decoration: InputDecoration(
                                   isDense: true,
-                                  contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
                                   border: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  focusedErrorBorder: InputBorder.none,
+                                  filled: false,
                                   fillColor: Colors.transparent,
                                   hintText: _getPhoneHint(_selectedCountryCode),
                                   hintStyle: const TextStyle(

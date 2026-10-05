@@ -432,7 +432,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
                 ),
                 SizedBox(height: 2),
                 Text(
-                  'STEP 2 OF 6',
+                  'STEP 2 OF 5',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
                     fontSize: 13,
@@ -1170,7 +1170,6 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
           _buildMandatoryLabel('Family Values'),
           const SizedBox(height: 6),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 child: _buildPillValueTile(
@@ -1185,10 +1184,36 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: _buildPillValueTile(
+                  label: 'Traditional',
+                  isSelected: _familyValues == 'Traditional',
+                  onTap: () {
+                    setState(() => _familyValues = 'Traditional');
+                    _checkAndTriggerAutoScroll();
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _buildPillValueTile(
                   label: 'Moderate',
                   isSelected: _familyValues == 'Moderate',
                   onTap: () {
                     setState(() => _familyValues = 'Moderate');
+                    _checkAndTriggerAutoScroll();
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildPillValueTile(
+                  label: 'Liberal',
+                  isSelected: _familyValues == 'Liberal',
+                  onTap: () {
+                    setState(() => _familyValues = 'Liberal');
                     _checkAndTriggerAutoScroll();
                   },
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/app_colors.dart';
+import '../../core/utils/validators.dart';
 import '../registration/basic_info_screen.dart';
 
 class AccountSecurityScreen extends StatefulWidget {
@@ -23,15 +24,29 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _biometricEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.addListener(_onEmailChanged);
+  }
+
+  void _onEmailChanged() {
+    setState(() {});
+  }
 
   @override
   void dispose() {
+    _emailController.removeListener(_onEmailChanged);
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
+
+  bool get _isEmailValid => Validators.isEmailValid(_emailController.text);
+  bool get _isEmailWrong =>
+      _emailController.text.trim().isNotEmpty && !_isEmailValid;
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasDigit => _passwordController.text.contains(RegExp(r'[0-9]'));
@@ -96,6 +111,16 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   double get _progressFactor => _completedPercentage / 100.0;
 
   void _onProceed() {
+    if (_emailController.text.trim().isNotEmpty && !_isEmailValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a valid email address'),
+          backgroundColor: Color(0xFF701A33),
+        ),
+      );
+      return;
+    }
+
     if (_passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -237,6 +262,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   'TAMIL ALLIANCE',
                   style: TextStyle(
                     color: Color(0xFFE5A93C),
+                    fontFamily: 'Cinzel',
                     fontSize: 14,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.1,
@@ -331,15 +357,15 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
               const Spacer(),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
                 decoration: BoxDecoration(
                   color: is100 ? const Color(0xFFD1FAE5) : const Color(0xFFFFE4E6),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   is100 ? '100% Complete' : '$pct% Completed',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 11,
                     fontWeight: FontWeight.w700,
                     color: is100 ? const Color(0xFF065F46) : const Color(0xFF9F1239),
                   ),
@@ -376,6 +402,9 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
 
   // 3. Mail Id Card
   Widget _buildMailIdCard() {
+    final isWrong = _isEmailWrong;
+    final isValid = _isEmailValid;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
@@ -405,15 +434,15 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
                 decoration: BoxDecoration(
                   color: const Color(0xFFEEF2F6),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
                   'OPTIONAL',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: 10.5,
                     fontWeight: FontWeight.w700,
                     color: Color(0xFF64748B),
                     letterSpacing: 0.5,
@@ -426,27 +455,99 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
+              color: isWrong
+                  ? const Color(0xFFFEF2F2)
+                  : (isValid ? const Color(0xFFF0FDF4) : const Color(0xFFF8FAFC)),
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isWrong
+                    ? const Color(0xFFEF4444)
+                    : (isValid ? const Color(0xFF10B981) : const Color(0xFFE2E8F0)),
+                width: isWrong || isValid ? 1.4 : 1.0,
+              ),
             ),
-            child: TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Color(0xFF1E293B),
-                fontWeight: FontWeight.w500,
-              ),
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Enter your email address',
-                hintStyle: TextStyle(
-                  color: Color(0xFF94A3B8),
-                  fontSize: 13.5,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    onChanged: (_) => setState(() {}),
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isWrong ? const Color(0xFF991B1B) : const Color(0xFF1E293B),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                      isDense: true,
+                      hintText: 'Enter your email address',
+                      hintStyle: TextStyle(
+                        color: Color(0xFF94A3B8),
+                        fontSize: 13.5,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                if (isValid)
+                  Container(
+                    width: 26,
+                    height: 26,
+                    margin: const EdgeInsets.only(left: 8),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFDCFCE7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.check_rounded,
+                      size: 16,
+                      color: Color(0xFF16A34A),
+                    ),
+                  )
+                else if (isWrong)
+                  Container(
+                    width: 24,
+                    height: 24,
+                    margin: const EdgeInsets.only(left: 8),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFFEE2E2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.close_rounded,
+                      size: 15,
+                      color: Color(0xFFDC2626),
+                    ),
+                  ),
+              ],
             ),
           ),
+          if (isWrong)
+            Padding(
+              padding: const EdgeInsets.only(top: 6.0, left: 2.0),
+              child: Row(
+                children: const [
+                  Icon(Icons.error_outline_rounded, size: 13, color: Color(0xFFDC2626)),
+                  SizedBox(width: 4),
+                  Text(
+                    'Invalid email format (e.g. name@gmail.com)',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFDC2626),
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );
@@ -459,7 +560,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
       children: [
         // Pill: FINAL STEP OF SECURITY
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3.5),
           decoration: BoxDecoration(
             color: const Color(0xFFFCE7F3),
             borderRadius: BorderRadius.circular(20),
@@ -469,16 +570,16 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
             children: const [
               Icon(
                 Icons.lock_rounded,
-                size: 12,
+                size: 11,
                 color: Color(0xFF701A33),
               ),
-              SizedBox(width: 5),
+              SizedBox(width: 4),
               Text(
                 'FINAL STEP OF SECURITY',
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 10.5,
                   fontWeight: FontWeight.w800,
-                  letterSpacing: 0.6,
+                  letterSpacing: 0.5,
                   color: Color(0xFF701A33),
                 ),
               ),
@@ -544,15 +645,15 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
               ),
               if (_passwordController.text.isNotEmpty)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
                   decoration: BoxDecoration(
                     color: _strengthBadgeBg,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
                     _strengthText,
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: _strengthTextColor,
                     ),
@@ -566,8 +667,9 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
+              color: const Color(0xFFF8FAFC),
               borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: const Color(0xFFE2E8F0), width: 1.0),
             ),
             child: Row(
               children: [
@@ -583,6 +685,15 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                      isDense: true,
                       hintText: 'Enter secure password',
                       hintStyle: TextStyle(
                         color: Color(0xFF94A3B8),
@@ -706,7 +817,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                     Text(
                       'Passwords Match',
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 11.5,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF065F46),
                       ),
@@ -721,13 +832,20 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F5F9),
+              color: const Color(0xFFF8FAFC),
               borderRadius: BorderRadius.circular(10),
-              border: _passwordController.text.isNotEmpty &&
-                      _confirmPasswordController.text.isNotEmpty &&
-                      !_passwordsMatch
-                  ? Border.all(color: const Color(0xFFE11D48), width: 1.2)
-                  : null,
+              border: Border.all(
+                color: _passwordController.text.isNotEmpty &&
+                        _confirmPasswordController.text.isNotEmpty &&
+                        !_passwordsMatch
+                    ? const Color(0xFFE11D48)
+                    : const Color(0xFFE2E8F0),
+                width: _passwordController.text.isNotEmpty &&
+                        _confirmPasswordController.text.isNotEmpty &&
+                        !_passwordsMatch
+                    ? 1.2
+                    : 1.0,
+              ),
             ),
             child: Row(
               children: [
@@ -743,6 +861,15 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                     ),
                     decoration: const InputDecoration(
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                      filled: false,
+                      fillColor: Colors.transparent,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
+                      isDense: true,
                       hintText: 'Confirm password',
                       hintStyle: TextStyle(
                         color: Color(0xFF94A3B8),
@@ -775,98 +902,6 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                       });
                     },
                   ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // D) Enable Biometric Login Card
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: const Color(0xFFEEF2FF),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFDBEAFE),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.fingerprint_rounded,
-                      color: Color(0xFF3B82F6),
-                      size: 22,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Enable Biometric Login',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF1E293B),
-                        ),
-                      ),
-                      SizedBox(height: 2),
-                      Text(
-                        'Instant Face ID or Fingerprint unlock',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color(0xFF64748B),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _biometricEnabled = !_biometricEnabled;
-                    });
-                  },
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: 48,
-                    height: 26,
-                    padding: const EdgeInsets.symmetric(horizontal: 2),
-                    decoration: BoxDecoration(
-                      color: _biometricEnabled
-                          ? const Color(0xFF701A33)
-                          : const Color(0xFFCBD5E1),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    alignment: _biometricEnabled
-                        ? Alignment.centerRight
-                        : Alignment.centerLeft,
-                    child: Container(
-                      width: 22,
-                      height: 22,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Icon(
-                          _biometricEnabled ? Icons.check : Icons.close,
-                          size: 13,
-                          color: _biometricEnabled
-                              ? const Color(0xFF701A33)
-                              : const Color(0xFF94A3B8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),

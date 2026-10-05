@@ -7,6 +7,7 @@ class AppTheme {
     final baseTheme = ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
+      fontFamily: 'PlusJakartaSans',
       primaryColor: AppColors.primaryMaroon,
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: const ColorScheme.light(

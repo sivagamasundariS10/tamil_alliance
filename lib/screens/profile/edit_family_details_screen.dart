@@ -1002,7 +1002,6 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
           _buildMandatoryLabel('Family Values'),
           const SizedBox(height: 6),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
                 child: _buildPillValueTile(
@@ -1016,10 +1015,34 @@ class _EditFamilyDetailsScreenState extends State<EditFamilyDetailsScreen> {
               const SizedBox(width: 8),
               Expanded(
                 child: _buildPillValueTile(
+                  label: 'Traditional',
+                  isSelected: _familyValues == 'Traditional',
+                  onTap: () {
+                    setState(() => _familyValues = 'Traditional');
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: _buildPillValueTile(
                   label: 'Moderate',
                   isSelected: _familyValues == 'Moderate',
                   onTap: () {
                     setState(() => _familyValues = 'Moderate');
+                  },
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _buildPillValueTile(
+                  label: 'Liberal',
+                  isSelected: _familyValues == 'Liberal',
+                  onTap: () {
+                    setState(() => _familyValues = 'Liberal');
                   },
                 ),
               ),
