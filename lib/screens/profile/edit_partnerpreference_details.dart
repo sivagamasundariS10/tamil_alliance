@@ -265,7 +265,7 @@ class _EditPartnerPreferenceDetailsScreenState extends State<EditPartnerPreferen
 
   void _onApplyPreferences() {
     print('====================================================');
-    print('💖 [USER INPUT: EDIT PARTNER PREFERENCES]');
+    print(' [USER INPUT: EDIT PARTNER PREFERENCES]');
     print('   Age Range       : ${_ageRange.start.round()} - ${_ageRange.end.round()} yrs');
     print('   Height Range    : ${_formatHeight(_heightRange.start)} to ${_formatHeight(_heightRange.end)}');
     print('   Marital Status  : $_maritalStatus ($_childrenStatus)');

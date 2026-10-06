@@ -21,23 +21,35 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+  final FocusNode _emailFocusNode = FocusNode();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _emailSubmitted = false;
 
   @override
   void initState() {
     super.initState();
     _emailController.addListener(_onEmailChanged);
+    _emailFocusNode.addListener(_onEmailFocusChanged);
   }
 
   void _onEmailChanged() {
+    if (_emailSubmitted) {
+      _emailSubmitted = false;
+    }
+    setState(() {});
+  }
+
+  void _onEmailFocusChanged() {
     setState(() {});
   }
 
   @override
   void dispose() {
     _emailController.removeListener(_onEmailChanged);
+    _emailFocusNode.removeListener(_onEmailFocusChanged);
+    _emailFocusNode.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -45,8 +57,12 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   }
 
   bool get _isEmailValid => Validators.isEmailValid(_emailController.text);
+  // Email error only shows after typing is completed (unfocused/submitted), not mid-typing
+  bool get _shouldValidateEmail => !_emailFocusNode.hasFocus || _emailSubmitted;
   bool get _isEmailWrong =>
-      _emailController.text.trim().isNotEmpty && !_isEmailValid;
+      _emailController.text.trim().isNotEmpty &&
+      !_isEmailValid &&
+      _shouldValidateEmail;
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasDigit => _passwordController.text.contains(RegExp(r'[0-9]'));
@@ -111,6 +127,10 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   double get _progressFactor => _completedPercentage / 100.0;
 
   void _onProceed() {
+    setState(() {
+      _emailSubmitted = true;
+    });
+
     if (_emailController.text.trim().isNotEmpty && !_isEmailValid) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -404,6 +424,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   Widget _buildMailIdCard() {
     final isWrong = _isEmailWrong;
     final isValid = _isEmailValid;
+    final isFocused = _emailFocusNode.hasFocus;
 
     return Container(
       width: double.infinity,
@@ -433,21 +454,44 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   color: Color(0xFF1E293B),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEEF2F6),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Text(
-                  'OPTIONAL',
-                  style: TextStyle(
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF64748B),
-                    letterSpacing: 0.5,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isValid)
+                    Container(
+                      margin: const EdgeInsets.only(right: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFDCFCE7),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'VERIFIED ✓',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF16A34A),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEEF2F6),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Text(
+                      'OPTIONAL',
+                      style: TextStyle(
+                        fontSize: 10.5,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF64748B),
+                        letterSpacing: 0.5,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
@@ -462,8 +506,10 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
               border: Border.all(
                 color: isWrong
                     ? const Color(0xFFEF4444)
-                    : (isValid ? const Color(0xFF10B981) : const Color(0xFFE2E8F0)),
-                width: isWrong || isValid ? 1.4 : 1.0,
+                    : (isValid
+                        ? const Color(0xFF10B981)
+                        : (isFocused ? const Color(0xFF701A33) : const Color(0xFFE2E8F0))),
+                width: isWrong || isValid || isFocused ? 1.4 : 1.0,
               ),
             ),
             child: Row(
@@ -471,7 +517,14 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                 Expanded(
                   child: TextField(
                     controller: _emailController,
+                    focusNode: _emailFocusNode,
                     keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (_) {
+                      setState(() {
+                        _emailSubmitted = true;
+                      });
+                    },
                     onChanged: (_) => setState(() {}),
                     style: TextStyle(
                       fontSize: 14,
@@ -513,24 +566,71 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                     ),
                   )
                 else if (isWrong)
-                  Container(
-                    width: 24,
-                    height: 24,
-                    margin: const EdgeInsets.only(left: 8),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFEE2E2),
-                      shape: BoxShape.circle,
+                  InkWell(
+                    onTap: () {
+                      _emailController.clear();
+                      setState(() {});
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: 24,
+                      height: 24,
+                      margin: const EdgeInsets.only(left: 8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEE2E2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        size: 15,
+                        color: Color(0xFFDC2626),
+                      ),
                     ),
-                    child: const Icon(
-                      Icons.close_rounded,
-                      size: 15,
-                      color: Color(0xFFDC2626),
+                  )
+                else if (_emailController.text.isNotEmpty)
+                  InkWell(
+                    onTap: () {
+                      _emailController.clear();
+                      setState(() {});
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: 22,
+                      height: 22,
+                      margin: const EdgeInsets.only(left: 8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFE2E8F0),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close_rounded,
+                        size: 13,
+                        color: Color(0xFF64748B),
+                      ),
                     ),
                   ),
               ],
             ),
           ),
-          if (isWrong)
+          if (isValid)
+            Padding(
+              padding: const EdgeInsets.only(top: 6.0, left: 2.0),
+              child: Row(
+                children: const [
+                  Icon(Icons.check_circle_rounded, size: 14, color: Color(0xFF16A34A)),
+                  SizedBox(width: 4),
+                  Text(
+                    'Email verified',
+                    style: TextStyle(
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFF16A34A),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else if (isWrong)
             Padding(
               padding: const EdgeInsets.only(top: 6.0, left: 2.0),
               child: Row(

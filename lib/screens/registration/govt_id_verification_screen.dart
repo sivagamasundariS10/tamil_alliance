@@ -904,7 +904,7 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
 
   void _onSubmitAndFinish() {
     print('====================================================');
-    print('🪪 [USER INPUT: STEP 5 - GOVT ID & IDENTITY VERIFICATION]');
+    print(' [USER INPUT: STEP 5 - GOVT ID & IDENTITY VERIFICATION]');
     print('   Document Type   : $_selectedDocType');
     print('   ID Number       : ${_idNumberController.text.trim()}');
     print('   Front Uploaded  : $_frontSideUploaded');
@@ -1434,7 +1434,7 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        '${_pdfFileSizeString ?? "PDF Document"} • Digital Signature Validated',
+                        '${_pdfFileSizeString ?? "PDF Document"}',
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
@@ -1537,14 +1537,14 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
                       color: Color(0xFF1E293B),
                     ),
                   ),
-                  SizedBox(height: 2),
-                  Text(
-                    'Official e-Aadhaar, Passport, or DigiLocker PDF (up to 10MB)',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Color(0xFF64748B),
-                    ),
-                  ),
+                  // SizedBox(height: 2),
+                  // Text(
+                  //   'Official e-Aadhaar, Passport, or DigiLocker PDF (up to 10MB)',
+                  //   style: TextStyle(
+                  //     fontSize: 10,
+                  //     color: Color(0xFF64748B),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

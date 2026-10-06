@@ -262,7 +262,7 @@ class _FamilyDetailsScreenState extends State<FamilyDetailsScreen> {
     }
 
     print('====================================================');
-    print('👨‍👩‍👧‍👦 [USER INPUT: STEP 2 - FAMILY DETAILS]');
+    print(' [USER INPUT: STEP 2 - FAMILY DETAILS]');
     print('   Father Name       : ${_fatherNameController.text.trim()}');
     print('   Father Occupation : ${_fatherOccController.text.trim()}');
     print('   Mother Name       : ${_motherNameController.text.trim()}');

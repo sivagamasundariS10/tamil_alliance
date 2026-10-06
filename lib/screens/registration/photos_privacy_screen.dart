@@ -257,8 +257,12 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
               ),
               const SizedBox(height: 4),
               const Text(
-                'High-resolution photos increase mutual family interest by 8x',
-                style: TextStyle(fontSize: 12, color: Color(0xFF64748B)),
+                'High-resolution photos (3 to 4 MB, JPG / PNG) increase interest by 8x',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF1D4ED8),
+                ),
               ),
               const SizedBox(height: 18),
 
@@ -999,18 +1003,9 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
   }
 
   void _onContinueToGovtId() {
-    if (_primaryPhotoAsset == null || _primaryPhotoAsset!.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please upload your Primary Biodata Portrait to proceed'),
-          backgroundColor: Color(0xFFE11D48),
-          duration: Duration(milliseconds: 1500),
-        ),
-      );
-      return;
-    }
+    // Optional check: user can proceed even without primary photo during testing
     print('====================================================');
-    print('📸 [USER INPUT: STEP 4 - PHOTOS & PRIVACY]');
+    print(' [USER INPUT: STEP 4 - PHOTOS & PRIVACY]');
     print('   Primary Photo   : $_primaryPhotoAsset');
     print('   Gallery Photos  : ${_galleryPhotos.map((e) => e['label']).toList()} (${_galleryPhotos.length}/5)');
     print('   Photo Privacy   : Visible to All Verified Members (Watermarked)');
@@ -1259,22 +1254,6 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFEE2E2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: const Text(
-                    'MANDATORY',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w900,
-                      color: Color(0xFF991B1B),
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -1441,6 +1420,30 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEFF6FF),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: const Color(0xFFBFDBFE)),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF1D4ED8)),
+                            SizedBox(width: 6),
+                            Text(
+                              'Photo size must be 3 to 4 MB (JPG / PNG)',
+                              style: TextStyle(
+                                fontSize: 11.5,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF1D4ED8),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -1553,30 +1556,33 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Additional Gallery Photos',
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xFF1E293B),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Additional Gallery Photos',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF1E293B),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'Upload up to 5 photos for parent & family review',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF64748B),
+                  SizedBox(height: 2),
+                  Text(
+                    'Upload up to 5 photos for parent & family review (3 - 4 MB each)',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Color(0xFF64748B),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            if (_galleryPhotos.length > 1)
+            if (_galleryPhotos.length > 1) ...[
+              const SizedBox(width: 8),
               InkWell(
                 onTap: () {
                   setState(() {
@@ -1618,6 +1624,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                   ),
                 ),
               ),
+            ],
           ],
         ),
         const SizedBox(height: 12),

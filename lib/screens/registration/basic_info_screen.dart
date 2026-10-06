@@ -8,6 +8,8 @@ class BasicInfoScreen extends StatefulWidget {
   final String? countryCode;
   final String? email;
 
+  static String? selectedGender;
+
   const BasicInfoScreen({
     super.key,
     this.mobileNumber,
@@ -43,6 +45,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
   String? _selectedCaste;
   String? _maritalStatus;
   String? _childrenStatus; // 'Living with Children', 'No Children', 'Living without Children'
+  String? _selectedPhysicalStatus = 'Normal';
 
   // Options
   final List<Map<String, dynamic>> _profileForOptions = [
@@ -116,8 +119,9 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
   bool get _showCommunityAndMarital => _showMotherTongue && _motherTongue != null;
   bool get _showCommunity => _showCommunityAndMarital;
   bool get _showMaritalStatus => _showCommunityAndMarital;
-  bool get _showSubmit => _showMaritalStatus && _maritalStatus != null &&
+  bool get _showPhysicalStatus => _showMaritalStatus && _maritalStatus != null &&
       (!_requiresChildrenSelection || _childrenStatus != null);
+  bool get _showSubmit => _showPhysicalStatus && _selectedPhysicalStatus != null;
 
   bool get _requiresChildrenSelection =>
       _maritalStatus == 'Awaiting Divorce' ||
@@ -551,7 +555,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
   void _onContinue() {
     FocusScope.of(context).unfocus();
     print('====================================================');
-    print('📋 [USER INPUT: STEP 1 - BASIC & ASTROLOGY DETAILS]');
+    print(' [USER INPUT: STEP 1 - BASIC & ASTROLOGY DETAILS]');
     print('   Profile For     : $_profileFor');
     print('   Full Name       : ${_nameController.text.trim()}');
     print('   Date of Birth   : ${_dobController.text.trim()}');
@@ -569,6 +573,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     if (_requiresChildrenSelection) {
       print('   Children Status : $_childrenStatus');
     }
+    print('   Physical Status : $_selectedPhysicalStatus');
     print('====================================================');
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -655,7 +660,13 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                       child: _buildMaritalStatusCard(),
                     ),
 
-                    // K) Sacred Trust + CTA (Reveals after Marital Status is selected)
+                    // J2) Physical Status (Reveals after Marital Status)
+                    _buildAnimatedSection(
+                      visible: _showPhysicalStatus,
+                      child: _buildPhysicalStatusCard(),
+                    ),
+
+                    // K) Sacred Trust + CTA (Reveals after Physical Status is selected)
                     _buildAnimatedSection(
                       visible: _showSubmit,
                       child: Column(
@@ -1610,7 +1621,10 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _gender = 'Male');
+                    setState(() {
+                      _gender = 'Male';
+                      BasicInfoScreen.selectedGender = 'Male';
+                    });
                     _scrollToBottom();
                   },
                   child: AnimatedContainer(
@@ -1658,7 +1672,10 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    setState(() => _gender = 'Female');
+                    setState(() {
+                      _gender = 'Female';
+                      BasicInfoScreen.selectedGender = 'Female';
+                    });
                     _scrollToBottom();
                   },
                   child: AnimatedContainer(
@@ -2386,6 +2403,121 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  // J2) Physical Status Card
+  Widget _buildPhysicalStatusCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFFEDF2F7)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Physical Status',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF1E293B),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              // Normal
+              Expanded(
+                child: _buildPhysicalStatusPill(
+                  label: 'Normal',
+                  icon: Icons.check_circle_outline_rounded,
+                  statusKey: 'Normal',
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Challenged
+              Expanded(
+                child: _buildPhysicalStatusPill(
+                  label: 'Challenged',
+                  icon: Icons.accessible_forward_rounded,
+                  statusKey: 'Challenged',
+                ),
+              ),
+              const SizedBox(width: 8),
+              // Doesn't Matter
+              Expanded(
+                child: _buildPhysicalStatusPill(
+                  label: 'Doesn\'t Matter',
+                  icon: Icons.all_inclusive_rounded,
+                  statusKey: 'Doesn\'t Matter',
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPhysicalStatusPill({
+    required String label,
+    required IconData icon,
+    required String statusKey,
+  }) {
+    final isSelected = _selectedPhysicalStatus == statusKey;
+    return Material(
+      color: isSelected ? const Color(0xFFFFD1D8) : const Color(0xFFEFF4FF),
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () {
+          setState(() {
+            _selectedPhysicalStatus = statusKey;
+          });
+          _scrollToBottom();
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ? const Color(0xFFFDA4AF) : const Color(0xFFDBEAFE),
+            ),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 16,
+                color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

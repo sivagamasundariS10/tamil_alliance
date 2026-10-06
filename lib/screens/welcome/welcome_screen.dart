@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../core/constants/app_colors.dart';
 import '../auth/mobile_auth_screen.dart';
-import '../auth/password_login_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -319,7 +318,7 @@ class WelcomeScreen extends StatelessWidget {
 
               const SizedBox(height: 14),
 
-              // 6. Community Trust Card: One App For All Your preference
+              // 6. Community Trust Card: One App For All Your Preferences
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(14),
@@ -333,50 +332,51 @@ class WelcomeScreen extends StatelessWidget {
                     Row(
                       children: [
                         const Icon(
-                          Icons.groups,
-                          size: 18,
+                          Icons.diversity_3,
+                          size: 19,
                           color: Color(0xFF701A33),
                         ),
-                        const SizedBox(width: 6),
-                        const Expanded(
+                        const SizedBox(width: 7),
+                        Expanded(
                           child: Text(
-                            'One App For All Your preference',
-                            style: TextStyle(
+                            'One App For All Your Preferences',
+                            style: GoogleFonts.plusJakartaSans(
                               fontSize: 13.5,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF701A33),
+                              color: const Color(0xFF701A33),
                             ),
                           ),
                         ),
-                        const Text(
+                        Text(
                           'Worldwide',
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFF6B7280),
+                          style: GoogleFonts.plusJakartaSans(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF6B7280),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 6),
-                    // const Text(
-                    //   'Trusted across Chennai, Coimbatore, Madurai, Bengaluru, Singapore, Malaysia, the UK & North America.',
-                    //   style: TextStyle(
-                    //     fontSize: 13,
-                    //     color: Color(0xFF4B5563),
-                    //     height: 1.35,
-                    //   ),
-                    // ),
-                    const SizedBox(height: 10),
-                    // Castes & Community Tags
+                    Text(
+                      'Welcoming all faiths — Find verified matches based on your religious traditions & personal values.',
+                      style: GoogleFonts.plusJakartaSans(
+                        fontSize: 12.5,
+                        color: const Color(0xFF4B5563),
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Clean Religion Chips
                     Wrap(
-                      spacing: 6,
-                      runSpacing: 6,
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        _buildCommunityChip('Iyer & Iyengar'),
-                        _buildCommunityChip('Kongu Vellalar'),
-                        _buildCommunityChip('Chettiar'),
-                        _buildCommunityChip('Mudaliar & Pillai'),
-                        _buildCommunityChip('+ 40 More'),
+                        _buildReligionChip('Hindu'),
+                        _buildReligionChip('Christian'),
+                        _buildReligionChip('Muslim'),
+                        _buildReligionChip('Jain'),
+                        _buildReligionChip('All Faiths Welcome', isHighlight: true),
                       ],
                     ),
                   ],
@@ -621,24 +621,34 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCommunityChip(String label) {
+  Widget _buildReligionChip(String label, {bool isHighlight = false}) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6.5),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isHighlight ? const Color(0xFFF3E8FF) : Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(
+          color: isHighlight ? const Color(0xFFE9D5FF) : const Color(0xFFE5E7EB),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+          ),
+        ],
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: Color(0xFF374151),
+        style: GoogleFonts.plusJakartaSans(
+          fontSize: 12.5,
+          fontWeight: isHighlight ? FontWeight.w700 : FontWeight.w600,
+          color: isHighlight ? const Color(0xFF701A33) : const Color(0xFF374151),
         ),
       ),
     );
   }
+
 }
 
 class AstrologicalSunIcon extends StatelessWidget {

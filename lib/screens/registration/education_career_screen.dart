@@ -127,19 +127,34 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       _onFieldChanged();
     });
     _incomeController.addListener(_onFieldChanged);
-    _bioController.addListener(_onFieldChanged);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_hasUserEditedBio && _bioController.text.trim().isEmpty) {
+        _bioController.text = _generateDefaultBio();
+        setState(() {});
+      }
+    });
   }
 
   void _onFieldChanged() {
     if (!mounted) return;
-    if (!_hasUserEditedBio && _isInterestsComplete && _bioController.text.trim().isEmpty) {
-      _bioController.text = _generateDefaultBio();
+    if (!_hasUserEditedBio) {
+      final updatedBio = _generateDefaultBio();
+      if (updatedBio != _bioController.text) {
+        _bioController.text = updatedBio;
+      }
     }
     _checkAndTriggerAutoScroll();
     setState(() {});
   }
 
   void _checkAndTriggerAutoScroll() {
+    if (!_hasUserEditedBio) {
+      final updatedBio = _generateDefaultBio();
+      if (updatedBio != _bioController.text) {
+        _bioController.text = updatedBio;
+      }
+    }
     bool shouldScroll = false;
 
     if (_isEducationComplete && !_prevCareerVisible) {
@@ -180,7 +195,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     if (_isInterestsComplete && !_prevBioVisible) {
       _prevBioVisible = true;
       shouldScroll = true;
-      if (!_hasUserEditedBio && _bioController.text.trim().isEmpty) {
+      if (!_hasUserEditedBio) {
         _bioController.text = _generateDefaultBio();
       }
     } else if (!_isInterestsComplete) {
@@ -774,17 +789,26 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
   String _generateDefaultBio() {
     final List<String> sentences = [];
 
-    // 1. Profession & Company
+    final deg = _degreeController.text.trim();
+    final college = _collegeController.text.trim();
     final desig = _designationController.text.trim();
     final comp = _companyController.text.trim();
     final loc = _workLocationController.text.trim();
-    final deg = _degreeController.text.trim();
-    final college = _collegeController.text.trim();
 
+    // 1. Education
+    if (deg.isNotEmpty && college.isNotEmpty) {
+      sentences.add("I have completed my $deg from $college.");
+    } else if (deg.isNotEmpty) {
+      sentences.add("I have completed my education in $deg.");
+    } else if (_highestEducation != null && _highestEducation!.isNotEmpty) {
+      sentences.add("I hold a $_highestEducation degree.");
+    }
+
+    // 2. Profession & Company & Location
     if (desig.isNotEmpty && comp.isNotEmpty && loc.isNotEmpty) {
-      sentences.add("I am currently working as a $desig at $comp in $loc.");
+      sentences.add("Currently, I am working as a $desig at $comp in $loc.");
     } else if (desig.isNotEmpty && comp.isNotEmpty) {
-      sentences.add("I am working as a $desig at $comp.");
+      sentences.add("Currently, I am working as a $desig at $comp.");
     } else if (desig.isNotEmpty && loc.isNotEmpty) {
       sentences.add("I am working as a $desig based in $loc.");
     } else if (desig.isNotEmpty) {
@@ -793,37 +817,54 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       sentences.add("I am employed in the $_employmentSector sector.");
     }
 
-    // 2. Education
-    if (deg.isNotEmpty && college.isNotEmpty) {
-      sentences.add("I have completed my $deg from $college.");
-    } else if (deg.isNotEmpty) {
-      sentences.add("I have completed my education in $deg.");
-    } else if (_highestEducation != null) {
-      sentences.add("I hold a $_highestEducation degree.");
-    }
-
-    // 3. Cultural outlook & personality
-    if (_culturalOutlook != null) {
-      if (_culturalOutlook == 'Traditional') {
-        sentences.add("I hold traditional values with deep respect for family customs and Tamil cultural roots.");
-      } else if (_culturalOutlook == 'Modern & Traditional') {
-        sentences.add("I blend modern thinking with strong traditional family values.");
-      } else if (_culturalOutlook == 'Moderate') {
-        sentences.add("I have a moderate outlook, balancing personal ambitions with family harmony.");
-      } else if (_culturalOutlook == 'Liberal') {
-        sentences.add("I have a progressive, open-minded approach towards life.");
-      } else if (_culturalOutlook == 'Orthodox') {
-        sentences.add("I have deep faith in our traditions, spirituality, and cultural heritage.");
+    // 3. Citizenship / Country if abroad
+    if (_citizenshipCountry != null && _citizenshipCountry != 'India') {
+      if (_residencyStatus != null && _residencyStatus!.isNotEmpty) {
+        sentences.add("I am currently living in $_citizenshipCountry on $_residencyStatus.");
+      } else {
+        sentences.add("I am currently living in $_citizenshipCountry.");
       }
     }
 
-    // 4. Hobbies
+    // 4. Cultural outlook & values
+    if (_culturalOutlook != null) {
+      if (_culturalOutlook == 'Traditional') {
+        sentences.add("I am a family-oriented person who values traditional Tamil customs and ethics.");
+      } else if (_culturalOutlook == 'Modern & Traditional') {
+        sentences.add("I maintain a healthy balance between modern thoughts and traditional family values.");
+      } else if (_culturalOutlook == 'Moderate') {
+        sentences.add("I have a balanced and practical outlook towards life and relationships.");
+      } else if (_culturalOutlook == 'Liberal') {
+        sentences.add("I have an open-minded and progressive approach towards life.");
+      } else if (_culturalOutlook == 'Orthodox') {
+        sentences.add("I have deep faith in our traditions, spirituality, and cultural roots.");
+      }
+    }
+
+    // 5. Dietary lifestyle
+    if (_selectedDietaryPreferences.isNotEmpty) {
+      if (_selectedDietaryPreferences.contains('Veg') && _selectedDietaryPreferences.contains('Non-Veg')) {
+        sentences.add("I enjoy both vegetarian and non-vegetarian food.");
+      } else if (_selectedDietaryPreferences.contains('Veg') && _selectedDietaryPreferences.contains('Eggetarian')) {
+        sentences.add("I follow a vegetarian diet and consume eggs (eggetarian).");
+      } else if (_selectedDietaryPreferences.contains('Veg')) {
+        sentences.add("I follow a vegetarian lifestyle.");
+      } else if (_selectedDietaryPreferences.contains('Vegan')) {
+        sentences.add("I follow a conscious vegan lifestyle.");
+      } else if (_selectedDietaryPreferences.contains('Eggetarian')) {
+        sentences.add("I am an eggetarian.");
+      } else if (_selectedDietaryPreferences.contains('Non-Veg')) {
+        sentences.add("I enjoy non-vegetarian food.");
+      }
+    }
+
+    // 6. Hobbies
     if (_selectedHobbies.isNotEmpty) {
       final hobbies = _selectedHobbies.take(3).join(', ');
       sentences.add("In my leisure time, I enjoy $hobbies.");
     }
 
-    // 5. Partner expectation
+    // 7. Life partner expectations
     sentences.add("Looking for an understanding, caring, and compatible partner to walk together through life's journey.");
 
     return sentences.join(' ');
@@ -873,7 +914,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     }
 
     print('====================================================');
-    print('🎓 [USER INPUT: STEP 3 - EDUCATION, CAREER & LIFESTYLE]');
+    print(' [USER INPUT: STEP 3 - EDUCATION, CAREER & LIFESTYLE]');
     print('   Highest Education  : $_highestEducation');
     print('   Degree             : ${_degreeController.text.trim()}');
     print('   College/University : ${_collegeController.text.trim()}');
@@ -885,7 +926,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     print('   Annual Income      : $_currencySymbol ${_incomeController.text.trim()}');
     print('   Citizenship Country: $_citizenshipCountry');
     print('   Residency Status   : $_residencyStatus');
-    print('   Dietary Preference : $_selectedDietaryPreferences');
+    print('   Dietary Preference : ${_selectedDietaryPreferences.join(", ")}');
     print('   Smoking Habit      : $_smokingHabit');
     print('   Drinking Habit     : $_drinkingHabit');
     print('   Hobbies            : $_selectedHobbies');
@@ -1132,8 +1173,8 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
               color: const Color(0xFFF1F3FB),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _highestEducation != null ? const Color(0xFF881337) : const Color(0xFFE8EBFA),
-                width: _highestEducation != null ? 1.5 : 1.0,
+                color: const Color(0xFFE8EBFA),
+                width: 1.0,
               ),
             ),
             child: Row(
@@ -1452,8 +1493,8 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
               color: const Color(0xFFF1F3FB),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: _citizenshipCountry != null ? const Color(0xFF881337) : const Color(0xFFE8EBFA),
-                width: _citizenshipCountry != null ? 1.5 : 1.0,
+                color: const Color(0xFFE8EBFA),
+                width: 1.0,
               ),
             ),
             child: Row(
@@ -1512,7 +1553,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFF881337), width: 1.5),
+              borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
             ),
           ),
           dropdownColor: Colors.white,
@@ -1539,6 +1580,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             setState(() {
               _residencyStatus = val;
             });
+            FocusScope.of(context).unfocus();
             _checkAndTriggerAutoScroll();
           },
         ),
@@ -1546,40 +1588,60 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     );
   }
 
+  void _onDietaryPreferenceTapped(String diet) {
+    setState(() {
+      if (_selectedDietaryPreferences.contains(diet)) {
+        _selectedDietaryPreferences.remove(diet);
+      } else {
+        if (_selectedDietaryPreferences.isEmpty) {
+          _selectedDietaryPreferences.add(diet);
+        } else if (_selectedDietaryPreferences.length == 1) {
+          final current = _selectedDietaryPreferences.first;
+          // Only permitted 2-item pairs: {Veg, Non-Veg} or {Veg, Eggetarian}
+          final isAllowedPair = (current == 'Veg' && (diet == 'Non-Veg' || diet == 'Eggetarian')) ||
+              ((current == 'Non-Veg' || current == 'Eggetarian') && diet == 'Veg');
+          if (isAllowedPair) {
+            _selectedDietaryPreferences.add(diet);
+          } else {
+            // Not an allowed combination (e.g. Non-Veg + Eggetarian, or Vegan + anything)
+            // Replace with newly tapped selection
+            _selectedDietaryPreferences.clear();
+            _selectedDietaryPreferences.add(diet);
+          }
+        } else {
+          // Already 2 selected: {Veg, Non-Veg} or {Veg, Eggetarian}
+          if (diet == 'Eggetarian' && _selectedDietaryPreferences.contains('Veg')) {
+            _selectedDietaryPreferences.clear();
+            _selectedDietaryPreferences.addAll(['Veg', 'Eggetarian']);
+          } else if (diet == 'Non-Veg' && _selectedDietaryPreferences.contains('Veg')) {
+            _selectedDietaryPreferences.clear();
+            _selectedDietaryPreferences.addAll(['Veg', 'Non-Veg']);
+          } else {
+            // Switched to another single option (e.g. Vegan or Veg)
+            _selectedDietaryPreferences.clear();
+            _selectedDietaryPreferences.add(diet);
+          }
+        }
+      }
+    });
+    _checkAndTriggerAutoScroll();
+  }
+
   // F) Lifestyle & Habits Card
   Widget _buildLifestyleCard() {
     return _buildCardWrapper(
       title: 'Lifestyle & Habits',
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildMandatoryLabel('Dietary Preference'),
-            if (_selectedDietaryPreferences.isNotEmpty)
-              Text(
-                '${_selectedDietaryPreferences.length} Selected',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Color(0xFF881337)),
-              ),
-          ],
-        ),
+        _buildMandatoryLabel('Dietary Preference'),
         const SizedBox(height: 8),
         Row(
           children: [
             Expanded(
               child: _buildDietTile(
-                label: 'Pure Veg',
+                label: 'Veg',
                 icon: Icons.eco_outlined,
-                isSelected: _selectedDietaryPreferences.contains('Pure Veg'),
-                onTap: () {
-                  setState(() {
-                    if (_selectedDietaryPreferences.contains('Pure Veg')) {
-                      _selectedDietaryPreferences.remove('Pure Veg');
-                    } else {
-                      _selectedDietaryPreferences.add('Pure Veg');
-                    }
-                  });
-                  _checkAndTriggerAutoScroll();
-                },
+                isSelected: _selectedDietaryPreferences.contains('Veg'),
+                onTap: () => _onDietaryPreferenceTapped('Veg'),
               ),
             ),
             const SizedBox(width: 8),
@@ -1588,16 +1650,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 label: 'Non-Veg',
                 icon: Icons.restaurant_outlined,
                 isSelected: _selectedDietaryPreferences.contains('Non-Veg'),
-                onTap: () {
-                  setState(() {
-                    if (_selectedDietaryPreferences.contains('Non-Veg')) {
-                      _selectedDietaryPreferences.remove('Non-Veg');
-                    } else {
-                      _selectedDietaryPreferences.add('Non-Veg');
-                    }
-                  });
-                  _checkAndTriggerAutoScroll();
-                },
+                onTap: () => _onDietaryPreferenceTapped('Non-Veg'),
               ),
             ),
           ],
@@ -1610,16 +1663,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 label: 'Eggetarian',
                 icon: Icons.egg_outlined,
                 isSelected: _selectedDietaryPreferences.contains('Eggetarian'),
-                onTap: () {
-                  setState(() {
-                    if (_selectedDietaryPreferences.contains('Eggetarian')) {
-                      _selectedDietaryPreferences.remove('Eggetarian');
-                    } else {
-                      _selectedDietaryPreferences.add('Eggetarian');
-                    }
-                  });
-                  _checkAndTriggerAutoScroll();
-                },
+                onTap: () => _onDietaryPreferenceTapped('Eggetarian'),
               ),
             ),
             const SizedBox(width: 8),
@@ -1628,16 +1672,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                 label: 'Vegan',
                 icon: Icons.grass_outlined,
                 isSelected: _selectedDietaryPreferences.contains('Vegan'),
-                onTap: () {
-                  setState(() {
-                    if (_selectedDietaryPreferences.contains('Vegan')) {
-                      _selectedDietaryPreferences.remove('Vegan');
-                    } else {
-                      _selectedDietaryPreferences.add('Vegan');
-                    }
-                  });
-                  _checkAndTriggerAutoScroll();
-                },
+                onTap: () => _onDietaryPreferenceTapped('Vegan'),
               ),
             ),
           ],
@@ -1922,9 +1957,9 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   // H) Bio Card
   Widget _buildBioCard() {
-    if (!_hasUserEditedBio && _bioController.text.trim().isEmpty) {
+    if (!_hasUserEditedBio) {
       final defaultBio = _generateDefaultBio();
-      if (defaultBio.isNotEmpty) {
+      if (defaultBio.isNotEmpty && defaultBio != _bioController.text) {
         _bioController.text = defaultBio;
       }
     }
@@ -1948,46 +1983,49 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 26,
-                    height: 26,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF881337).withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.circular(8),
+              Container(
+                width: 26,
+                height: 26,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF881337).withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.format_quote_rounded, size: 16, color: Color(0xFF881337)),
+              ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Few Words About Me',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF0F172A),
                     ),
-                    child: const Icon(Icons.format_quote_rounded, size: 16, color: Color(0xFF881337)),
                   ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Few Words About Me',
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          color: Color(0xFF0F172A),
-                        ),
-                      ),
-                      Text(
-                        'Express your aspirations',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color(0xFF64748B),
-                        ),
-                      ),
-                    ],
+                  Text(
+                    'Express your aspirations',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF64748B),
+                    ),
                   ),
                 ],
               ),
-              const Icon(Icons.edit_outlined, size: 16, color: Color(0xFF64748B)),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
+          const Text(
+            'We generated this based on your details. You can keep it as is, or tap inside to edit.',
+            style: TextStyle(
+              fontSize: 11.5,
+              color: Color(0xFF64748B),
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          const SizedBox(height: 10),
           TextFormField(
             controller: _bioController,
             maxLines: 4,
