@@ -255,15 +255,15 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                   color: Color(0xFF1E293B),
                 ),
               ),
-              const SizedBox(height: 4),
-              const Text(
-                'High-resolution photos (3 to 4 MB, JPG / PNG) increase interest by 8x',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1D4ED8),
-                ),
-              ),
+              // const SizedBox(height: 4),
+              // const Text(
+              //   'High-resolution photos (3 to 4 MB, JPG / PNG) increase interest by 8x',
+              //   style: TextStyle(
+              //     fontSize: 12,
+              //     fontWeight: FontWeight.w600,
+              //     color: Color(0xFF1D4ED8),
+              //   ),
+              // ),
               const SizedBox(height: 18),
 
               // Option 1: Take Photo with Camera
@@ -1420,30 +1420,30 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEFF6FF),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: const Color(0xFFBFDBFE)),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF1D4ED8)),
-                            SizedBox(width: 6),
-                            Text(
-                              'Photo size must be 3 to 4 MB (JPG / PNG)',
-                              style: TextStyle(
-                                fontSize: 11.5,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFF1D4ED8),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // const SizedBox(height: 10),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                      //   decoration: BoxDecoration(
+                      //     color: const Color(0xFFEFF6FF),
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     border: Border.all(color: const Color(0xFFBFDBFE)),
+                      //   ),
+                        // child: const Row(
+                        //   mainAxisSize: MainAxisSize.min,
+                        //   children: [
+                        //     Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF1D4ED8)),
+                        //     SizedBox(width: 6),
+                        //     Text(
+                        //       'Photo size must be 3 to 4 MB (JPG / PNG)',
+                        //       style: TextStyle(
+                        //         fontSize: 11.5,
+                        //         fontWeight: FontWeight.w700,
+                        //         color: Color(0xFF1D4ED8),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                      // ),
                       const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -1572,7 +1572,7 @@ class _PhotosPrivacyScreenState extends State<PhotosPrivacyScreen> {
                   ),
                   SizedBox(height: 2),
                   Text(
-                    'Upload up to 5 photos for parent & family review (3 - 4 MB each)',
+                    'Upload up to 5 photos for parent & family review ',
                     style: TextStyle(
                       fontSize: 11,
                       color: Color(0xFF64748B),

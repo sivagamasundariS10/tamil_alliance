@@ -94,6 +94,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
     super.initState();
     _nameController.addListener(() => setState(() {}));
     _birthPlaceController.addListener(() => setState(() {}));
+    _religionController.addListener(() => setState(() {}));
   }
 
   @override
@@ -127,6 +128,8 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
       _maritalStatus == 'Awaiting Divorce' ||
       _maritalStatus == 'Widowed' ||
       _maritalStatus == 'Divorced';
+
+  bool get _isContinueEnabled => _religionController.text.trim().isNotEmpty;
 
 
   void _scrollToBottom() {
@@ -553,6 +556,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
   }
 
   void _onContinue() {
+    if (!_isContinueEnabled) return;
     FocusScope.of(context).unfocus();
     print('====================================================');
     print(' [USER INPUT: STEP 1 - BASIC & ASTROLOGY DETAILS]');
@@ -1993,6 +1997,7 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
             ),
             child: TextField(
               controller: _religionController,
+              onChanged: (_) => setState(() {}),
               style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w600, color: Color(0xFF1E293B)),
               decoration: const InputDecoration(
                 border: InputBorder.none,
@@ -2447,22 +2452,13 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
                   statusKey: 'Normal',
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
               // Challenged
               Expanded(
                 child: _buildPhysicalStatusPill(
                   label: 'Challenged',
                   icon: Icons.accessible_forward_rounded,
                   statusKey: 'Challenged',
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Doesn't Matter
-              Expanded(
-                child: _buildPhysicalStatusPill(
-                  label: 'Doesn\'t Matter',
-                  icon: Icons.all_inclusive_rounded,
-                  statusKey: 'Doesn\'t Matter',
                 ),
               ),
             ],
@@ -2578,41 +2574,45 @@ class _BasicInfoScreenState extends State<BasicInfoScreen> {
 
   // L) Continue CTA Button
   Widget _buildContinueButton() {
+    final bool isEnabled = _isContinueEnabled;
+
     return Container(
       width: double.infinity,
       height: 52,
       decoration: BoxDecoration(
-        color: const Color(0xFF701A33),
+        color: isEnabled ? const Color(0xFF701A33) : const Color(0xFFCBD5E1),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x59701A33),
-            blurRadius: 10,
-            offset: Offset(0, 4),
-          ),
-        ],
+        boxShadow: isEnabled
+            ? const [
+                BoxShadow(
+                  color: Color(0x59701A33),
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
+                ),
+              ]
+            : null,
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: _onContinue,
+          onTap: isEnabled ? _onContinue : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Text(
                 'Continue',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isEnabled ? Colors.white : const Color(0xFF64748B),
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 0.4,
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Icon(
                 Icons.arrow_forward_rounded,
-                color: Colors.white,
+                color: isEnabled ? Colors.white : const Color(0xFF64748B),
                 size: 18,
               ),
             ],

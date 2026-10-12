@@ -57,12 +57,8 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   }
 
   bool get _isEmailValid => Validators.isEmailValid(_emailController.text);
-  // Email error only shows after typing is completed (unfocused/submitted), not mid-typing
-  bool get _shouldValidateEmail => !_emailFocusNode.hasFocus || _emailSubmitted;
   bool get _isEmailWrong =>
-      _emailController.text.trim().isNotEmpty &&
-      !_isEmailValid &&
-      _shouldValidateEmail;
+      _emailController.text.trim().isNotEmpty && !_isEmailValid;
 
   bool get _hasMinLength => _passwordController.text.length >= 8;
   bool get _hasDigit => _passwordController.text.contains(RegExp(r'[0-9]'));
@@ -423,8 +419,8 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
   // 3. Mail Id Card
   Widget _buildMailIdCard() {
     final isWrong = _isEmailWrong;
-    final isValid = _isEmailValid;
     final isFocused = _emailFocusNode.hasFocus;
+    final isValid = _isEmailValid;
 
     return Container(
       width: double.infinity,
@@ -454,44 +450,21 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   color: Color(0xFF1E293B),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (isValid)
-                    Container(
-                      margin: const EdgeInsets.only(right: 6),
-                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFDCFCE7),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        'VERIFIED ✓',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF16A34A),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                    ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEEF2F6),
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: const Text(
-                      'OPTIONAL',
-                      style: TextStyle(
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF64748B),
-                        letterSpacing: 0.5,
-                      ),
-                    ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2.5),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEEF2F6),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'OPTIONAL',
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF64748B),
+                    letterSpacing: 0.5,
                   ),
-                ],
+                ),
               ),
             ],
           ),
@@ -499,17 +472,13 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
             decoration: BoxDecoration(
-              color: isWrong
-                  ? const Color(0xFFFEF2F2)
-                  : (isValid ? const Color(0xFFF0FDF4) : const Color(0xFFF8FAFC)),
+              color: isWrong ? const Color(0xFFFEF2F2) : const Color(0xFFF8FAFC),
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isWrong
                     ? const Color(0xFFEF4444)
-                    : (isValid
-                        ? const Color(0xFF10B981)
-                        : (isFocused ? const Color(0xFF701A33) : const Color(0xFFE2E8F0))),
-                width: isWrong || isValid || isFocused ? 1.4 : 1.0,
+                    : (isFocused ? const Color(0xFF94A3B8) : const Color(0xFFE2E8F0)),
+                width: isWrong ? 1.4 : 1.0,
               ),
             ),
             child: Row(
@@ -552,8 +521,8 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                 ),
                 if (isValid)
                   Container(
-                    width: 26,
-                    height: 26,
+                    width: 24,
+                    height: 24,
                     margin: const EdgeInsets.only(left: 8),
                     decoration: const BoxDecoration(
                       color: Color(0xFFDCFCE7),
@@ -561,30 +530,8 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                     ),
                     child: const Icon(
                       Icons.check_rounded,
-                      size: 16,
+                      size: 15,
                       color: Color(0xFF16A34A),
-                    ),
-                  )
-                else if (isWrong)
-                  InkWell(
-                    onTap: () {
-                      _emailController.clear();
-                      setState(() {});
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      margin: const EdgeInsets.only(left: 8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFFEE2E2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        size: 15,
-                        color: Color(0xFFDC2626),
-                      ),
                     ),
                   )
                 else if (_emailController.text.isNotEmpty)
@@ -598,39 +545,21 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                       width: 22,
                       height: 22,
                       margin: const EdgeInsets.only(left: 8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE2E8F0),
+                      decoration: BoxDecoration(
+                        color: isWrong ? const Color(0xFFFEE2E2) : const Color(0xFFE2E8F0),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.close_rounded,
                         size: 13,
-                        color: Color(0xFF64748B),
+                        color: isWrong ? const Color(0xFFDC2626) : const Color(0xFF64748B),
                       ),
                     ),
                   ),
               ],
             ),
           ),
-          if (isValid)
-            Padding(
-              padding: const EdgeInsets.only(top: 6.0, left: 2.0),
-              child: Row(
-                children: const [
-                  Icon(Icons.check_circle_rounded, size: 14, color: Color(0xFF16A34A)),
-                  SizedBox(width: 4),
-                  Text(
-                    'Email verified',
-                    style: TextStyle(
-                      fontSize: 11.5,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF16A34A),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          else if (isWrong)
+          if (isWrong)
             Padding(
               padding: const EdgeInsets.only(top: 6.0, left: 2.0),
               child: Row(
@@ -638,7 +567,7 @@ class _AccountSecurityScreenState extends State<AccountSecurityScreen> {
                   Icon(Icons.error_outline_rounded, size: 13, color: Color(0xFFDC2626)),
                   SizedBox(width: 4),
                   Text(
-                    'Invalid email format (e.g. name@gmail.com)',
+                    'Enter valid email',
                     style: TextStyle(
                       fontSize: 11.5,
                       fontWeight: FontWeight.w600,

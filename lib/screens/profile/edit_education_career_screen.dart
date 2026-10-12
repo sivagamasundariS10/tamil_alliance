@@ -311,11 +311,10 @@ class _EditEducationCareerScreenState extends State<EditEducationCareerScreen> {
   // ─────────────────────────────────────────────────────────────
   Widget _buildEducationDetailsCard() {
     final degreeLevels = [
-      "Master's / Post Graduate",
-      "Bachelor's / Undergraduate",
-      "Doctorate / Ph.D",
-      "Diploma / Polytechnic",
-      "Professional Degree (CA/CS)",
+      "PhD",
+      "Master's",
+      "Bachelor's",
+      "Diploma",
       "High School",
     ];
 

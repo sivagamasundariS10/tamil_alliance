@@ -25,9 +25,8 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
   final ImagePicker _picker = ImagePicker();
 
   // Document selection
-  String _selectedDocType = 'Aadhaar Card (UIDAI)';
+  String _selectedDocType = 'Passport';
   final List<String> _docTypes = [
-    'Aadhaar Card (UIDAI)',
     'Passport',
     'Voter ID (EPIC)',
     'Driving Licence',
@@ -1109,14 +1108,14 @@ class _GovtIdVerificationScreenState extends State<GovtIdVerificationScreen> {
                         color: Color(0xFF1E293B),
                       ),
                     ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Aadhaar, Passport, or Voter ID',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Color(0xFF64748B),
-                      ),
-                    ),
+                    // SizedBox(height: 2),
+                    // Text(
+                    //   'Passport, or Voter ID',
+                    //   style: TextStyle(
+                    //     fontSize: 11,
+                    //     color: Color(0xFF64748B),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

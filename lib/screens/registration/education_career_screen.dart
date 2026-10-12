@@ -38,8 +38,16 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
   String _currencyCode = 'INR';
   String _currencySymbol = '₹';
 
+  String get _currencyDisplay {
+    if (_currencySymbol.trim().toUpperCase() == _currencyCode.trim().toUpperCase()) {
+      return _currencyCode;
+    }
+    return '$_currencySymbol $_currencyCode';
+  }
+
   // 4. Citizenship & Residency
   String? _citizenshipCountry = 'India';
+  final TextEditingController _citizenshipCountryController = TextEditingController(text: 'India');
   String? _residencyStatus;
 
   // 5. Lifestyle & Habits
@@ -64,6 +72,15 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
   bool _prevInterestsVisible = false;
   bool _prevBioVisible = false;
 
+  bool get _isIndiaCitizenship {
+    final country = (_citizenshipCountryController.text.isNotEmpty
+            ? _citizenshipCountryController.text
+            : (_citizenshipCountry ?? ''))
+        .trim()
+        .toLowerCase();
+    return country == 'india' || country.startsWith('ind');
+  }
+
   // Progressive Validation Getters
   bool get _isEducationComplete =>
       _highestEducation != null && _degreeController.text.trim().isNotEmpty;
@@ -79,10 +96,8 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   bool get _isCitizenshipComplete =>
       _isIncomeComplete &&
-      _citizenshipCountry != null &&
-      _citizenshipCountry!.trim().isNotEmpty &&
-      _residencyStatus != null &&
-      _residencyStatus!.trim().isNotEmpty;
+      _citizenshipCountryController.text.trim().isNotEmpty &&
+      (_isIndiaCitizenship || (_residencyStatus != null && _residencyStatus!.trim().isNotEmpty));
 
   bool get _isLifestyleComplete =>
       _isCitizenshipComplete &&
@@ -94,15 +109,13 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       _isLifestyleComplete &&
       _culturalOutlook != null;
 
-  final List<String> _educationLevels = [
-    "Doctorate / Ph.D", 
-    "Master's / Post Graduate",
-    "Bachelor's / Graduate",
-    "Medical / Dental (MBBS / MD / BDS)",
-    "Law (LLB / LLM)",
+  List<String> get _educationLevels => const [
+    "PhD",
+    "Master's Degree",
+    "Bachelor's Degree",
+    "Diploma",
+    "High School",
     "Professional Certification (CA / CS / CFA)",
-    "Diploma / Polytechnic",
-    "Higher Secondary (12th)",
   ];
 
   final List<String> _employmentSectors = [
@@ -127,6 +140,13 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
       _onFieldChanged();
     });
     _incomeController.addListener(_onFieldChanged);
+    _citizenshipCountryController.addListener(() {
+      _citizenshipCountry = _citizenshipCountryController.text;
+      if (_isIndiaCitizenship) {
+        _residencyStatus = null;
+      }
+      _onFieldChanged();
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && !_hasUserEditedBio && _bioController.text.trim().isEmpty) {
@@ -228,6 +248,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
     _companyController.dispose();
     _workLocationController.dispose();
     _incomeController.dispose();
+    _citizenshipCountryController.dispose();
     _customHobbyController.dispose();
     _bioController.dispose();
     super.dispose();
@@ -518,14 +539,15 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
   void _showEducationPicker() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
         return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -550,35 +572,34 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Expanded(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    itemCount: _educationLevels.length,
-                    separatorBuilder: (_, __) => const Divider(height: 1, color: Color(0xFFF1F5F9)),
-                    itemBuilder: (c, idx) {
-                      final level = _educationLevels[idx];
-                      final isSelected = _highestEducation == level;
-                      return ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                        title: Text(
-                          level,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                            color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
-                          ),
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _educationLevels.length,
+                  separatorBuilder: (_, __) => const Divider(height: 12, thickness: 1, color: Color(0xFFF1F5F9)),
+                  itemBuilder: (c, idx) {
+                    final level = _educationLevels[idx];
+                    final isSelected = _highestEducation == level;
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      title: Text(
+                        level,
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                          color: isSelected ? const Color(0xFF881337) : const Color(0xFF1E293B),
                         ),
-                        trailing: isSelected
-                            ? const Icon(Icons.check_circle_rounded, color: Color(0xFF881337), size: 20)
-                            : null,
-                        onTap: () {
-                          setState(() => _highestEducation = level);
-                          Navigator.pop(ctx);
-                          _checkAndTriggerAutoScroll();
-                        },
-                      );
-                    },
-                  ),
+                      ),
+                      trailing: isSelected
+                          ? const Icon(Icons.check_circle_rounded, color: Color(0xFF881337), size: 20)
+                          : null,
+                      onTap: () {
+                        setState(() => _highestEducation = level);
+                        Navigator.pop(ctx);
+                        _checkAndTriggerAutoScroll();
+                      },
+                    );
+                  },
                 ),
               ],
             ),
@@ -709,7 +730,12 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                                 ),
                                 onTap: () {
                                   setState(() {
-                                    _citizenshipCountry = searchQuery.trim();
+                                    final selected = searchQuery.trim();
+                                    _citizenshipCountry = selected;
+                                    _citizenshipCountryController.text = selected;
+                                    if (_isIndiaCitizenship) {
+                                      _residencyStatus = null;
+                                    }
                                   });
                                   Navigator.pop(ctx);
                                   _checkAndTriggerAutoScroll();
@@ -749,6 +775,10 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                                     onTap: () {
                                       setState(() {
                                         _citizenshipCountry = country;
+                                        _citizenshipCountryController.text = country;
+                                        if (_isIndiaCitizenship) {
+                                          _residencyStatus = null;
+                                        }
                                       });
                                       Navigator.pop(ctx);
                                       _checkAndTriggerAutoScroll();
@@ -1202,7 +1232,9 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         const SizedBox(height: 6),
         _buildSingleInputField(
           controller: _degreeController,
-          hintText: 'e.g. M.S. Software Systems / B.Tech / MBA',
+          hintText: _highestEducation?.contains('Professional Certification') == true
+              ? 'e.g. Chartered Accountant (CA) / CS / CFA'
+              : 'e.g. M.S. Software Systems / B.Tech / MBA',
           prefixIcon: Icons.workspace_premium_outlined,
         ),
         const SizedBox(height: 14),
@@ -1292,7 +1324,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
         ),
         const SizedBox(height: 14),
 
-        _buildMandatoryLabel('Work Location (City, Country)'),
+        _buildMandatoryLabel('Work Location'),
         const SizedBox(height: 6),
         _buildSingleInputField(
           controller: _workLocationController,
@@ -1361,7 +1393,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
               const Icon(Icons.swap_horiz_rounded, size: 14, color: Color(0xFF1E40AF)),
               const SizedBox(width: 4),
               Text(
-                '$_currencySymbol $_currencyCode (Auto-set)',
+                '$_currencyDisplay (Auto-set)',
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -1401,7 +1433,7 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${_workLocationController.text.isNotEmpty ? _workLocationController.text : "India"} -> $_currencySymbol $_currencyCode',
+                      '${_workLocationController.text.isNotEmpty ? _workLocationController.text : "India"} -> $_currencyDisplay',
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -1478,50 +1510,15 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
 
   // E) Citizenship & Residency Card
   Widget _buildCitizenshipCard() {
+    final bool isIndia = _isIndiaCitizenship;
+
     return _buildCardWrapper(
       title: 'Citizenship',
       children: [
         _buildMandatoryLabel('Citizenship Country'),
         const SizedBox(height: 6),
-        InkWell(
-          onTap: _showCitizenshipCountryPicker,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF1F3FB),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: const Color(0xFFE8EBFA),
-                width: 1.0,
-              ),
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.public_outlined, size: 18, color: Color(0xFF64748B)),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    _citizenshipCountry ?? 'Select Country',
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: _citizenshipCountry != null ? const Color(0xFF0F172A) : const Color(0xFF94A3B8),
-                    ),
-                  ),
-                ),
-                const Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: Color(0xFF64748B)),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 14),
-        _buildMandatoryLabel('Residency Status'),
-        const SizedBox(height: 6),
-        DropdownButtonFormField<String>(
-          initialValue: _residencyStatus,
-          icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF64748B), size: 20),
+        TextFormField(
+          controller: _citizenshipCountryController,
           style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
@@ -1534,14 +1531,19 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             prefixIcon: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Icon(Icons.badge_outlined, size: 18, color: Color(0xFF64748B)),
+              child: Icon(Icons.public_outlined, size: 18, color: Color(0xFF64748B)),
             ),
             prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
-            hintText: 'Select Residency Status',
+            hintText: 'Enter or select country',
             hintStyle: const TextStyle(
               color: Color(0xFF94A3B8),
               fontSize: 13,
               fontWeight: FontWeight.w400,
+            ),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 20, color: Color(0xFF64748B)),
+              onPressed: _showCitizenshipCountryPicker,
+              splashRadius: 20,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -1553,37 +1555,97 @@ class _EducationCareerScreenState extends State<EducationCareerScreen> {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
+              borderSide: const BorderSide(color: Color(0xFF881337), width: 1.5),
             ),
           ),
-          dropdownColor: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          items: const [
-            DropdownMenuItem(
-              value: 'Citizenship',
-              child: Text('Citizenship'),
-            ),
-            DropdownMenuItem(
-              value: 'Work Visa',
-              child: Text('Work Visa'),
-            ),
-            DropdownMenuItem(
-              value: 'Permanent Resident (PR)',
-              child: Text('Permanent Resident (PR)'),
-            ),
-            DropdownMenuItem(
-              value: 'Student Visa',
-              child: Text('Student Visa'),
-            ),
-          ],
           onChanged: (val) {
             setState(() {
-              _residencyStatus = val;
+              _citizenshipCountry = val;
+              if (_isIndiaCitizenship) {
+                _residencyStatus = null;
+              }
             });
-            FocusScope.of(context).unfocus();
             _checkAndTriggerAutoScroll();
           },
         ),
+
+        // Residency Status is hidden when Citizenship Country is India!
+        // Only shown when other country names are typed or selected.
+        if (!isIndia) ...[
+          const SizedBox(height: 14),
+          _buildMandatoryLabel('Residency Status'),
+          const SizedBox(height: 6),
+          DropdownButtonFormField<String>(
+            key: ValueKey('residency_${_citizenshipCountryController.text}'),
+            initialValue: _residencyStatus,
+            icon: const Icon(Icons.keyboard_arrow_down_rounded, color: Color(0xFF64748B), size: 20),
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF0F172A),
+            ),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: const Color(0xFFF1F3FB),
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              prefixIcon: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Icon(Icons.badge_outlined, size: 18, color: Color(0xFF64748B)),
+              ),
+              prefixIconConstraints: const BoxConstraints(minWidth: 38, minHeight: 38),
+              hintText: 'Select Residency Status',
+              hintStyle: const TextStyle(
+                color: Color(0xFF94A3B8),
+                fontSize: 13,
+                fontWeight: FontWeight.w400,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: Color(0xFFE8EBFA), width: 1.0),
+              ),
+            ),
+            dropdownColor: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            items: const [
+              DropdownMenuItem(
+                value: 'Citizenship',
+                child: Text('Citizenship'),
+              ),
+              DropdownMenuItem(
+                value: 'Work Visa',
+                child: Text('Work Visa'),
+              ),
+              DropdownMenuItem(
+                value: 'Permanent Resident (PR)',
+                child: Text('Permanent Resident (PR)'),
+              ),
+              DropdownMenuItem(
+                value: 'Student Visa',
+                child: Text('Student Visa'),
+              ),
+              DropdownMenuItem(
+                value: 'Temporary Visa',
+                child: Text('Temporary Visa'),
+              ),
+            ],
+            onChanged: (val) {
+              setState(() {
+                _residencyStatus = val;
+              });
+              FocusScope.of(context).unfocus();
+              _checkAndTriggerAutoScroll();
+            },
+          ),
+        ],
       ],
     );
   }
